@@ -1,0 +1,37 @@
+<schema>
+
+	<element name="class" tablename="courseclass" >
+		<field name="objid" primary="true"/>
+		<field name="code" />
+		<field name="blockid" />
+		<field name="programid" />
+		<field name="courseid" />
+		<field name="schooltermid" />
+		<field name="min_seats" />
+		<field name="max_seats" />
+		<field name="teacherid" />
+		<field name="notes" />
+		<field name="colorcode" />
+    </element>
+
+	<element name="schedule" tablename="courseclass_schedule" >
+		<field name="objid" primary="true"/>
+		<field name="classid" />
+		<field name="days_of_week" />
+		<field name="days" />
+		<field name="fromtime" />
+		<field name="totime" />
+		<field name="roomid" />
+		<field name="teacherid" />
+    </element>
+
+	<element name="block" tablename="block_section" >
+		<field name="objid" primary="true"/>
+		<field name="code" />
+		<field name="programid" />
+		<field name="schooltermid" />
+		<field name="description" />
+		<field name="yearlevel" />
+    </element>
+
+</schema>

@@ -1,0 +1,20 @@
+import tester.*;
+
+def m = [ "default.host" : "localhost:8080", "app.context": "ikon" ];
+def p = new TestProxy( m );
+
+
+def svc = p.create( "RoleService" );
+
+def role = [
+    name:"role1", description: "Role 1", roleclass: "FACULTY", excluded: ["person.create","person.edit"]
+]
+//svc.create( role );
+
+//def list = svc.getList( [:] );
+//println list;
+
+role = svc.read( role );
+role.excluded.add( "person.update" );
+role.excluded.add( "person.remove" );
+svc.update( role );

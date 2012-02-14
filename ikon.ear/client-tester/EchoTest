@@ -1,0 +1,7 @@
+import tester.*;
+
+def m = [ "default.host" : "localhost:8080", "app.context": "ikon" ];
+def p = new TestProxy( m );
+
+def svc = p.create( "EchoService" );
+print svc.test( [name:"emn"] );

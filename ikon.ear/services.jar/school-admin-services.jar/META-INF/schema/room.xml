@@ -1,0 +1,7 @@
+<schema>
+	<element name="room" tablename="room" >
+		<field name="objid" primary="true"/>
+		<field name="code"/>
+		<field name="roomno"/>
+	</element>
+</schema>

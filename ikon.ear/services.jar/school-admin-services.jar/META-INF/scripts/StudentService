@@ -1,0 +1,29 @@
+import com.rameses.annotations.*;
+
+class StudentService {
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def getList(def params) {
+		def qry = em.sqlContext.createNamedQuery( "student:list-students" );
+		if(params) {
+			if(params._start) qry.setFirstResult( params._start );
+			if(params._limit) qry.setMaxResults( params._limit );
+			qry.setParameters( params );
+		}
+		return qry.resultList;
+	}
+	
+	@ProxyMethod
+	public def read(def o) {
+		o = em.read( "student", o );
+		if(o.birthdate) o.birthdate = dateSvc.format( "yyyy-MM-dd", o.birthdate );
+		return o;
+	}
+
+}

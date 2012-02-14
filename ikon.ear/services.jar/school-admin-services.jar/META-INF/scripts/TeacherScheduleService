@@ -1,0 +1,24 @@
+import com.rameses.annotations.*;
+
+class TeacherScheduleService {
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def findPossibleClasses(def params) {
+		print params;
+		def list = em.sqlContext.createNamedQuery("class:list-teacher-possible-classes").setParameters(params).resultList;
+		return list;
+	}
+
+	@ProxyMethod
+	public def getAssignedClasses(def params) {
+		return [];
+	}
+	
+	
+}

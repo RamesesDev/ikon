@@ -1,0 +1,19 @@
+import tester.*;
+
+def m = [ "default.host" : "localhost:8080", "app.context": "ikon" ];
+def p = new TestProxy( m );
+
+
+def svc = p.create( "JobpositionService" );
+def orgsvc = p.create( "OrgunitService" );
+def org = orgsvc.getList([:])[0];
+
+def jobpos = [
+    code: "IT01",
+    title: "Junior Programmer",
+    roleclass: "FACULTY",
+    role: "role1",
+    excluded: [],
+    orgunitid: org.objid
+];
+jobpos = svc.create( jobpos );

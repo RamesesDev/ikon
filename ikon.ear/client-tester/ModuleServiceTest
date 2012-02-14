@@ -1,0 +1,15 @@
+import tester.*;
+
+def m = [ "default.host" : "localhost:8080", "app.context": "ikon" ];
+def p = new TestProxy( m );
+
+def svc = p.create( "ModuleService" );
+//save first module
+def mod = [name:"module1", title:"First Module", filename:"module1", version: 0, lastmodified: new Date(), 
+    permissions: [action:"object.create", title:"Create Object"] ];
+svc.save( mod );
+
+print svc.getList( [:] );
+//svc.remove( mod );    
+
+

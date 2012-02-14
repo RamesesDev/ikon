@@ -1,0 +1,62 @@
+<schema>
+
+	<element name="student" tablename="student" >
+		<field name="objid" primary="true"/>
+		<field name="lastname" />
+		<field name="firstname" />
+		<field name="middlename" />
+		<field name="gender" />
+		<field name="birthdate" />
+		<field name="birthplace" />
+		<field name="civilstatus" />
+		<field name="religion" />
+		<field name="citizenship" />
+		<field name="email" />
+		<complex name="contactinfo" serializer="default" ref="contactinfo"/>
+		<complex name="primaryaddress" serializer="default" ref="address"/>
+		<complex name="secondaryaddress" serializer="default" ref="address"/>
+		<complex name="fathersinfo" serializer="default" ref="dependentinfo"/>
+		<complex name="mothersinfo" serializer="default" ref="dependentinfo"/>
+		<complex name="guardianinfo" serializer="default" ref="dependentinfo"/>
+		<field name="programid" />
+		<field name="acadyear" />
+		<field name="term" />
+		<field name="studenttype" />
+		<field name="yearlevel" />
+		<field name="studentno" />
+		<field name="appno" />
+    </element>
+
+	<element name="dependentinfo">
+		<field name="name"/>
+		<field name="occupation"/>
+		<field name="address"/>
+		<field name="phone"/>
+	</element>
+	
+	<element name="contactinfo">
+		<field name="type"/>
+		<field name="info"/>
+		<field name="value"/>
+	</element>
+	
+	<element name="address">
+		<field name="type"/>
+		<field name="address1"/>
+		<field name="address2"/>
+		<field name="city"/>
+		<field name="province"/>
+	</element>
+	
+	<element name="applicant" tablename="student_applicant" >
+		<field name="objid" primary="true"/>
+		<field name="lastname" />
+		<field name="firstname" />
+		<field name="birthdate" />
+		<field name="programid" />
+		<field name="yearlevel" />
+		<field name="apptype" />
+		<complex name="info" merge="true" serializer="default" />
+    </element>
+
+</schema>

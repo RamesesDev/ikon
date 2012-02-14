@@ -1,0 +1,12 @@
+import tester.*;
+
+def m = [ "default.host" : "localhost:8080", "app.context": "ikon" ];
+def p = new TestProxy( m );
+
+def svc = p.create( "RoleclassService" );
+print svc.getList( [rolelevel:1] );
+
+
+
+
+

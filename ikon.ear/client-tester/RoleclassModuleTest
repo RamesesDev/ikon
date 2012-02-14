@@ -1,0 +1,21 @@
+import tester.*;
+
+def m = [ "default.host" : "localhost:8080", "app.context": "ikon" ];
+def p = new TestProxy( m );
+
+
+def svc = p.create( "ModuleService" );
+def svc2 = p.create( "RoleclassService" );
+
+//save first module
+def mod = svc.read( [name:"module1"] );
+
+//load first roleclass found
+def roleclass = svc2.read( [name:"FACULTY"] );
+
+//add the role class module
+def x = [roleclass:roleclass.name, module:mod.name]
+svc2.addModule( x );
+println "---------------------------------";
+println svc2.read( roleclass );
+//svc2.removeModule( x );

@@ -1,0 +1,31 @@
+<schema>
+	<element name="program" tablename="program" >
+		<field name="objid" primary="true"/>
+		<field name="code"/>
+		<field name="title" />
+		<field name="revyear"/>
+		<field name="yearlevels"/>
+		<field name="orgunitid"/>
+	</element>
+	
+	<element name="course" tablename="programcourse" >
+		<field name="programid" primary="true"/>
+		<field name="courseid" primary="true"/>
+		<field name="yearlevel"/>
+		<field name="term"/>
+		<field name="units"/>
+		<field name="remarks"/>
+		<field name="lec_hrs"/>
+		<field name="lab_hrs"/>
+		<field name="min_units_taken"/>
+		<field name="min_yearlevel"/>
+	</element>
+	
+	<element name="coursereq" tablename="programcourse_req" >
+		<field name="programid" primary="true"/>
+		<field name="courseid" primary="true"/>
+		<field name="reqcourseid" primary="true"/>
+		<field name="reqtype"/>
+	</element>	
+	
+</schema>

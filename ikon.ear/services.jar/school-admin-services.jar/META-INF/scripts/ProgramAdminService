@@ -1,0 +1,141 @@
+import com.rameses.annotations.*;
+
+class ProgramAdminService {
+
+	@PersistenceContext("main")
+	def em;
+
+	@Service("CourseService")
+	def courseSvc;
+	
+	@ProxyMethod
+	public def getList(def params) {
+		print params;
+		def qry = em.sqlContext.createNamedQuery( "program:list" );
+		if(params) {
+			def buff = new StringBuffer();
+			if( params.orgunitid ) { 
+				buff.append( ''' orgunitid=$P{orgunitid} ''' );
+			}
+			if( params.code ) {
+				if( buff.length() > 0 ) buff.append( " and " );
+				if( params.code.indexOf("%")>=0) {
+					buff.append( ''' code like $P{code} ''' );
+				}
+				else {
+					buff.append( ''' code=$P{code} ''' );
+				}
+			}
+			if( params.title ) {
+				if( buff.length() > 0 ) buff.append( " and " );
+				if( params.title.indexOf("%")>=0) {
+					buff.append( ''' title like $P{title} ''' );
+				}
+				else {
+					buff.append( ''' code=$P{title} ''' );
+				}
+			}
+			if( buff.length() > 0 ) {
+				qry.setVars( [condition: " where " + buff.toString() ] );
+			}
+			if(params._start) qry.setFirstResult( params._start );
+			if(params._limit) qry.setMaxResults( params._limit );
+			qry.setParameters( params );
+		}
+		return qry.resultList;
+	}
+	
+	@ProxyMethod
+	public def create(def o) {
+		if(!o.objid) o.objid = "PRG" + new java.rmi.server.UID();
+		return em.create( "program", o );
+	}
+	
+	@ProxyMethod
+	public def read(def o) {
+		return em.read( "program", o );
+	}
+
+	@ProxyMethod
+	public def update(def o) {
+		return em.update( "program", o );
+	}
+	
+	@ProxyMethod
+	public def remove(def o) {
+		em.delete( "program", o );
+	}
+	
+	@ProxyMethod
+	public def getProgramCourses(def o) {
+		def list = em.sqlContext.createNamedQuery("program:list-courses").setParameters( o ).resultList;
+		list.each {
+			def p = [programid:o.objid, courseid: it.courseid];
+			p.reqtype = 0;
+			it.prerequisites = em.sqlContext.createNamedQuery("program:list-requisites").setParameters(p).resultList*.coursecode.join(", ");
+			p.reqtype = 1;
+			it.corequisites = em.sqlContext.createNamedQuery("program:list-requisites").setParameters(p).resultList*.coursecode.join(", ");
+		}
+		return list;
+	}
+	
+	@ProxyMethod
+	public def addProgramCourse(def o) {
+		return em.create( "program:course", o );
+	}
+	
+	@ProxyMethod
+	public def removeProgramCourse(def o) {
+		return em.delete( "program:course", o );
+	}
+
+	@ProxyMethod
+	public def updateProgramCourse(def o) {
+		return em.update( "program:course", o );
+	}
+	
+	
+	//course requisites
+	@ProxyMethod
+	public def getCourseRequisites(def o) {
+		return em.sqlContext.createNamedQuery("program:list-requisites").setParameters(o).resultList;
+	}
+	
+	@ProxyMethod
+	public def saveCourseRequisites(def items, def deletedItems) {
+		deletedItems.each { 
+			em.delete( "program:coursereq", it );
+		}
+		items.each {
+			em.save( "program:coursereq", it );
+		}
+	}
+
+	
+	@ProxyMethod
+	public def lookupCoursePrerequisites(def o) {
+		return em.sqlContext.createNamedQuery("program:lookup-course-prerequisites").setParameters(o).resultList;
+	}
+	
+	@ProxyMethod
+	public def lookupCourseCorequisites(def o) {
+		return em.sqlContext.createNamedQuery("program:lookup-course-corequisites").setParameters(o).resultList;
+	}
+	
+	@ProxyMethod
+	public def findCourses(def o) {
+		return courseSvc.findCourses( o );
+	}
+	
+	@ProxyMethod
+	public def findPrograms(def params) {
+		def qry = em.sqlContext.createNamedQuery( "program:find-programs" );
+		if(params) {
+			if(params._start) qry.setFirstResult( params._start );
+			if(params._limit) qry.setMaxResults( params._limit );
+			qry.setParameters( params );
+		}
+		return qry.resultList;
+	}
+
+}

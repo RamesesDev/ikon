@@ -1,0 +1,18 @@
+import com.rameses.annotations.*;
+
+class CourseAdminService {
+
+	@PersistenceContext("main")
+	def em;
+
+	@Service("OrgunitService")
+	def orgSvc;
+	
+	@ProxyMethod
+	public def getList(def params) {
+		return orgSvc.getUserOrgunits( [orgtype : "ACADEMIC_UNIT"] );
+	}
+	
+	
+	
+}

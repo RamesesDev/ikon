@@ -1,0 +1,37 @@
+import com.rameses.annotations.*;
+import com.rameses.util.*;
+
+class PermissionService 
+{	
+    
+	@ProxyMethod(local=true)
+	public def filterExcludes( permissions, excludes ) {
+		if( !excludes ) {
+			return permissions;
+		}
+		else {
+			 def f = excludes.pop();
+			permissions.removeAll( permissions.findAll{ it.matches(f) } );
+			return filterExcludes( permissions, excludes );
+		}
+	}
+	
+	@ProxyMethod(local=true)
+	public def filterIncludes( permissions, includes ) {
+		return doFilterIncludes( permissions, includes, [] );
+	}
+	
+	private def doFilterIncludes( p, includes, list ) {
+		if( ! includes ) {
+			return list;
+		}
+		else {
+			def f = includes.pop();
+			def items = p.findAll{ it.matches(f) }
+			p.removeAll( items );
+			list.addAll( items );
+			return doFilterIncludes( p, includes, list );
+		}
+	}
+	
+}

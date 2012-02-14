@@ -1,0 +1,13 @@
+<schema>
+	<element name="user" tablename="suser" >
+		<field name="objid" primary="true"/>
+		<field name="uid" required="true"/>
+		<field name="firstname" />
+		<field name="lastname"/>
+		<field name="dtcreated"/>
+		<field name="owner"/>
+		<field name="loginid"/>
+		<complex name="contact" serializer="default" mapfield="contact"/>
+		<complex name="info" serializer="default" merge="true"/>
+	</element>
+</schema>

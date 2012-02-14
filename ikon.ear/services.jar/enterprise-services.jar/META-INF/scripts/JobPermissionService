@@ -1,0 +1,83 @@
+import com.rameses.annotations.*;
+
+class JobPermissionService 
+{
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("SessionService")
+	def sessionService;
+	
+	@Service("JobpositionService")
+	def jobSvc;
+	
+	@Resource("CacheService")
+	def cacheService;
+	
+	@Service("PermissionService")
+	def permSvc;
+	
+	@Env
+	def env;
+	
+	
+	@ProxyMethod
+	public def getUserJobposition( param )
+	{
+		def jobid = param.jobid;
+		if( !jobid ) {
+			jobid = em.sqlContext.createQuery('select objid from jobposition where assigneeid=$P{userid}')
+			         .setParameters(env)
+					 .singleResult?.objid;
+		}
+		
+		if( !jobid ) return null;
+		
+		def key = env.sessionid + env.userid + jobid;
+		def job = jobSvc.read( [objid: jobid] );
+		if( !job ) return null;
+		
+		def info = [:];
+		info.objid = job.objid;
+		info.code = job.code;
+		info.title = job.title;
+		info.orgunitid = job.orgunitid;
+		
+		//info.permissions = cacheService.get( key );
+		
+		if( !info.permissions ) {
+			def exc = em.sqlContext.createNamedQuery('user_permission:get-excluded-permissions')
+			            .setParameter('jobid', job.objid)
+						.singleResult;
+			
+			def modperms = em.sqlContext.createNamedQuery('user_permission:get-module-permissions')
+			              .setParameters(job)
+						  .resultList;
+			
+			def permissions = [];
+			def excludes = [];
+			
+			modperms.each { m->
+				if( m.permissions ) {
+					def actions = em.serializer.read( m.permissions );
+					def l = actions.collect{ "${m.name}:${it.action}".toString() }
+					permissions.addAll( l );
+				}
+			}
+			
+			if( exc.roleincluded ) {
+				def inc = em.serializer.read(exc.roleincluded);
+				permissions = permSvc.filterIncludes( permissions, inc );
+			}
+			if( exc.jobexcluded ) {
+				def ex = em.serializer.read(exc.jobexcluded);
+				permissions = permSvc.filterExcludes( permissions, ex );
+			}
+			
+			info.permissions = permissions;
+		}
+		
+		return info;
+	}
+
+}

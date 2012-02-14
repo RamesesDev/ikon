@@ -1,0 +1,14 @@
+<schema>
+
+	<element name="roleclass" tablename="roleclass" >
+		<field name="name" primary="true"/>
+		<field name="description" />
+		<field name="rolelevel" />
+    </element>
+
+	<element name="module" tablename="roleclass_module" >
+		<field name="roleclass" primary="true"/>
+		<field name="module" primary="true"/>
+	</element>
+	
+</schema>

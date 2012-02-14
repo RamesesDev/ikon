@@ -1,0 +1,55 @@
+import tester.*;
+
+def m = [ "default.host" : "localhost:8080", "app.context": "ikon" ];
+def p = new TestProxy( m );
+
+
+def svc = p.create( "PersonnelService" );
+
+def pers = [
+    staffno: "049174",
+    firstname: "ELMO",
+    lastname: "NAZARENO",
+    middlename: "MANAGASE",
+    gender: "M",
+    birthdate: java.sql.Date.valueOf( "1969-01-18" ),
+    birthplace: "Cebu",
+    civilstatus: "MARRIED",
+    religion: "ROMAN CATHOLIC",
+    citizenship: "FILIPINO",
+    email: "elmonazareno@gmail.com",
+    primaryaddress: [
+        type: "HOME",
+        address1: "18 Orchid St.",
+        city: "Cebu",
+        province: "Cebu",
+        zipcode: "6000"
+    ],
+    contactinfo: [
+        type: "MOBILE",
+        value: "0916-9987"
+    ]
+];
+pers = svc.create( pers );
+pers = svc.read( [objid: pers.objid] );
+pers.spouseinfo = [
+    firstname: "Patricia",
+    lastname : "Nazareno",
+    occupation: "professor",
+    address: "UP Cebu",
+    phone: "11111"
+];
+pers.secondaryaddress =  [
+    type: "WORK",
+    address1: "Rameses Systems Inc.",
+    city: "Cebu",
+    province: "Cebu",
+    zipcode: "6000"
+];
+svc.update( pers );
+svc.getList( [:] );
+
+
+
+
+

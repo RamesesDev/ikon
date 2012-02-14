@@ -1,0 +1,30 @@
+import com.rameses.annotations.*;
+import com.rameses.util.*;
+
+class LoginService {
+	
+    @PersistenceContext("main")
+    def em;
+    
+	@Service("SessionService")
+	def sessionService;
+	
+
+	@ProxyMethod
+	public void changePassword( def o ) {
+		def login = em.sqlContext.createQuery('select * from login where uid=$P{username}').setParameters(o).singleResult;
+		
+		if(!login) {
+			throw new Exception("Login account not found.");
+		}
+		
+		o.oldpassword = Encoder.MD5.encode(o.oldpassword, o.username);
+		if(login.password != o.oldpassword) {
+			throw new Exception("Invalid current password provided.");
+		}
+		
+		o.newpassword = Encoder.MD5.encode(o.newpassword, o.username);
+		em.sqlContext.createExecutor('update login set password = $P{newpassword} where uid=$P{username}')
+		  .setParameters(o).execute();
+	}	
+}

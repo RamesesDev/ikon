@@ -1,0 +1,17 @@
+import com.rameses.annotations.*;
+
+class RoomScheduleService {
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def getRoomSchedule(def params) {
+		return null;
+	}
+
+	
+}

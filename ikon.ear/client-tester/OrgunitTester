@@ -1,0 +1,17 @@
+import tester.*;
+
+def m = [ "default.host" : "localhost:8080", "app.context": "ikon" ];
+def p = new TestProxy( m );
+
+
+def svc = p.create( "OrgunitService" );
+
+print svc.getOrgtypes();
+def org = [code:"NATSCI", title:"NATURAL SCIENCES", orgtype:"ACADEMIC_DEPARTMENT"];
+org = svc.create( org );
+println svc.getList([:]);
+
+org.title = "NATURAL SCIENCE";
+svc.update( org );
+println "-----------------------------------";
+println svc.read(org);

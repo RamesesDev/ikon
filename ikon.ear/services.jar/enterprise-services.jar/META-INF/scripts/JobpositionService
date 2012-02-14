@@ -1,0 +1,74 @@
+import com.rameses.annotations.*;
+
+class JobpositionService {
+
+	@PersistenceContext("main")
+	def em;
+
+	@Service("RoleService")
+	def roleSvc;
+	
+	@ProxyMethod
+	public def getList(def params) {
+		def qry = em.sqlContext.createNamedQuery( "jobposition:list" );
+		if(params) {
+			if(params._start) qry.setFirstResult( params._start );
+			if(params._limit) qry.setMaxResults( params._limit );
+			qry.setParameters( params );
+		}
+		return qry.resultList;
+	}
+	
+	@ProxyMethod
+	public def create(@Param(schema="jobposition") o) {
+		o.objid = "JOBP" + new java.rmi.server.UID();
+		return em.create( "jobposition", o );
+	}
+	
+	@ProxyMethod
+	public def read(def o) {
+		return em.read( "jobposition", o );
+	}
+
+	@ProxyMethod
+	public def update(@Param(schema="jobposition") o) {
+		return em.update( "jobposition", o );
+	}
+	
+	@ProxyMethod
+	public def remove(def o) {
+		em.delete( "jobposition", o );
+	}
+	
+	@ProxyMethod
+	public def getPermissions(def o) {
+		def jobpos = em.read( "jobposition", o );
+		def m = [:];
+		m.modules = roleSvc.getRoleModulePermissions(jobpos.role);
+		m.excluded = (jobpos.excluded) ? jobpos.excluded : [];
+		return m;
+	}
+	
+	@ProxyMethod
+	public def updatePermissions(def o) {
+		def jobpos = em.read( "jobposition", o );
+		jobpos.excluded = o.excluded;
+		em.update( "jobposition", jobpos );	
+	}
+	
+	@ProxyMethod
+	public def assign(def o) {
+		def x = em.read( "jobposition", o );
+		x.assigneeid = o.assigneeid;
+		em.update( "jobposition", x );
+		return x;
+	}
+	
+	@ProxyMethod
+	public def unassign(def o) {
+		def x = em.read( "jobposition", o );
+		x.assigneeid = null;
+		em.update( "jobposition", x );
+		return x;
+	}
+}

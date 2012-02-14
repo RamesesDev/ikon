@@ -1,0 +1,24 @@
+<schema>
+	<element name="schoolterm" tablename="schoolterm" >
+		<field name="objid" primary="true"/>
+		<field name="year"/>
+		<field name="term" />
+		<field name="state"/>
+		<field name="fromdate" />
+		<field name="todate" />
+	</element>
+	
+	<element name="entry" tablename="schoolterm_entry" >
+		<field name="objid" primary="true"/>
+		<field name="schooltermid" />
+		<field name="fromdate"/>
+		<field name="todate"/>
+		<field name="phaseid"/>
+	</element>
+	
+	<element name="phase" tablename="schoolterm_phase" >
+		<field name="objid" primary="true"/>
+		<field name="description" />
+	</element>
+
+</schema>
