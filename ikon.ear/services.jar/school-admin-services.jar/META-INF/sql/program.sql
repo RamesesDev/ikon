@@ -32,7 +32,3 @@ where p.programid = $P{programid}
 and c.code LIKE $P{code} 
 and p.courseid != $P{courseid} 
 and ( yearlevel <= $P{yearlevel} OR ( yearlevel = $P{yearlevel} and term <= $P{term} ) )  
-
-[find-programs]
-select objid,code,title,yearlevels from program where code like $P{code} order by code
-

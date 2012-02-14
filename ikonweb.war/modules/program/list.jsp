@@ -5,7 +5,7 @@
 	$put( "programlist", 
 		new function() {
 			var acadSvc = ProxyService.lookup( "AcademicOrgunitService" );
-			var svc = ProxyService.lookup( "ProgramAdminService" );
+			var svc = ProxyService.lookup( "ProgramService" );
 			
 			var self = this;
 			
@@ -33,7 +33,7 @@
 			}
 			
 			this.add = function() {
-				return new PopupOpener( "program:edit", {saveHandler:refreshList,orgunitid:this.orgUnit.objid} );
+				return new PopupOpener( "program:create", {saveHandler:refreshList,orgunit:this.orgUnit} );
 			}
 			
 			this.propertyChangeListener = {
@@ -44,7 +44,7 @@
 </script>
 
 Academic Unit: <select r:context="programlist" r:items="orgUnits" r:name="orgUnit" r:itemLabel="code"></select>
-
+<br>
 <input type="button" value="Add" r:context="programlist" r:name="add" />
 <table r:context="programlist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
 	<thead>

@@ -4,15 +4,21 @@
 	
 	$put( "programcourse", 
 		new function() {
-			var svc = ProxyService.lookup( "ProgramAdminService" );
-			this.programid;
+			var svc = ProxyService.lookup( "ProgramService" );
+			this.program;
 			this.mode;
 			this.course;
 			this.saveHandler;
 			this.courseid;
+			var self = this;
+			this.yearlevels = [];
 			
 			this.onload = function() {
-				this.course = {programid:this.programid}
+				this.course = {programid:this.program.objid}
+				this.yearlevels = [];
+				for( var i=0; i<this.program.yearlevels; i++ ) {
+					this.yearlevels.push(i+1);
+				}	
 			}	
 			
 			this.save = function() {
@@ -30,25 +36,42 @@
 			this.selectedCourse;
 			
 			this.courseLookup = function(searchText) {
-				return svc.findCourses( {code: searchText + '%' } );
+				var courseSvc = ProxyService.lookup( "CourseService" );
+				return courseSvc.getList( {code: searchText + '%' } );
 			}
 			
 			this.addCourse = function() {
-				return new PopupOpener( "" );
+				return new PopupOpener( "course:create" );
+			}
+			
+			this.termList = [
+				{key:"1", label: "1st Semester"},
+				{key:"2", label: "2nd Semester"},
+				{key:"5", label: "Summer"}
+			];
+			
+			this.propertyChangeListener = {
+				"selectedCourse" : function(x) {
+					self.course.units = x.units; 
+				}
 			}
 		}
 	);
 </script>
-<div id="courseTpl" style="display:none;">
-	<a>#{code} - #{title}</a>
-</div>
 
-Course <input type="text" r:context="programcourse" r:name="courseid" r:suggest="courseLookup" r:suggestName="selectedCourse" r:suggestExpression="#{code}" r:suggestTemplate="courseTpl" />
+Course <input type="text" r:context="programcourse" r:name="courseid" r:suggest="courseLookup" r:suggestName="selectedCourse" r:suggestExpression="#{code} - #{title}" />
 <label r:context="programcourse" r:visibleWhen="#{selectedCourse!=null}" r:depends="selectedCourse">#{selectedCourse.title}</label>
 <br> 
-Year Level <input type="text" r:context="programcourse" r:name="course.yearlevel"/><br> 
-Semester <input type="text" r:context="programcourse" r:name="course.term"/><br> 
-Units <input type="text" r:context="programcourse" r:name="course.units"/><br> 
+Year Level 
+<select r:context="programcourse" r:name="course.yearlevel" r:allowNull="true" r:required="true"
+	r:caption="Year Level" r:items="yearlevels"></select>
+<br>
+Term / Semester
+<select r:context="programcourse" r:name="course.term" r:allowNull="true" r:required="true"
+	r:caption="Term / Semester" r:itemKey="key" r:itemLabel="label" r:items="termList"></select>
+<br>
+Units  <input type="text" r:context="programcourse" r:name="course.units" r:depends="selectedCourse"/>
+<br>
 Lab Hrs <input type="text" r:context="programcourse" r:name="course.lab_hrs"/><br>
 Lec Hrs <input type="text" r:context="programcourse" r:name="course.lec_hrs"/><br>
 Remarks <input type="text" r:context="programcourse" r:name="course.remarks"/>
@@ -62,4 +85,5 @@ Min. year level <input type="text" r:context="programcourse" r:name="course.min_
  
 
 			
+		
 		

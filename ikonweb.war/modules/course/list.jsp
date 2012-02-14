@@ -33,7 +33,7 @@
 			}
 			
 			this.add = function() {
-				return new PopupOpener( "course:info", {mode:"create", saveHandler: reloadList, orgunitid: this.orgUnit.objid});
+				return new PopupOpener( "course:create", { saveHandler: reloadList, orgunit: this.orgUnit});
 			}
 
 			this.edit = function() {

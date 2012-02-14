@@ -1,5 +1,5 @@
 [list]
-select * from course where orgunitid=$P{orgunitid} order by code
+select * from course ${condition} order by code
 
 [lookup-list]
 select * from course where code LIKE $P{code} order by code

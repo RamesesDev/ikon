@@ -13,7 +13,7 @@
 		<field name="religion"/>
 		<field name="citizenship"/>
 		<field name="email" required="true"/>
-		<complex name="contactinfo" serializer="default" ref="contactinfo"/>
+		<complex name="contactinfo" serializer="default" type="list" ref="contactinfo"/>
 		<complex name="primaryaddress" serializer="default"  ref="address"/>
 		<complex name="secondaryaddress" serializer="default"  ref="address" required="false"/>
 		<complex name="spouseinfo" serializer="default"  ref="spouseinfo" required="false"/>
@@ -29,7 +29,7 @@
 	</element>
 	
 	<element name="contactinfo">
-		<field name="type" required="true"/>
+		<field name="type" required="true" />
 		<field name="value" required="true"/>
 		<field name="info"/>
 	</element>

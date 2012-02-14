@@ -9,14 +9,13 @@
 		new function() {
 			this.info =  <s:invoke service="StudentApplicantService" method="read" params="<%=request%>" json="true" />;
 			var self = this;
+			
+			this.yearLevels = [];
+			
 			this.showApproval = function() {
 				var  p = new PopupOpener( "#student_applicant_approval" );
 				p.title = "Approval for " + this.info.lastname + ", " + this.info.firstname;
 				return p;
-			}
-			
-			this.approve = function() {
-				alert( "Alright yeah..." );
 			}
 			
 			this.lookupProgram = function() {
@@ -24,9 +23,23 @@
 					self.info.programid = o.objid;
 					self.info.programtitle = o.title;
 					self.info.programcode = o.code;
+					self.yearLevels = [];
+					for( var i=0; i < o.yearlevels; i++ ) {
+						self.yearLevels.push( i + 1);
+					}
 					self._controller.refresh();
 				}
 				return new PopupOpener("program:lookup", {selectHandler: handler } );
+			}
+			
+			this.approve = function() {
+				if( confirm( "You are about to accept this student. Continue?") ) {
+					var svc = ProxyService.lookup( "StudentApplicantService" );
+					svc.accept( this.info );
+					alert( "Student successfully accepted" );
+					window.location.hash = "student_applicant:list";
+					return "_close";
+				}
 			}
 		}
 	);
@@ -45,7 +58,12 @@
 		#{info.programcode} - #{info.programtitle}	
 	</label>
 	<br>
+	Year Level 
+	<select r:context="studentapplicantinfo" r:items="yearLevels" r:name="info.yearlevel" 
+		r:allowNull="true" r:caption="Year Level" r:required="true"></select>  
 	<br>
+	<br/>
+	
 	<input type="button" r:context="studentapplicantinfo" r:name="approve"  value="OK"/>	
 </div>
 

@@ -22,7 +22,7 @@
 			}
 			
 			this.add = function() {
-				return new PopupOpener( "personnel:info", {mode:"create", saveHandler: reloadList });
+				return new PopupOpener( "personnel:create", {mode:"create", saveHandler: reloadList });
 			}
 
 			this.edit = function() {

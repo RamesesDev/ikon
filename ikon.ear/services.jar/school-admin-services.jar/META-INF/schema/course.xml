@@ -3,7 +3,6 @@
 	<element name="course" tablename="course" >
 		<field name="objid" primary="true"/>
 		<field name="code" />
-		<field name="groupid" />
 		<field name="title" />
 		<field name="units" />
 		<field name="orgunitid" />

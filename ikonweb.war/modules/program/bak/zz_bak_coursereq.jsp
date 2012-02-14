@@ -4,7 +4,7 @@
 	
 	$put( "coursereq", 
 		new function() {
-			var svc = ProxyService.lookup( "ProgramAdminService" );
+			var svc = ProxyService.lookup( "ProgramService" );
 		
 			this.saveHandler;
 			this.programCourse;

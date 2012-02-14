@@ -15,7 +15,7 @@ class StudentApplicantService {
 	}
 	
 	@ProxyMethod
-	public def approve(def o) {
+	public def accept(def o) {
 		def m = [:];
 		m.putAll( o );
 		m.objid = "STUD" + new java.rmi.server.UID();
@@ -41,7 +41,8 @@ class StudentApplicantService {
 		}
 		return qry.resultList;
 	}
+	
+	
+	
 
 }
-
-

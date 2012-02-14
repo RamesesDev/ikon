@@ -14,7 +14,7 @@
 <script>
 	$put( "program_lookup", 
 		new function() {
-			var svc = ProxyService.lookup( "ProgramAdminService" );
+			var svc = ProxyService.lookup( "ProgramService" );
 			
 			var self = this;
 			
@@ -56,5 +56,4 @@ Code <input type="text" r:context="program_lookup" r:name="query.code" />
 	</tbody>
 </table>
 
-<br>
 <input type="button" r:context="program_lookup" r:name="select" value="OK"/> 

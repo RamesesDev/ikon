@@ -1,16 +1,12 @@
 import com.rameses.annotations.*;
 
-class ProgramAdminService {
+class ProgramService {
 
 	@PersistenceContext("main")
 	def em;
 
-	@Service("CourseService")
-	def courseSvc;
-	
 	@ProxyMethod
 	public def getList(def params) {
-		print params;
 		def qry = em.sqlContext.createNamedQuery( "program:list" );
 		if(params) {
 			def buff = new StringBuffer();
@@ -72,9 +68,9 @@ class ProgramAdminService {
 		list.each {
 			def p = [programid:o.objid, courseid: it.courseid];
 			p.reqtype = 0;
-			it.prerequisites = em.sqlContext.createNamedQuery("program:list-requisites").setParameters(p).resultList*.coursecode.join(", ");
+			it.prerequisites = em.sqlContext.createNamedQuery("program:list-requisites").setParameters(p).resultList;
 			p.reqtype = 1;
-			it.corequisites = em.sqlContext.createNamedQuery("program:list-requisites").setParameters(p).resultList*.coursecode.join(", ");
+			it.corequisites = em.sqlContext.createNamedQuery("program:list-requisites").setParameters(p).resultList;
 		}
 		return list;
 	}
@@ -94,13 +90,23 @@ class ProgramAdminService {
 		return em.update( "program:course", o );
 	}
 	
-	
 	//course requisites
 	@ProxyMethod
 	public def getCourseRequisites(def o) {
 		return em.sqlContext.createNamedQuery("program:list-requisites").setParameters(o).resultList;
 	}
 	
+	@ProxyMethod
+	public def addCourseRequisite(def o) {
+		em.save( "program:coursereq", o );
+	}
+	
+	@ProxyMethod
+	public def removeCourseRequisite(def o) {
+		em.delete( "program:coursereq", o );
+	}
+
+	/*
 	@ProxyMethod
 	public def saveCourseRequisites(def items, def deletedItems) {
 		deletedItems.each { 
@@ -110,32 +116,13 @@ class ProgramAdminService {
 			em.save( "program:coursereq", it );
 		}
 	}
+	*/
 
-	
 	@ProxyMethod
-	public def lookupCoursePrerequisites(def o) {
-		return em.sqlContext.createNamedQuery("program:lookup-course-prerequisites").setParameters(o).resultList;
+	public def lookupCourseRequisites(def o) {
+		def str = (o.reqtype == "0") ? "lookup-course-prerequisites" : "lookup-course-corequisites";
+		return em.sqlContext.createNamedQuery("program:"+str).setParameters(o).resultList;
 	}
 	
-	@ProxyMethod
-	public def lookupCourseCorequisites(def o) {
-		return em.sqlContext.createNamedQuery("program:lookup-course-corequisites").setParameters(o).resultList;
-	}
-	
-	@ProxyMethod
-	public def findCourses(def o) {
-		return courseSvc.findCourses( o );
-	}
-	
-	@ProxyMethod
-	public def findPrograms(def params) {
-		def qry = em.sqlContext.createNamedQuery( "program:find-programs" );
-		if(params) {
-			if(params._start) qry.setFirstResult( params._start );
-			if(params._limit) qry.setMaxResults( params._limit );
-			qry.setParameters( params );
-		}
-		return qry.resultList;
-	}
 
 }

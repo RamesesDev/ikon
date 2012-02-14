@@ -9,6 +9,22 @@ class CourseService {
 	public def getList(def params) {
 		def qry = em.sqlContext.createNamedQuery( "course:list" );
 		if(params) {
+			def buff = new StringBuffer();
+			if( params.orgunitid ) {
+				buff.append( ''' orgunitid=$P{orgunitid} ''' );
+			}
+			if( params.code ) {
+				if( buff.length() > 0 ) buff.append( " and " );
+				if( params.code.indexOf("%") >= 0 ) {
+					buff.append( ''' code like $P{code} ''' );
+				}
+				else {
+					buff.append( ''' code = $P{code} ''' );
+				}
+			}
+			if( buff.length() > 0 ) { 
+				qry.setVars( [condition: " where " + buff.toString() ] );
+			}
 			if(params._start) qry.setFirstResult( params._start );
 			if(params._limit) qry.setMaxResults( params._limit );
 			qry.setParameters( params );
@@ -36,23 +52,6 @@ class CourseService {
 	public def remove(def o) {
 		em.delete( "course", o );
 	}
-	
-	@ProxyMethod
-	public def findCourses(def params) {
-		if(!params?.code) 
-			throw new Exception("Please provide a code to lookup");
-		if(!params.code.endsWith("%"))	
-			params.code += "%";
-		
-		def sqlName = "course:lookup-list";
-		if( params.programid ) sqlName  = "course:lookup-list-byprogram";	
-		def qry = em.sqlContext.createNamedQuery( sqlName );
-		if(params._start) qry.setFirstResult( params._start );
-		if(params._limit) qry.setMaxResults( params._limit );
-		qry.setParameters( params );
-		return qry.resultList;
-	}
-	
 	
 	
 }

@@ -18,7 +18,7 @@
 				var f = function(o) {
 					window.location.hash = "class_schedule:blockinfo?objid="+o.objid;
 				}
-				return new PopupOpener("class_schedule:editblock", {saveHandler: f } );
+				return new PopupOpener("class_schedule:addblock", {saveHandler: f } );
 			}
 			this.addClass = function() {
 				return new PopupOpener("class_schedule:edit");

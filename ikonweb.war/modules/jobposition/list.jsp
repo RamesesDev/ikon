@@ -41,6 +41,10 @@
 				return new PopupOpener( "jobposition:info", {saveHandler:refreshList, jobposition:this.selectedItem, mode:"edit" } );
 			}
 			
+			this.viewPermissions = function() {
+				return new PopupOpener( "jobposition:permission", {objid:this.selectedItem.objid } );
+			}
+			
 			this.propertyChangeListener = {
 				orgUnit : function(o) { self.listModel.refresh(true); }
 			}
@@ -73,7 +77,6 @@ Org Unit: <select r:context="jobpositionlist" r:items="orgUnits" r:name="orgUnit
 			<td>Code</td>
 			<td>Title</td>
 			<td>Assignee</td>
-			<td>Role</td>
 			<td>&nbsp;</td>
 		</tr>
 	</thead>
@@ -91,9 +94,9 @@ Org Unit: <select r:context="jobpositionlist" r:items="orgUnits" r:name="orgUnit
 					<a r:context="jobpositionlist" r:name="removeAssignee"> [Unassign]</a>
 				</div>
 			</td>
-			<td>#{item.role}</td>
-			<td>
-				<a r:context="jobpositionlist" r:name="edit">View</a>&nbsp;
+			<td align="center">
+				<a r:context="jobpositionlist" r:name="edit">View</a>&nbsp;&nbsp;
+				<a r:context="jobpositionlist" r:name="viewPermissions">Permissions</a>
 			</td>
 		</tr>	
 	</tbody>
