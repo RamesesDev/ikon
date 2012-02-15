@@ -32,6 +32,7 @@
 		<field name="schooltermid" />
 		<field name="description" />
 		<field name="yearlevel" />
+		<field name="term" />
     </element>
 
 </schema>

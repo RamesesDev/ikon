@@ -3,12 +3,19 @@
 <script>
 	$put( "room_schedule_list", 
 		this.listModel = function() {
+			this.query = {}
 			this.selectedItem;
-			return [];
+			return [ {roomno: "125", numclasses:10 },{roomno: "126", numclasses:1 }];
 		}	
 	);
 </script>
 
+Search available rooms: 
+<br>
+From Time <input type="text" r:context="room_schedule_list" r:name="query.fromtime"/>
+<br>
+To Time <input type="text" r:context="room_schedule_list" r:name="query.totime"/>
+<br>
 
 <table r:context="room_schedule_list" r:model="listModel" r:varName="item" r:varStatus="stat" r:name="selectedItem" border="1" width="80%">
 	<thead>
@@ -21,7 +28,7 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>#{item.name}</td>
+			<td>#{item.roomno}</td>
 			<td>#{item.numclasses}</td>
 			<td>#{item.remarks}</td>
 			<td>&nbsp;</td>

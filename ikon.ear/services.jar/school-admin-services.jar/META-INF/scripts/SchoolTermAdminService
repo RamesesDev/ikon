@@ -50,7 +50,6 @@ class SchoolTermAdminService {
 	
 	@ProxyMethod
 	public def getEntries(def o) {
-		print o;
 		def list = em.sqlContext.createNamedQuery("schoolterm:list-entries").setParameters( o ).resultList;
 		list.each {
 			if(it.fromdate) it.fromdate = dateSvc.format( "yyyy-MM-dd", it.fromdate );
@@ -61,14 +60,8 @@ class SchoolTermAdminService {
 	
 	@ProxyMethod
 	public def addEntry(def o) {
-		print "adding entry " + o;
-		try {
 		o.objid = "STENT" + new java.rmi.server.UID();
 		return em.create( "schoolterm:entry", o );
-		}
-		catch(e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@ProxyMethod

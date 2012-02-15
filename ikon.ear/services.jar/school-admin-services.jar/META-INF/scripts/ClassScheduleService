@@ -8,6 +8,9 @@ class ClassScheduleService {
 	@Service("DateService")
 	def dateSvc;
 
+	@Service("ProgramService")
+	def programSvc;
+
 	@ProxyMethod
 	public def getList(def params) {
 		def qry = em.sqlContext.createNamedQuery( "class:list" );
@@ -54,20 +57,39 @@ class ClassScheduleService {
 		return list;
 	}
 	
+	@ProxyMethod
+	public def lookupProgramCourses(def o) {
+		def ids = em.sqlContext.createQuery( '''select courseid from courseclass where blockid=$P{blockid}''').setParameters(o).resultList*.courseid;
+		def list = programSvc.lookupProgramCourses(o); 	
+		list.removeAll( list.findAll{ ids.contains( it.courseid )  } );
+		return list;
+	}
 	
 	@ProxyMethod
 	public def saveClass(def o) {
-		print "saving class";
+		//check if there is conflict when adding the class
+		def m = [:];
+		//check each class schedule.
+		for( it in o.schedules) {
+			m.blockid = o.blockid;
+			m.courseid = o.courseid;
+			m.days_of_week = it.days_of_week;
+			m.fromtime = it.fromtime;
+			m.totime = it.totime;	
+			def z = em.sqlContext.createNamedQuery( "class_schedule:check-block-schedule-conflict" ).setParameters(m).singleResult;
+			if( z.conflict_count > 0 ) {
+				throw new Exception("There are conflicts in schedule");
+			}
+		}
+		
 		if(!o.objid) o.objid = "CLS"+new java.rmi.server.UID();
 		o = em.save( "class", o );
-		
 		if(o.removedSchedules) {
 			o.removedSchedules.each {
 				em.delete("class:schedule", it);
 			}
 			o.remove( "removedSchedules" );
 		}
-		
 		o.schedules.each {
 			if(!it.objid) it.objid = "CLSSKED:" + new java.rmi.server.UID();
 			it.classid = o.objid;
@@ -83,12 +105,13 @@ class ClassScheduleService {
 		return em.create( "class", o );
 	}
 	
+	/*
 	@ProxyMethod
 	public def addSchedules(def items, def removedItems) {
 		if(!it.objid) it.objid = "CLSSKED" + new java.rmi.server.UID();
 		em.save( "class:schedule", o );
 	}
-
+	*/
 	
 	
 }

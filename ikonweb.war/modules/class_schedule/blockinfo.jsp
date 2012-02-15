@@ -17,14 +17,8 @@
 			var util = new SkedUtil();
 			
 			this.selectedClass = {};
-			var ibox = new InfoBox('#infobox','right', {x:-10, y:20});
 			
-			this.addCourseSchedule = function() {
-				var func = function() {
-					self.model.load();
-				}
-				return new PopupOpener("class_schedule:edit_block", {programid: this.blockinfo.programid, blockid:this.blockinfo.objid, saveHandler:func });
-			}
+			
 			
 			this.model = {
 				minTime: 6,
@@ -47,11 +41,16 @@
 				}
 			};
 			
-			this.editClass = function() {
-				var func = function() {
-					self.model.load();
-				}
-				return new PopupOpener("class_schedule:edit_block", {class: this.selectedClass.item.class, saveHandler:func });
+			var reloadModel = function() {
+				self.model.load();
+			}
+			
+			this.addClassSchedule = function() {
+				return new PopupOpener("class_schedule:addclass", { block:this.blockinfo, saveHandler:reloadModel } );
+			}
+			
+			this.editClassSchedule = function() {
+				return new PopupOpener("class_schedule:edit_block", {class: this.selectedClass.item.class, saveHandler:reloadModel });
 			}
 			
 			this.removeClass = function() {
@@ -63,13 +62,16 @@
 	
 </script>
 
-<input type="button" r:context="blockinfo" value="Add Course" r:name="addCourseSchedule"/>
+<input type="button" r:context="blockinfo" value="Add Course" r:name="addClassSchedule"/>
+
 <br>
 <b>Block Code</b> <label r:context="blockinfo">#{blockinfo.code}</label> 
 <br>
 <b>Program</b> <label r:context="blockinfo">#{blockinfo.programcode} - #{blockinfo.programtitle}</label> 
 <br>
 <b>Year Level</b> <label r:context="blockinfo">#{blockinfo.yearlevel}</label> 
+<br>
+<b>Term</b> <label r:context="blockinfo">#{blockinfo.term}</label> 
 <br>
 <hr>
 <div r:type="weekcalendar" r:context="blockinfo" r:model="model">

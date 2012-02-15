@@ -91,10 +91,12 @@ class ProgramService {
 	}
 	
 	//course requisites
+	/*
 	@ProxyMethod
 	public def getCourseRequisites(def o) {
 		return em.sqlContext.createNamedQuery("program:list-requisites").setParameters(o).resultList;
 	}
+	*/
 	
 	@ProxyMethod
 	public def addCourseRequisite(def o) {
@@ -124,5 +126,9 @@ class ProgramService {
 		return em.sqlContext.createNamedQuery("program:"+str).setParameters(o).resultList;
 	}
 	
-
+	@ProxyMethod
+	public def lookupProgramCourses(def o) {
+		def str = "program:lookup-program-course-" + ((o.scheduletype == 'regular') ? "regular" : "nonregular");
+		return em.sqlContext.createNamedQuery(str).setParameters(o).resultList;
+	}
 }

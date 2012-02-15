@@ -1,10 +1,21 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
+<%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
+<%@ page import="java.util.*" %>
+
+
+<%
+	Map m = new HashMap();
+	m.put( "objid", request.getParameter("schooltermid"));
+	request.setAttribute( "PARAMS", m );
+%>
 
 <script>	
 	$put( "class_list", 
 		new function() {
 			var svc = ProxyService.lookup( "ClassService" );
 			var self = this;
+			
+			this.schoolterm = <s:invoke service="SchoolTermAdminService" method="read" params="${PARAMS}" json="true" />
 			
 			this.selectedItem;
 			this.listModel = {
@@ -18,10 +29,7 @@
 				var f = function(o) {
 					window.location.hash = "class_schedule:blockinfo?objid="+o.objid;
 				}
-				return new PopupOpener("class_schedule:addblock", {saveHandler: f } );
-			}
-			this.addClass = function() {
-				return new PopupOpener("class_schedule:edit");
+				return new PopupOpener("class_schedule:addblock", {schoolterm:this.schoolterm, saveHandler: f } );
 			}
 		}
 	);
@@ -38,9 +46,7 @@
 	}
 </script>
 
-
 <input type="button" value="Add Block" r:context="class_list" r:name="addBlock" />
-<input type="button" value="Add Class" r:context="class_list" r:name="addClass" />
 <br>
 
 <table r:context="class_list" r:model="listModel" r:varName="item" r:varStatus="stat" r:name="selectedItem" border="1" width="80%">

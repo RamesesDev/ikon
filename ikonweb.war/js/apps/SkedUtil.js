@@ -88,8 +88,17 @@ function SkedUtil() {
 	
 	function TimeUtil( time ) {
 		if(!time) time = "00:00";
-		this.hour = time.substring( 0, time.indexOf(":"));
-		this.minute = time.substring( time.indexOf(":") + 1);
+		if( typeof(time) == 'number' ) {
+			time = time+"";
+			if( time.length  == 3 ) time = "0"+time;
+			this.hour = time.substring( 0, 2 );
+			this.minute = time.substring( 2, 4);
+		}
+		else {
+			this.hour = time.substring( 0, time.indexOf(":"));
+			this.minute = time.substring( time.indexOf(":") + 1);
+		}	
+	
 		this.toString = function() {
 			return this.hour + ":" + this.minute;
 		}
