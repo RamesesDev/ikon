@@ -1,10 +1,10 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
-<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="cui" %>
+<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="ui" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
-<s:invoke service="RoleService" method="getAllPermissions" params="${param['role']}" var="INFO"/>
+<s:invoke service="RoleService" method="getAllPermissions" params="${param['role']}" var="INFO" debug="true"/>
 
 <script>
 	$put("role_permission",
@@ -13,10 +13,10 @@
 			var svc = ProxyService.lookup( "RoleService" );
 			
 			this.rolename = "${param['role']}";
-			this.excluded = <cui:tojson value="${INFO.excluded}"/>;
+			this.included = <ui:tojson value="${INFO.included}"/>;
 			
 			this.savePermissions = function() {
-				svc.updatePermissions( {name:this.rolename, excluded: this.excluded} );
+				svc.updatePermissions( {name:this.rolename, included: this.included} );
 				return "_close";	
 			}
 		}
@@ -40,7 +40,7 @@ Role: <b>${param['role']}</b>
 					<c:set var="id">${m.modulename}:${row}.${col}</c:set>
 					<td align="center">
 						<c:if test="${! empty m.index[id]}">
-							<input type="checkbox" r:context="role_permission" r:name="excluded" r:mode="set" r:uncheckedValue="${id}" />
+							<input type="checkbox" r:context="role_permission" r:name="included" r:mode="set" r:checkedValue="${id}" />
 						</c:if>
 					</td>	
 				</c:forEach>

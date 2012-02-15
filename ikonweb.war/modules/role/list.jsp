@@ -42,6 +42,10 @@
 				return new PopupOpener( "role:info", {saveHandler:refreshList, role:this.selectedItem, mode:"edit" } );
 			}
 			
+			this.viewPermissions = function() {
+				return new PopupOpener("role:permission", {role:this.selectedItem.name});
+			}
+			
 			this.propertyChangeListener = {
 				"roleClass" : function(o) {
 					refreshList();
@@ -66,7 +70,11 @@ Role Classes <select r:context="rolelist" r:items="roleClasses" r:name="roleClas
 		<td>#{item.name}</td>
 		<td>#{item.description}</td>
 		<td>#{item.roleclass}</td>
-		<td><a r:context="rolelist" r:name="edit">View</a></td>
+		<td align="center">
+			<a r:context="rolelist" r:name="edit">View</a>
+			<span class="vr"></span>
+			<a r:context="rolelist" r:name="viewPermissions">Permissions</a>
+		</td>
 	</tbody>
 </table>
 			

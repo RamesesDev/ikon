@@ -35,16 +35,19 @@
 	<body>
 		<h1>Script Management</h1>
 		<button r:context="server-mgmt" r:name="reloadAllSvc">Reload All</button>
+		
+		
 		<h1>Schema Management</h1>
 		<button r:context="server-mgmt" r:name="reloadAllSchema">Reload All</button>
 		
-		<c:if test="${!empty param['id']}">
-			<%ModuleUtil.clearModules(application, request.getParameter("id") );%>
+		
+		<c:if test="${!empty param['moddir']}">
+			<%ModuleUtil.clearModules(application, request.getParameter("moddir") );%>
 		</c:if>
 
 		<h1>Modules Management</h1>
 		<form method="post">
-			Modules Directory <input type="text" name="id"/>
+			Modules Directory <input type="text" name="moddir" value="${param.moddir}"/>
 			<input type="submit" value="Load Modules"/>
 		</form>
 	</body>

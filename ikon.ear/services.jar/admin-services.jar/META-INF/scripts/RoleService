@@ -8,6 +8,10 @@ class RoleService {
 	@Service("RoleclassService")
 	def roleclassSvc;
 	
+	@Service("PermissionService")
+	def permSvc;
+	
+	
 	@ProxyMethod
 	public def getList(def params) {
 		def sql = "role:list";
@@ -55,14 +59,26 @@ class RoleService {
 		def role = em.read( "role", [name: rolename] );
 		def m = [:];
 		m.modules = roleclassSvc.getModulePermissions( role.roleclass, null );
-		m.excluded = ( !role.excluded )	? [] : role.excluded;
+		m.included = ( !role.included ) ? [] : role.included;
+		
+		def allperms = [];
+		m.modules.each{ mod ->
+			mod.rows.each{ row ->
+				mod.cols.each{ col -> 
+					allperms.add("${mod.modulename}:${row}.${col}".toString()) 
+				}
+			}
+		}
+		
+		m.included = permSvc.filterIncludes( allperms, m.included );
+		
 		return m;
 	}
 	
 	@ProxyMethod
 	public def updatePermissions(def r) {
 		def role = em.read( "role", r );
-		role.excluded = r.excluded;
+		role.included = r.included;
 		em.update( "role", role );	
 	}
 	
