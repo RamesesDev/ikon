@@ -11,3 +11,11 @@ or	(cs.fromtime<=$P{fromtime} and cs.totime>=$P{totime})
 or (cs.totime>$P{fromtime} and cs.totime<=$P{totime}) 
 or (cs.fromtime>=$P{fromtime} and cs.totime<=$P{totime} ) 
 )
+
+[list-regular-program-courses]
+select p.*, c.code as coursecode, c.title as coursetitle 
+from programcourse p 
+inner join course c on c.objid = p.courseid 
+where p.programid = $P{programid} 
+and p.yearlevel=$P{yearlevel} and p.term=$P{term} 
+and not exists (select * from courseclass cc where cc.courseid=c.objid and cc.blockid=$P{blockid} ) 

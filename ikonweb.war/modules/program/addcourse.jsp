@@ -38,7 +38,7 @@
 					self.course.courseid = x.objid;
 					self.course.units = x.units;
 				}
-				return new PopupOpener( "course:lookup", {selectHandler: h } );
+				return new PopupOpener( "course:lookup", {selectHandler: h,  orgunit:{objid: this.program.orgunitid} } );
 			}
 			
 			this.termList = [

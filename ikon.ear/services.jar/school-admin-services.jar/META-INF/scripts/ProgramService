@@ -90,13 +90,6 @@ class ProgramService {
 		return em.update( "program:course", o );
 	}
 	
-	//course requisites
-	/*
-	@ProxyMethod
-	public def getCourseRequisites(def o) {
-		return em.sqlContext.createNamedQuery("program:list-requisites").setParameters(o).resultList;
-	}
-	*/
 	
 	@ProxyMethod
 	public def addCourseRequisite(def o) {
@@ -108,17 +101,6 @@ class ProgramService {
 		em.delete( "program:coursereq", o );
 	}
 
-	/*
-	@ProxyMethod
-	public def saveCourseRequisites(def items, def deletedItems) {
-		deletedItems.each { 
-			em.delete( "program:coursereq", it );
-		}
-		items.each {
-			em.save( "program:coursereq", it );
-		}
-	}
-	*/
 
 	@ProxyMethod
 	public def lookupCourseRequisites(def o) {
@@ -126,9 +108,4 @@ class ProgramService {
 		return em.sqlContext.createNamedQuery("program:"+str).setParameters(o).resultList;
 	}
 	
-	@ProxyMethod
-	public def lookupProgramCourses(def o) {
-		def str = "program:lookup-program-course-" + ((o.scheduletype == 'regular') ? "regular" : "nonregular");
-		return em.sqlContext.createNamedQuery(str).setParameters(o).resultList;
-	}
 }

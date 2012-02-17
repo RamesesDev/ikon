@@ -1,0 +1,42 @@
+import com.rameses.annotations.*;
+
+class CheckRoomConflictInterceptor {
+
+	@PersistenceContext("main")
+	def em;
+
+	@After(pattern="ClassScheduleService.changeSchedule.*")
+	public void checkRoomConflict( evt ) {
+		def o = evt.args[0];
+		def m = [:];
+		m.schooltermid = o.schooltermid;
+		o.schedules.each {
+			if(it.roomid) {
+				m.days_of_week = it.days_of_week;
+				m.roomid = it.roomid;
+				m.fromtime = it.fromtime;
+				m.totime = it.totime;
+				m.scheduleid = it.objid;
+				//remove first all existing conflicts
+				em.sqlContext.createNamedExecutor("room_schedule:remove-room-conflict").setParameters(m).execute();
+				em.sqlContext.createNamedExecutor("room_schedule:flag-room-conflict").setParameters(m).execute();
+			}	
+		}		
+	}
+	
+	//attach room conflict flags
+	@After(pattern="ClassScheduleService.getBlockClasses.*")
+	public void findRoomConflict( evt ) {
+		def list = evt.result;
+		list.each { o->
+			o.schedules.each {
+				if( it.roomid ) {
+					def s = em.sqlContext.createNamedQuery("room_schedule:find-room-conflict").setParameters( [scheduleid: it.objid, roomid:it.roomid ] ).resultList*.roomno.join("\n");
+					if( s ) it.room_conflict = s;
+				}
+			}
+		}	
+	}
+	
+	
+}

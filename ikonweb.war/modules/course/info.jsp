@@ -19,7 +19,7 @@
 				else {
 					svc.update( this.course );
 				}
-				if(this.saveHandler) this.saveHandler();
+				if(this.saveHandler) this.saveHandler(this.course);
 				return "_close";
 			}
 			

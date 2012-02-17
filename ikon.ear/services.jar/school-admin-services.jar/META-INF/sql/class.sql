@@ -15,7 +15,8 @@ where b.schooltermid = $P{schooltermid}
 and not exists (select c.* from courseclass c where c.blockid=b.objid) 
 
 [class-schedules]
-select s.* from courseclass_schedule s  
+select s.*, (select roomno from room where objid = s.roomid ) as roomno 
+from courseclass_schedule s  
 where s.classid = $P{classid} 
 order by s.fromtime, s.days  
 

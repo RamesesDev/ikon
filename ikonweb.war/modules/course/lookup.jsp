@@ -22,6 +22,7 @@
 			this.query = {}
 			this.selectedItem;
 			this.selectHandler;
+			this.orgunit;
 			
 			this.listModel = {
 				rows: 5,
@@ -39,6 +40,7 @@
 			this.search = function() {
 				this.listModel.refresh(true);
 			}
+			
 		}
 	);
 </script>

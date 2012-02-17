@@ -3,26 +3,29 @@
 
 
 <script>
-		
+	$register( {id:"#context_menu", context: "blockinfo" });	
 	$put( "blockinfo", 
 		new function() {
 			
-			var svc = ProxyService.lookup("ClassService");
+			var svc = ProxyService.lookup("ClassScheduleService");
 		
 			
-			this.blockinfo = <s:invoke service="ClassService" method="getBlock" params="<%=request%>" json="true"/>;	
+			this.blockinfo = <s:invoke service="ClassScheduleService" method="getBlock" params="<%=request%>" json="true"/>;	
 			this.classlist;
 			var self = this;
 				
 			var util = new SkedUtil();
+			var info = new InfoBox("#context_menu");
 			
-			this.selectedClass = {};
-			
-			
-			
+			this.selectedClass;
+
 			this.model = {
 				minTime: 6,
 				maxTime: 22,
+				onclick: function(o, e) {
+					self.selectedClass = o.item.class;
+					self._controller.navigate(new DropdownOpener( "#context_menu"), e );
+				},
 				fetchList: function() {
 					var arr = [];
 					self.classlist = svc.getBlockClasses( {blockid: self.blockinfo.objid } );
@@ -31,7 +34,11 @@
 							for( var i=0;i<clz.schedules.length;i++ ) {
 								var c = clz.schedules[i];	
 								var func = function(d) {
-									arr.push( {day: d, from: c.fromtime, to: c.totime, caption: clz.coursecode, item:{class:clz,sked:c}, color: clz.colorcode });		
+									var caption = clz.coursecode;
+									caption += "\n" + "Rm:" + ((c.roomno)?c.roomno:'unassigned');
+									if( c.room_conflict ) caption += "\n" + "Rm conflicts:"+c.room_conflict;
+									arr.push( {day: d, from: c.fromtime, to: c.totime, caption: caption, 
+										item:{class:clz,sked:c}, color: clz.colorcode });		
 								}
 								util.fetchDays( c.days_of_week, func );
 							}
@@ -46,11 +53,12 @@
 			}
 			
 			this.addClassSchedule = function() {
-				return new PopupOpener("class_schedule:addclass", { block:this.blockinfo, saveHandler:reloadModel } );
+				return new PopupOpener("class_schedule:addblockclass", { block:this.blockinfo, saveHandler:reloadModel } );
 			}
 			
-			this.editClassSchedule = function() {
-				return new PopupOpener("class_schedule:edit_block", {class: this.selectedClass.item.class, saveHandler:reloadModel });
+			this.changeSchedule = function() {
+				self._controller.navigate("_close");
+				return new PopupOpener("class_schedule:editblockclass", { class:this.selectedClass, saveHandler:reloadModel } );
 			}
 			
 			this.removeClass = function() {
@@ -61,6 +69,14 @@
 	);	
 	
 </script>
+
+<div id="context_menu" style="display:none;">
+	<label r:context="blockinfo">
+		<b>#{selectedClass.code}</b>
+		<br>
+	</label>
+	<a r:context="blockinfo" r:name="changeSchedule">Change Schedule</a>
+</div>
 
 <input type="button" r:context="blockinfo" value="Add Course" r:name="addClassSchedule"/>
 
@@ -77,13 +93,3 @@
 <div r:type="weekcalendar" r:context="blockinfo" r:model="model">
 </div>
 
-
-<div id="infobox" style="display:none">
-	<div r:context="blockinfo" r:type="label">
-		Time: #{selectedClass.from} - #{selectedClass.to}<br/>
-		Subject: #{selectedClass.caption}<br/>
-		Instructor: <i>Not yet assigned.</i><br/>
-		Room: <i>#{selectedClass.item.sked.roomid}</i><br/>
-		<a r:context="blockinfo" r:name="editClass">Edit</a>&nbsp;&nbsp;<a r:context="blockinfo" r:name="removeClass">Remove</a>
-	</div>
-</div>

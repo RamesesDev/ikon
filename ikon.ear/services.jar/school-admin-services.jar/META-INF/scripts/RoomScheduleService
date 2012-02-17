@@ -7,11 +7,34 @@ class RoomScheduleService {
 	
 	@Service("DateService")
 	def dateSvc;
-
+	
 	@ProxyMethod
-	public def getRoomSchedule(def params) {
-		return null;
+	public def getRoomAvailability(def o) {
+		return em.sqlContext.createNamedQuery("room_schedule:list-room-availability").setParameters(o).resultList;
 	}
 
+	@ProxyMethod
+	public def getRoomSchedules( o ) {
+		return em.sqlContext.createNamedQuery("room_schedule:list-room-schedule").setParameters(o).resultList;
+	}
+
+	@ProxyMethod
+	public def getUnassignedSchedules( o ) {
+		return em.sqlContext.createNamedQuery("room_schedule:list-available-room-schedules").setParameters(o).resultList;
+	}
 	
+	@ProxyMethod
+	public def assignRoom( o ) {
+		def x = em.read( "class:schedule", o );
+		x.roomid = o.roomid;
+		em.update( "class:schedule", o );
+	}
+
+	@ProxyMethod
+	public def unassignRoom( o ) {
+		def x = em.read( "class:schedule", o );
+		x.roomid = null;
+		em.update( "class:schedule", x );
+	}
+
 }

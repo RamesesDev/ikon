@@ -1,0 +1,10 @@
+import com.rameses.annotations.*;
+
+class CheckStudentConflictInterceptor {
+
+	@After(pattern="ClassScheduleService.changeSchedule.*")
+	public void checkStudentConflict( evt ) {
+		println "checking student conflicts in schedule";
+	}
+	
+}

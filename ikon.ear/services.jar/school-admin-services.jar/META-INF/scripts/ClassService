@@ -30,65 +30,6 @@ class ClassService {
 		return mainlist;
 	}
 	
-	@ProxyMethod
-	public def saveBlock(def o) {
-		o.objid = "BLK"+new java.rmi.server.UID();
-		return em.create( "class:block", o );
-	}
-	
-	@ProxyMethod
-	public def getBlock(def o) {
-		o = em.read( "class:block", o );
-		def p = em.read( "program", [objid: o.programid] );
-		o.programcode = p.code;
-		o.programtitle = p.title;
-		return o;
-	}
-	
-	@ProxyMethod
-	public def getBlockClasses(def o) {
-		def list = em.sqlContext.createNamedQuery( "class:list-block-classes").setParameters( o ).resultList;
-		list.each {
-			it.schedules = em.sqlContext.createNamedQuery("class:class-schedules").setParameters( [classid:it.objid] ).resultList;
-		}	
-		return list;
-	}
-	
-	
-	@ProxyMethod
-	public def saveClass(def o) {
-		print "saving class";
-		if(!o.objid) o.objid = "CLS"+new java.rmi.server.UID();
-		o = em.save( "class", o );
-		
-		if(o.removedSchedules) {
-			o.removedSchedules.each {
-				em.delete("class:schedule", it);
-			}
-			o.remove( "removedSchedules" );
-		}
-		
-		o.schedules.each {
-			if(!it.objid) it.objid = "CLSSKED:" + new java.rmi.server.UID();
-			it.classid = o.objid;
-			em.save( "class:schedule", it );
-		}
-		return o;
-	}
-	
-	
-	@ProxyMethod
-	public def create(def o) {
-		o.objid = "CLS" + new java.rmi.server.UID();
-		return em.create( "class", o );
-	}
-	
-	@ProxyMethod
-	public def addSchedules(def items, def removedItems) {
-		if(!it.objid) it.objid = "CLSSKED" + new java.rmi.server.UID();
-		em.save( "class:schedule", o );
-	}
-
 	
 	
 }

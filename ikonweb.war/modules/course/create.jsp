@@ -13,7 +13,7 @@
 			this.save = function() {
 				this.course.orgunitid = this.orgunit.objid;
 				svc.create( this.course );
-				if(this.saveHandler) this.saveHandler();
+				if(this.saveHandler) this.saveHandler(this.course);
 				return "_close";
 			}
 		}

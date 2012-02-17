@@ -23,6 +23,7 @@
 			this.listModel = {
 				rows: 10,
 				fetchList: function(o) {
+					if( !self.orgUnit ) return [];
 					o.orgunitid = self.orgUnit.objid;
 					return svc.getList( o );	
 				}
@@ -45,7 +46,7 @@
 
 Academic Unit: <select r:context="programlist" r:items="orgUnits" r:name="orgUnit" r:itemLabel="code"></select>
 <br>
-<input type="button" value="Add" r:context="programlist" r:name="add" />
+<input type="button" value="Add" r:context="programlist" r:name="add" r:visibleWhen="#{orgUnit!=null}"/>
 <table r:context="programlist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
 	<thead>
 		<td>Code</td>

@@ -2,22 +2,40 @@ import com.rameses.annotations.*;
 
 class TeacherScheduleService {
 
+	
 	@PersistenceContext("main")
 	def em;
 	
 	@Service("DateService")
 	def dateSvc;
-
+	
 	@ProxyMethod
-	public def findPossibleClasses(def params) {
-		print params;
-		def list = em.sqlContext.createNamedQuery("class:list-teacher-possible-classes").setParameters(params).resultList;
-		return list;
+	public def getTeacherAvailability(def o) {
+		return em.sqlContext.createNamedQuery("teacher_schedule:list-teacher-availability").setParameters(o).resultList;
 	}
 
 	@ProxyMethod
-	public def getAssignedClasses(def params) {
-		return [];
+	public def getTeacherSchedules( o ) {
+		return em.sqlContext.createNamedQuery("teacher_schedule:list-teacher-schedule").setParameters(o).resultList;
+	}
+
+	@ProxyMethod
+	public def getUnassignedSchedules( o ) {
+		return em.sqlContext.createNamedQuery("teacher_schedule:list-available-teacher-schedules").setParameters(o).resultList;
+	}
+	
+	@ProxyMethod
+	public def assignTeacher( o ) {
+		def x = em.read( "class", o );
+		x.roomid = o.roomid;
+		em.update( "class", o );
+	}
+
+	@ProxyMethod
+	public def unassignTeacher( o ) {
+		def x = em.read( "class", o );
+		x.roomid = null;
+		em.update( "class", x );
 	}
 	
 	

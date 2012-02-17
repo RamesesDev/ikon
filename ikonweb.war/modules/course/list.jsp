@@ -23,12 +23,13 @@
 			this.listModel = {
 				rows: 10,
 				fetchList: function(o) {
+					if( !self.orgUnit ) return [];
 					o.orgunitid = self.orgUnit.objid;
 					return svc.getList( o );	
 				}
 			}
 			
-			var reloadList = function() {
+			var reloadList = function(o) {
 				self.listModel.refresh(true);	
 			}
 			
@@ -48,7 +49,7 @@
 </script>
 
 Academic Unit: <select r:context="courselist" r:items="orgUnits" r:name="orgUnit" r:itemLabel="code"></select>
-<input type="button" value="Add" r:context="courselist" r:name="add" />
+<input type="button" value="Add" r:context="courselist" r:name="add" r:visibleWhen="#{orgUnit!=null}"/>
 <table r:context="courselist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
 	<thead>
 		<td>Code</td>

@@ -1,0 +1,11 @@
+import com.rameses.annotations.*;
+
+class CheckTeacherConflictInterceptor {
+
+	@After(pattern="ClassScheduleService.changeSchedule.*", eval="args[0].teacherid != null")
+	public void checkTeacherConflict( evt ) {
+		def o = evt.args[0];
+		println "checking teacher conflicts for " + o.teacherid;
+	}
+	
+}

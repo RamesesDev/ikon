@@ -2,7 +2,7 @@
 
 
 <script>
-	$put( "class_schedule_addclass", 
+	$put( "class_schedule_add_block_class", 
 	
 		new function() {
 			var svc = ProxyService.lookup("ClassScheduleService"); 
@@ -13,17 +13,15 @@
 			this.selectedSchedule;
 			this.saveHandler;
 			
-			this.scheduletype = "regular";
 			this.courseList;
 			
 			this.getCourseList = function() {
 				var p = {}
-				p.scheduletype = this.scheduletype;
 				p.yearlevel = this.block.yearlevel;
 				p.term = this.block.term;
 				p.blockid = this.block.objid;
 				p.programid = this.block.programid;
-				return svc.lookupProgramCourses( p );
+				return svc.lookupRegularProgramCourses( p );
 			}
 			
 			this.onload = function() {
@@ -74,31 +72,29 @@
 	);
 </script>
 
-<label r:context="class_schedule_addclass">
+<label r:context="class_schedule_add_block_class">
 	Year Level : <b>#{block.yearlevel}</b><br>
 	Term : <b>#{block.term}</b><br>
 </label>
 <br>
 
 Schedule a course<br>
-<input type="radio" r:context="class_schedule_addclass" r:name="scheduletype" value="regular"/>Regular
-<input type="radio" r:context="class_schedule_addclass" r:name="scheduletype" value="nonregular"/>Non Regular
-<select r:context="class_schedule_addclass" r:items="getCourseList()" r:depends="scheduletype" r:name="class.courseid" 
-	r:itemKey="courseid" r:itemLabel="coursecode" r:allowNull="true" r:required="true" r:caption="Course" rows="10"/>
+<select r:context="class_schedule_add_block_class" r:items="getCourseList()" r:depends="scheduletype" r:name="class.courseid" 
+	r:itemKey="courseid" r:itemLabel="coursecode" r:allowNull="true" r:required="true" r:caption="Course" size="6"/>
 
 <br>	
-Class Code: <input type="text" r:context="class_schedule_addclass" r:name="class.code" r:required="true" r:caption="Class Code"/> 
+Class Code: <input type="text" r:context="class_schedule_add_block_class" r:name="class.code" r:required="true" r:caption="Class Code"/> 
 <br>	
-Color Code: <span r:type="colorpicker" r:context="class_schedule_addclass" r:name="class.colorcode"></span> 
+Color Code: <span r:type="colorpicker" r:context="class_schedule_add_block_class" r:name="class.colorcode"></span> 
 <br>
 <b><u>Seat capacity</u></b>
 <br>
-Min Seats: <input type="text" r:context="class_schedule_addclass" r:name="class.min_seats" r:required="true" r:caption="Min No. of Seats" size="4"/> 
-Max Seats: <input type="text" r:context="class_schedule_addclass" r:name="class.max_seats" r:required="true" r:caption="Max No. of Seats" size="4"/> 
+Min Seats: <input type="text" r:context="class_schedule_add_block_class" r:name="class.min_seats" r:required="true" r:caption="Min No. of Seats" size="4"/> 
+Max Seats: <input type="text" r:context="class_schedule_add_block_class" r:name="class.max_seats" r:required="true" r:caption="Max No. of Seats" size="4"/> 
 <br>
 
 Schedules
-<table r:context="class_schedule_addclass" r:model="scheduleList" r:varName="item" width="80%" r:name="selectedSchedule" border="1">
+<table r:context="class_schedule_add_block_class" r:model="scheduleList" r:varName="item" width="80%" r:name="selectedSchedule" border="1">
 	<thead>
 		<tr>
 			<td>Days</td>
@@ -111,17 +107,17 @@ Schedules
 			<td>#{item.days}</td>
 			<td>#{item.fromtime} - #{item.totime}</td>
 			<td>
-				<a r:context="class_schedule_addclass" r:name="editSchedule" r:immediate="true">Edit</a>
+				<a r:context="class_schedule_add_block_class" r:name="editSchedule" r:immediate="true">Edit</a>
 				&nbsp;&nbsp;&nbsp;
-				<a r:context="class_schedule_addclass" r:name="removeSchedule" r:immediate="true">Remove</a>
+				<a r:context="class_schedule_add_block_class" r:name="removeSchedule" r:immediate="true">Remove</a>
 			</td>
 		</tr>
 	</tbody>	
 </table>
-<input type="button" r:context="class_schedule_addclass" r:name="addSchedule" value="+" r:immediate="true" title="Add Schedule"/>
+<input type="button" r:context="class_schedule_add_block_class" r:name="addSchedule" value="+" r:immediate="true" title="Add Schedule"/>
 <br>
 <br>
-<input type="button" r:context="class_schedule_addclass" r:name="save" value="Save"/>
+<input type="button" r:context="class_schedule_add_block_class" r:name="save" value="Save"/>
 
 	
 	
