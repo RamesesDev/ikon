@@ -1,3 +1,7 @@
+body, table, p, ul, ol {
+	color: #444;
+}
+
 img { border: none; }
 
 h1,h2,h3,h4,h5,h6 { margin: 5px 0; }
@@ -117,7 +121,9 @@ table.grid {
 	border: solid 1px #ccc;
 }
 
-table.grid th, table.grid td { padding: 4px 8px !important; }
+table.grid th, table.grid td {
+	padding: 4px 8px; 
+}
 
 table.grid th,
 table.grid thead td {

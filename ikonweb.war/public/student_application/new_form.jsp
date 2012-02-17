@@ -1,10 +1,13 @@
+<%
+response.setHeader("Cache-Control","no-cache"); 
+response.setHeader("Pragma","no-cache"); 
+response.setDateHeader ("Expires", -1); 
+%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="common" %>
 
-<%
-	request.setAttribute("APPID", "SAAP" + new java.rmi.server.UID());
-%>
 
 <t:public redirect_session="false">
 	<jsp:attribute name="head">
@@ -12,23 +15,35 @@
 	</jsp:attribute>
 
 	<jsp:attribute name="style">
-		.caption {
+		.form .caption {
 			font-size:12px;
 			font-style:italic;
 		}
-		table {
+		.form table {
 			font-size:12px;
 			font-family:'Arial'
 		}
-		table tr td {
+		.form table tr td {
 			padding:3px;
+		}
+		.form .steps a {
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.form .section-title {
+			font-weight:bold;
+		}
+		.form .student-photo {
+			box-shadow: 0 2px 5px #aaa;
+			-webkit-box-shadow: 0 2px 5px #aaa;
+			-moz-box-shadow: 0 2px 5px #aaa;
 		}
 	</jsp:attribute>
 
 	<jsp:body>
-	
 		
 	<script>
+		<common:uid prefix="SAAP" var="STUD_APPID"/>
 		<common:loadmodules name="modules"/>
 	
 		$put("student_appform", 
@@ -38,7 +53,7 @@
 				this.selectedContact;
 				
 				this.student = {
-					objid: "${APPID}",
+					objid: "${STUD_APPID}",
 					contactinfo:[],
 					primaryaddress:{},
 					secondaryaddress:{},
@@ -69,10 +84,12 @@
 					}
 				}
 				
+				this.stage = 1;
 				this.step = 1;
 				this.submit = function() {
-					if( this.step < 3 ) {
+					if( this.step < 2 ) {
 						this.step++;
+						this.stage++;
 						return;
 					}
 					
@@ -100,28 +117,57 @@
 				
 				this.lookupProgram = function() {
 					return new PopupOpener("program:lookup",{selectHandler: function(o){
-						self.student.program = o;
 						self.student.programid = o.objid;
+						self.student.programcode = o.code;
+						self.student.programtitle = o.title;
+						self.student.programyearlevels = o.yearlevels;
 					}});
 				}
+				
+				this.file;
+				this.upload_complete = function() {
+					this.student.temp_photodir = this.file.temp_photodir;
+					this.file = null;
+					this._controller.refresh();
+				}
+				
+				//dummy and flags
+				
+				this.dummyFunc = function(){};
+				this.shownFields = {
+					guardianinfo: true
+				};
+				
 			}
 		);
 	</script>
 	
-	<div style="width:95%;">
+	<div class="form">
 		<h2>Application for New Students</h2>		
 		<div class="hr"></div>
 		
+		<div class="section steps">
+			<a r:context="student_appform" r:name="dummyFunc" r:params="{step: 1}" r:immediate="true">
+				Step 1
+			</a>
+			<span r:context="student_appform" r:visibleWhen="#{stage > 1}">
+				/
+				<a r:context="student_appform" r:name="dummyFunc" r:params="{step: 2}" r:immediate="true">
+					Step 2
+				</a>
+			</span>
+		</div>
+		
 		<div r:context="student_appform" r:visibleWhen="#{step == 1}">
 			<div class="section" r:context="student_appform" r:type="label">
-				<span style="font-weight:bold;">Program Information</span>
+				<span class="section-title">Program Information</span>
 				<table>
 					<tr>
 						<td class="caption" align="right">
-							Program Code
+							Program Code *
 						</td>
 						<td>
-							<b>#{student.program.code}</b>
+							<b>#{student.programcode}</b>
 							<div style="position:absolute;top:-100px;left:-100px;">
 								<input type="text" r:context="student_appform" r:name="student.programid" r:required="true" r:caption="Program"/>
 							</div>
@@ -129,17 +175,17 @@
 					</tr>
 					<tr>
 						<td class="caption" align="right">
-							Title
+							Title *
 						</td>
 						<td>
-							<b>#{student.program.title}</b>
+							<b>#{student.programtitle}</b>
 						</td>
 					</tr>
 					<tr>
 						<td></td>
 						<td>
 							<button r:context="student_appform" r:name="lookupProgram" r:immediate="true">
-								#{student.program ? 'Change' : 'Select'} Program
+								#{student.programid ? 'Change' : 'Select'} Program
 							</button>
 						</td>
 					</tr>
@@ -160,54 +206,78 @@
 			<div class="hr"></div>
 			
 			<div class="section">
-				<jsp:include page="personal.jsp"/>
+				<jsp:include page="new_form/personal.jsp"/>
 			</div>
 		</div>
 		
 		<div r:context="student_appform" r:visibleWhen="#{step == 2}">
 			<div class="section">
-				<span style="font-weight:bold;">Primary Address</span>
-				<jsp:include page="address.jsp">
+				<span class="section-title">Primary Address</span>
+				<jsp:include page="new_form/address.jsp">
 					<jsp:param name="address" value="student.primaryaddress"/>
+					<jsp:param name="caption" value="Primary Address"/>
 				</jsp:include>
 			</div>
 			
 			<div class="section">
-				<span style="font-weight:bold;">Secondary Address</span>
-				<jsp:include page="address.jsp">
-					<jsp:param name="address" value="student.secondaryaddress"/>
-				</jsp:include>
+				<span class="section-title">Secondary Address</span>
+				<input type="checkbox" r:context="student_appform" r:name="shownFields.secondaryaddress" />
+				<div r:context="student_appform" r:visibleWhen="#{shownFields.secondaryaddress}"
+				     r:depends="shownFields.secondaryaddress">
+					<jsp:include page="new_form/address.jsp">
+						<jsp:param name="address" value="student.secondaryaddress"/>
+						<jsp:param name="caption" value="Secondary Address"/>
+					</jsp:include>
+				</div>
 			</div>
-		</div>
+			
+			<div class="hr"></div>
 
-		<div r:context="student_appform" r:visibleWhen="#{step == 3}">
 			<div class="section">
-				<span style="font-weight:bold;">Mother's Information</span>
-				<jsp:include page="personinfo.jsp">
-					<jsp:param name="info" value="student.mothersinfo"/>
-				</jsp:include>
+				<span class="section-title">Legal Guardian</span>
+				<input type="checkbox" r:context="student_appform" r:name="shownFields.guardianinfo" />
+				<div r:context="student_appform" r:visibleWhen="#{shownFields.guardianinfo}"
+				     r:depends="shownFields.guardianinfo">
+					<jsp:include page="new_form/personinfo.jsp">
+						<jsp:param name="info" value="student.guardianinfo"/>
+						<jsp:param name="caption" value="Guardian"/>
+					</jsp:include>
+				</div>
 			</div>
 			
 			<div class="section">
-				<span style="font-weight:bold;">Father's Information</span>
-				<jsp:include page="personinfo.jsp">
-					<jsp:param name="info" value="student.fathersinfo"/>
-				</jsp:include>
+				<span class="section-title">Father's Information</span>
+				<input type="checkbox" r:context="student_appform" r:name="shownFields.fathersinfo" />
+				<div r:context="student_appform" r:visibleWhen="#{shownFields.fathersinfo}"
+				     r:depends="shownFields.fathersinfo">
+					<jsp:include page="new_form/personinfo.jsp">
+						<jsp:param name="info" value="student.fathersinfo"/>
+						<jsp:param name="caption" value="Father"/>
+					</jsp:include>
+				</div>
 			</div>
 			
 			<div class="section">
-				<span style="font-weight:bold;">Legal Guardian</span>
-				<jsp:include page="personinfo.jsp">
-					<jsp:param name="info" value="student.guardianinfo"/>
-				</jsp:include>
+				<span class="section-title">Mother's Information</span>
+				<input type="checkbox" r:context="student_appform" r:name="shownFields.mothersinfo" />
+				<div r:context="student_appform" r:visibleWhen="#{shownFields.mothersinfo}"
+				     r:depends="shownFields.mothersinfo">
+					<jsp:include page="new_form/personinfo.jsp">
+						<jsp:param name="info" value="student.mothersinfo"/>
+						<jsp:param name="caption" value="Mother"/>
+					</jsp:include>
+				</div>
 			</div>
 		</div>
 		
 		<div class="section">
-			<button type="button" r:context="student_appform" r:name="back" r:visibleWhen="#{step>1}">Back</button>
-			<button type="button" r:context="student_appform" r:name="submit" r:visibleWhen="#{step<3}">Proceed</button>
-			<button type="button" r:context="student_appform" r:name="submit" r:visibleWhen="#{step==3}">Submit</button>
+			<button type="button" r:context="student_appform" r:name="back" r:visibleWhen="#{step>1}" r:immediate="true">Back</button>
+			<button type="button" r:context="student_appform" r:name="submit" r:visibleWhen="#{step==1}">Proceed</button>
+			<button type="button" r:context="student_appform" r:name="submit" r:visibleWhen="#{step==2}">Submit</button>
 		</div>
+	</div>
+	
+	
 	</jsp:body>
 	
 	

@@ -85,7 +85,7 @@ class RoleService {
 	@ProxyMethod
 	public def getRoleModulePermissions(def rolename) {
 		def role = em.read( "role", [name: rolename] );
-		return roleclassSvc.getModulePermissions( role.roleclass, role.excluded );
+		return roleclassSvc.getModulePermissions( role.roleclass, role.included );
 	}
 
 }

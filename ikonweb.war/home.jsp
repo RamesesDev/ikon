@@ -1,9 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
-<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="common" %>
+<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="ui" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
 
+<ui:check-session/>
 
 <c:if test="${!empty SESSIONID}">
 	<s:invoke service="SessionService" method="getInfo" params="${SESSIONID}" var="SESSION_INFO"/>

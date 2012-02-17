@@ -59,7 +59,8 @@
 Role Classes <select r:context="rolelist" r:items="roleClasses" r:name="roleClass" r:itemLabel="name"
 	r:allowNull="true" r:emptyText="All"></select><br>
 <input type="button" value="Add" r:context="rolelist" r:name="add" />
-<table r:context="rolelist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
+<table r:context="rolelist" r:model="listModel" r:varName="item" r:name="selectedItem"
+       class="grid" cellpadding="0" cellspacing="0" width="80%">
 	<thead>
 		<td>Role</td>
 		<td>Description</td>

@@ -21,7 +21,8 @@
 	);
 </script>
 
-<table r:context="studentlist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
+<table r:context="studentlist" r:model="listModel" r:varName="item" r:name="selectedItem"
+       class="grid" cellpadding="0" cellspacing="0" width="80%">
 	<thead>
 		<tr>
 			<td>Student No</td>

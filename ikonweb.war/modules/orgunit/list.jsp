@@ -49,7 +49,8 @@
 
 <select r:context="orgunitlist" r:items="orgTypes" r:name="orgType" r:itemKey="name" r:itemLabel="name"></select>
 <input type="button" value="Add" r:context="orgunitlist" r:name="add" />
-<table r:context="orgunitlist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
+<table r:context="orgunitlist" r:model="listModel" r:varName="item" r:name="selectedItem"
+       class="grid" cellpadding="0" cellspacing="0" width="80%">
 	<thead>
 		<td>Code</td>
 		<td>Title</td>

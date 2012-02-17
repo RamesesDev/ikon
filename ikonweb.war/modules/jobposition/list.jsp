@@ -68,7 +68,7 @@
 </script>
 
 
-Org Unit: <select r:context="jobpositionlist" r:items="orgUnits" r:name="orgUnit" r:itemLabel="code"></select>
+Org Unit: <select r:context="jobpositionlist" r:items="orgUnits" r:name="orgUnit" r:itemLabel="title"></select>
 
 <input type="button" value="Add" r:context="jobpositionlist" r:name="add" />
 <table r:context="jobpositionlist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
@@ -95,7 +95,8 @@ Org Unit: <select r:context="jobpositionlist" r:items="orgUnits" r:name="orgUnit
 				</div>
 			</td>
 			<td align="center">
-				<a r:context="jobpositionlist" r:name="edit">View</a>&nbsp;&nbsp;
+				<a r:context="jobpositionlist" r:name="edit">View</a>
+				<span class="vr"></span>
 				<a r:context="jobpositionlist" r:name="viewPermissions">Permissions</a>
 			</td>
 		</tr>	

@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
+<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="ui" %>
 
 <%@ attribute name="before_rendering" fragment="true" %>
 <%@ attribute name="head" fragment="true" %>
@@ -12,20 +13,10 @@
 <%@ attribute name="pageTitle"%>
 <%@ attribute name="showFeedback"%>
 
+<ui:check-session/>
+
 <c:if test="${empty showFeedback}">
 	<c:set var="showFeedback" value="false"/>
-</c:if>
-
-
-<c:if test="${empty SESSIONID}">
-	<%
-		String uri = request.getRequestURI();
-		String qs = request.getQueryString();
-		if( qs != null )
-		uri = uri + "?" + qs;
-		
-		response.sendRedirect("authenticate.jsp?u=" + java.net.URLEncoder.encode(uri));
-	%>
 </c:if>
 
 <%

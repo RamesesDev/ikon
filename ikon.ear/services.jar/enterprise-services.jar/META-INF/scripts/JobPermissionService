@@ -24,16 +24,14 @@ class JobPermissionService
 	@ProxyMethod
 	public def getUserJobposition( param )
 	{
-		def jobid = param.jobid;
-		if( !jobid ) {
-			jobid = em.sqlContext.createQuery('select objid from jobposition where assigneeid=$P{userid}')
-			         .setParameters(env)
-					 .singleResult?.objid;
-		}
+		def joblist = em.sqlContext.createQuery('select objid,code,title from jobposition where assigneeid=$P{userid}')
+			            .setParameters(env)
+					    .resultList;
 		
-		if( !jobid ) return null;
+		if( !joblist ) return null;
 		
-		def key = env.sessionid + env.userid + jobid;
+		def jobid = param.jobid? param.jobid : joblist[0].objid;
+		
 		def job = jobSvc.read( [objid: jobid] );
 		if( !job ) return null;
 		
@@ -42,8 +40,10 @@ class JobPermissionService
 		info.code = job.code;
 		info.title = job.title;
 		info.orgunitid = job.orgunitid;
+		info.others = joblist;
 		
-		//info.permissions = cacheService.get( key );
+		def key = "" + (env.sessionid + env.userid + jobid).hashCode();
+		info.permissions = cacheService.get( key );
 		
 		if( !info.permissions ) {
 			def exc = em.sqlContext.createNamedQuery('user_permission:get-excluded-permissions')
@@ -75,6 +75,7 @@ class JobPermissionService
 			}
 			
 			info.permissions = permissions;
+			cacheService.put(key, info.permissions);
 		}
 		
 		return info;

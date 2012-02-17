@@ -20,6 +20,8 @@
 		);
 			
 		
+		$register({id:"#jobmenu", context:"home"});
+		
 		$put(
 			"home",
 			new function() {
@@ -27,12 +29,38 @@
 					if( !location.hash && $ctx('apps').items && $ctx('apps').items.length > 0 ) 
 						location.hash = $ctx('apps').items[0].id;
 				}
+				
+				var jobMenu;						
+				this.showJobs = function() {
+					if( !jobMenu ) {
+						jobMenu = new DropdownOpener( '#jobmenu' );
+						jobMenu.options = {
+							styleClass: 'dropdownmenu',
+							handleClassOnOpen: 'menu_open',
+							position: {my: 'right top', at: 'right bottom'}
+						};
+					}
+					return jobMenu;
+				}
 			}
 		);
 	</jsp:attribute>
-	
-	<jsp:attribute name="style">
-		
+
+	<jsp:attribute name="header_middle">
+		<a r:context="home" r:name="showJobs">
+			${JOB.title} &nbsp;&nbsp;&#9660;
+		</a>
+		<div id="jobmenu" style="display:none">
+			<ul>
+				<c:forEach items="${JOB.others}" var="item">
+					<li>
+						<a href="?jobid=${item.objid}">
+							${item.title}
+						</a>
+					</li>
+				</c:forEach>
+			</ul>
+		</div>
 	</jsp:attribute>
 	
 	<jsp:body>

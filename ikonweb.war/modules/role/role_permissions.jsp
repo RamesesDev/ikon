@@ -19,35 +19,134 @@
 				svc.updatePermissions( {name:this.rolename, included: this.included} );
 				return "_close";	
 			}
+			
+			//bind items
+			this.onload = function() {
+				var allcbox = $('input.all-modules').change(function(){
+					if( this.checked )
+						$('input.modulename').attr('checked', 'checked');
+					else
+						$('input.modulename').removeAttr('checked');
+					$('input.modulename').trigger('change');
+				});
+				
+				$('div.module').each(function(idx,mod){
+					var modcbox = $(mod).find('input.modulename');
+					modcbox.change(function(){
+						if( this.checked )
+							$('input.workunit', mod).attr('checked', 'checked');
+						else {
+							$('input.workunit', mod).removeAttr('checked');
+							allcbox.removeAttr('checked');
+						}
+						$('input.workunit', mod).trigger('change');
+					});
+					
+					$(mod).find('tr.item').each(function(idx,row){
+						var rowcbox = $(row).find('input.workunit');
+						var items = $(row).find('input.action');
+						
+						rowcbox.change(function(){
+							if( this.checked )
+								items.attr('checked', 'checked');
+							else {
+								items.removeAttr('checked');
+								modcbox.removeAttr('checked');
+								allcbox.removeAttr('checked');
+							}
+							items.trigger('change');
+						});
+						
+						items.change(function() {
+							if( this.checked ) return;
+							rowcbox.removeAttr('checked');
+							modcbox.removeAttr('checked');
+							allcbox.removeAttr('checked');
+						});
+					});
+				});
+			}
 		}
 	);
 </script>
 
-Role: <b>${param['role']}</b>
-<c:forEach items="${INFO.modules}" var="m">
-	<h2>${m.moduletitle}</h2>
-	<table width="80%" border="1">
-		<tr>
-			<td width="80">Entity Name</td>
-			<c:forEach items="${m.cols}" var="col">
-				<td align="center">${col}</td>	
-			</c:forEach>
-		</tr>
-		<c:forEach items="${m.rows}" var="row">
+<style>
+	.role_permission .row-header {
+		padding-left: 0;
+	}
+	
+	.role_permission td { border-right: solid 1px #ccc; }
+</style>
+
+<div>
+	Role: <b>${param['role']}</b>
+</div>
+<div>
+	<input type="checkbox" class="all-modules"/>
+	All Modules
+</div>
+
+<div class="hr"></div>
+<br/>
+
+<c:forEach items="${INFO.modules}" var="m" varStatus="stat">
+	<c:if test="${stat.index > 0}">
+		<br/>
+	</c:if>
+	<div class="module">
+		<h2>
+			<input type="checkbox" class="modulename" id="${m.modulename}"/>
+			${m.moduletitle}
+		</h2>
+		<table class="grid role_permission" border="0" cellpadding="0" cellspacing="0">
 			<tr>
-				<td>${row}</td>
+				<td width="100px">
+					Entity Name
+				</td>
+				<c:set var="count" value="${0}"/>
 				<c:forEach items="${m.cols}" var="col">
-					<c:set var="id">${m.modulename}:${row}.${col}</c:set>
-					<td align="center">
-						<c:if test="${! empty m.index[id]}">
-							<input type="checkbox" r:context="role_permission" r:name="included" r:mode="set" r:checkedValue="${id}" />
-						</c:if>
-					</td>	
+					<c:set var="count" value="${count+1}"/>
+					<td align="center" width="50px">
+						${col}
+					</td>
 				</c:forEach>
+				<c:if test="${count < 10}">
+					<c:forEach begin="${count}" end="${10-1}">
+						<td align="center" width="50px">
+							&nbsp;
+						</td>
+					</c:forEach>
+				</c:if>
 			</tr>
-		</c:forEach>
-	</table>
+			<c:forEach items="${m.rows}" var="row">
+				<tr class="item">
+					<td valign="top" class="row-header">
+						<input type="checkbox" class="workunit" id="${m.modulename}:${row}"/> 
+						${row}
+					</td>
+					<c:set var="count" value="${0}"/>
+					<c:forEach items="${m.cols}" var="col">
+						<c:set var="count" value="${count+1}"/>
+						<c:set var="id">${m.modulename}:${row}.${col}</c:set>
+						<td align="center" valign="top">
+							<c:if test="${! empty m.index[id]}">
+								<input type="checkbox" class="action" id="${id}"
+									   r:context="role_permission" r:name="included" r:mode="set" r:checkedValue="${id}" />
+							</c:if>
+						</td>	
+					</c:forEach>
+					<c:if test="${count < 10}">
+						<c:forEach begin="${count}" end="${10-1}">
+							<td align="center">
+								&nbsp;
+							</td>
+						</c:forEach>
+					</c:if>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>
 </c:forEach>
 	
 <br>
-<input type="button" r:context="role_permission" r:name="savePermissions" value="Save"/>
+<button r:context="role_permission" r:name="savePermissions">Save</button>

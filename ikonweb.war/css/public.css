@@ -35,20 +35,9 @@ body {
 }
 
 .head .content .logo { padding-left: 10px; }
+.head .content .mainmenu { padding-right: 10px; }
 
 .head a {
-	color: #0066FF;
-	text-decoration: none;
-	font-weight: bold;
-	outline: none;
-}
-
-.head a:hover { color: #06449B; }
-
-.head .mainmenu {
-	color: #0066FF;
-}
-.head .mainmenu a {
 	font-size:12px;
 	font-weight:bolder;
 	text-decoration:none;
@@ -58,7 +47,7 @@ body {
 	color: #0066FF;
 }
 
-.head .mainmenu a:hover { color: #06449B; }
+.head a:hover { color: #06449B; }
 
 
 .middle {

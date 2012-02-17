@@ -18,10 +18,10 @@ class PermissionService
 	
 	@ProxyMethod(local=true)
 	public def filterIncludes( permissions, includes ) {
-		return doFilterIncludes( permissions, includes, [] );
+		return doFilterIncludes( permissions, includes );
 	}
 	
-	private def doFilterIncludes( p, includes, list ) {
+	private def doFilterIncludes( p, includes, list=[] ) {
 		if( ! includes ) {
 			return list;
 		}

@@ -5,6 +5,7 @@
 		<field name="description" />
 		<field name="roleclass" />
 		<complex name="included" serializer="default" />
+		<field name="system"/>
     </element>
 
 	
