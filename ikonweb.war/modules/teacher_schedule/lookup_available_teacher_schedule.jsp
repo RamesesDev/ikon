@@ -44,6 +44,7 @@
 			<td>Days</td>
 			<td>From Time</td>
 			<td>To Time</td>
+			<td>Room</td>
 		</tr>
 	</thead>
 	<tbody>
@@ -52,6 +53,7 @@
 			<td>#{item.days}</td>
 			<td>#{item.fromtime}</td>
 			<td>#{item.totime}</td>
+			<td>#{item.roomno}</td>
 		</tr>
 	</tbody>
 </table>

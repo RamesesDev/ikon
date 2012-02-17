@@ -75,7 +75,9 @@
 					for( var i=0; i<list.length; i++ ) {
 						var c = list[i];	
 						var func = function(d) {
-							arr.push( {day: d, from: c.fromtime, to: c.totime, caption: c.classcode, item:c, color: c.colorcode });		
+							var caption = c.classcode;
+							caption += "\n" + "Rm:" + ((c.roomno)?c.roomno:'unassigned');
+							arr.push( {day: d, from: c.fromtime, to: c.totime, caption: caption, item:c, color: c.colorcode });		
 						}
 						util.fetchDays( c.days_of_week, func );
 					}
@@ -85,7 +87,7 @@
 			
 			this.lookupAvailable = function() {
 				var f = function(x) {
-					svc.assignTeacher( {objid: x.objid, teacherid: self.selectedItem.objid } );
+					svc.assignTeacher( {objid: x.classid, teacherid: self.selectedItem.objid } );
 					self.weekSchedule.load();
 				}
 				return new PopupOpener( "teacher_schedule:lookup_available_schedule", 
@@ -96,7 +98,7 @@
 			this.unassignTeacher = function() {
 				self._controller.navigate( "_close");
 				if( confirm( "This will remove room assignement. Proceed?")) {
-					svc.unassignTeacher( {objid: self.selectedSchedule.objid, teacherid: self.selectedSchedule.teacherid } );
+					svc.unassignTeacher( {objid: self.selectedSchedule.classid, teacherid: self.selectedSchedule.teacherid } );
 					self.weekSchedule.load();
 				}
 			}
@@ -115,7 +117,7 @@
 		<b>#{selectedSchedule.code}</b>
 		<br>
 	</label>
-	<a r:context="teacher_schedule_list" r:name="unassignRoom">Unassign Room</a>
+	<a r:context="teacher_schedule_list" r:name="unassignTeacher">Unassign Teacher</a>
 </div>
 
 

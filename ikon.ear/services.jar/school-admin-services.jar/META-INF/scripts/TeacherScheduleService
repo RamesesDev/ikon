@@ -27,14 +27,14 @@ class TeacherScheduleService {
 	@ProxyMethod
 	public def assignTeacher( o ) {
 		def x = em.read( "class", o );
-		x.roomid = o.roomid;
+		x.teacherid = o.teacherid;
 		em.update( "class", o );
 	}
 
 	@ProxyMethod
 	public def unassignTeacher( o ) {
 		def x = em.read( "class", o );
-		x.roomid = null;
+		x.teacherid = null;
 		em.update( "class", x );
 	}
 	

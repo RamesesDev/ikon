@@ -18,17 +18,16 @@ and not exists (
    ) 
 ) 
 
-
 [list-teacher-schedule]
-select *, cc.code as classcode 
+select cs.*, cc.code as classcode, (select roomno from room where objid=cs.roomid) as roomno  
 from courseclass_schedule cs 
 inner join courseclass cc on cs.classid=cc.objid 
 inner join course c on cc.courseid = c.objid 
 where cc.schooltermid=$P{schooltermid}  
-and cs.roomid = $P{roomid} 
+and cc.teacherid = $P{teacherid} 
 
 [list-available-teacher-schedules]
-select cs.*, cc.code as classcode   
+select cs.*, cc.code as classcode, (select roomno from room where objid=cs.roomid) as roomno    
 from courseclass_schedule cs 
 inner join courseclass cc on cc.objid=cs.classid  
 inner join course c on cc.courseid=c.objid 
@@ -50,7 +49,7 @@ and not exists (
 ) 
 
 [remove-teacher-conflict] 
-delete from room_schedule_conflict where roomid=$P{roomid} and ( sked1=$P{scheduleid} OR sked2=$P{scheduleid} )
+delete from teacher_schedule_conflict where teacherid=$P{teacherid} and ( sked1=$P{scheduleid} OR sked2=$P{scheduleid} )
 
 [flag-teacher-conflict]
 insert into room_schedule_conflict 
