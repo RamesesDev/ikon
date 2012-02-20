@@ -19,7 +19,7 @@ and not exists (
 ) 
 
 [list-teacher-schedule]
-select cs.*, cc.code as classcode, (select roomno from room where objid=cs.roomid) as roomno  
+select cs.*, cc.code as classcode, cc.colorcode, (select roomno from room where objid=cs.roomid) as roomno  
 from courseclass_schedule cs 
 inner join courseclass cc on cs.classid=cc.objid 
 inner join course c on cc.courseid = c.objid 
@@ -33,7 +33,7 @@ inner join courseclass cc on cc.objid=cs.classid
 inner join course c on cc.courseid=c.objid 
 where cc.schooltermid = $P{schooltermid} 
 and cc.teacherid is null 
-and c.orgunitid = $P{orgunitid} 
+and c.orgunitid in (select orgunitid from jobposition jp where assigneeid = $P{teacherid})  
 and not exists ( 
    select * 
    from courseclass_schedule cs1 
@@ -52,13 +52,13 @@ and not exists (
 delete from teacher_schedule_conflict where teacherid=$P{teacherid} and ( sked1=$P{scheduleid} OR sked2=$P{scheduleid} )
 
 [flag-teacher-conflict]
-insert into room_schedule_conflict 
-select $P{scheduleid}, cs.objid, cs.roomid 
+insert ignore into teacher_schedule_conflict 
+select $P{scheduleid}, cs.objid, cc.teacherid  
 from courseclass_schedule cs 
 inner join courseclass cc on cs.classid=cc.objid 
 where cc.schooltermid=$P{schooltermid}  
 and not( cs.objid = $P{scheduleid} ) 
-and cs.roomid = $P{roomid}  
+and cc.teacherid = $P{teacherid}  
 and (cs.days_of_week & $P{days_of_week} ) > 0   
 and ( 
 	(cs.fromtime>=$P{fromtime} and cs.fromtime<$P{totime}) 
@@ -68,10 +68,16 @@ and (
 ) 
  
 [find-teacher-conflict]
-select r.roomno 
-from room_schedule_conflict rc 
-inner join room r on r.objid = rc.roomid 
-where not(roomid = $P{roomid}) 
-and ( sked1=$P{scheduleid} OR sked2=$P{scheduleid} ) 
+select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
+from courseclass_schedule cs 
+inner join courseclass cc on cc.objid=cs.classid 
+inner join teacher_schedule_conflict rs on cs.objid=rs.sked1 
+where rs.sked2 = $P{scheduleid} and rs.teacherid=$P{teacherid} 
+union 
+select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
+from courseclass_schedule cs 
+inner join courseclass cc on cc.objid=cs.classid 
+inner join teacher_schedule_conflict rs on cs.objid=rs.sked2 
+where rs.sked1 = $P{scheduleid} and rs.teacherid=$P{teacherid} 
  
  

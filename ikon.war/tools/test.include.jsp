@@ -1,5 +1,0 @@
-<%
-
-response.sendRedirect("sample.jsp");
-
-%>

@@ -6,6 +6,7 @@
 		<field name="title" />
 		<field name="units" />
 		<field name="orgunitid" />
+		<field name="classification"  />
     </element>
 
 </schema>

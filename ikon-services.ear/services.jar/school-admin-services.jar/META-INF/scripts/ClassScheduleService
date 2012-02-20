@@ -18,8 +18,7 @@ class ClassScheduleService {
 		}
 		def list = qry.resultList;
 		list.each {
-			it.schedules = em.sqlContext.createNamedQuery("class:class-schedules").setParameters( [classid:it.objid] )
-				.resultList.collect{ x-> [x.fromtime+" "+x.totime+" "+x.days + " " + x.roomno ] };
+			it.schedules = em.sqlContext.createNamedQuery("class:class-schedules").setParameters( [classid:it.objid] ).resultList;
 		}
 		def mainlist = [];	
 		

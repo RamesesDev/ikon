@@ -66,6 +66,12 @@
 		<servlet-name>cluster-resource</servlet-name>
         <servlet-class>com.rameses.web.support.ClusterResourceServlet</servlet-class>
     </servlet>
+	
+	<servlet>
+		<servlet-name>xxx</servlet-name>
+        <jsp-file>/customizer.jsp</jsp-file>
+    </servlet>
+	
 
     <servlet-mapping>
         <servlet-name>JSInvoker</servlet-name>
@@ -90,6 +96,11 @@
 	<servlet-mapping>
         <servlet-name>cluster-resource</servlet-name>
         <url-pattern>/cres/*</url-pattern>
+    </servlet-mapping>
+	
+	<servlet-mapping>
+        <servlet-name>xxx</servlet-name>
+        <url-pattern>*.cus</url-pattern>
     </servlet-mapping>
 
 

@@ -47,7 +47,7 @@
 		<td>#{item.todate}</td>
 		<td>#{item.status}</td>
 		<td><a href="#schoolterm:info?objid=#{item.objid}">View</a></td>
-		<td><a href="${pageContext.request.contextPath}/schoolterm.jsp?schooltermid=#{item.objid}">Main Page</a></td>
+		<td><a href="${pageContext.request.contextPath}/scheduling.jsp?schooltermid=#{item.objid}">Scheduling</a></td>
 	</tbody>
 </table>
 			

@@ -25,7 +25,7 @@
 		<field name="teacherid" />
     </element>
 
-	<element name="block" tablename="block_section" >
+	<element name="block" tablename="block_schedule" >
 		<field name="objid" primary="true"/>
 		<field name="code" />
 		<field name="programid" />

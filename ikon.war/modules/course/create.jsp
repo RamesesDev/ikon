@@ -10,6 +10,8 @@
 			this.course = {}
 			this.orgunit;
 			
+			this.classifications = ["MAJOR","MINOR","GE"];
+			
 			this.save = function() {
 				this.course.orgunitid = this.orgunit.objid;
 				svc.create( this.course );
@@ -30,6 +32,9 @@ Code <input type="text" r:context="course_create" r:name="course.code" r:require
 Title <input type="text" r:context="course_create" r:name="course.title" r:required="true" r:caption="Course Title" />
 <br>
 Units <input type="text" r:context="course_create" r:name="course.units" r:required="true" r:caption="Course Units" />
+<br>
+Classification <select r:context="course_create" r:name="course.classification" r:items="classifications" r:allowNull="true"
+	r:required="true" r:caption="Course Classification"></select>
 <br>
 
 <input type="button" r:context="course_create" r:name="save" value="Save"/>

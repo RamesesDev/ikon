@@ -2,10 +2,26 @@ import com.rameses.annotations.*;
 
 class CheckTeacherConflictInterceptor {
 
-	@After(pattern="ClassScheduleService.changeSchedule.*", eval="args[0].teacherid != null")
-	public void checkTeacherConflict( evt ) {
+	@PersistenceContext("main")
+	def em;
+	
+	@After(pattern="ClassScheduleService.changeSchedule.*")
+	public void checkRoomConflict( evt ) {
 		def o = evt.args[0];
-		println "checking teacher conflicts for " + o.teacherid;
+		def m = [:];
+		m.schooltermid = o.schooltermid;
+		if( o.teacherid ) {
+			o.schedules.each {
+				m.days_of_week = it.days_of_week;
+				m.teacherid = o.teacherid;
+				m.fromtime = it.fromtime;
+				m.totime = it.totime;
+				m.scheduleid = it.objid;
+				//remove first all existing conflicts
+				em.sqlContext.createNamedExecutor("teacher_schedule:remove-teacher-conflict").setParameters(m).execute();
+				em.sqlContext.createNamedExecutor("teacher_schedule:flag-teacher-conflict").setParameters(m).execute();
+			}		
+		}
 	}
 	
 }

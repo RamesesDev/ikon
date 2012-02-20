@@ -1,15 +1,19 @@
 [list]
-select cls.*, p.code as programcode, p.title as programtitle, c.code as coursecode, c.title as coursetitle,
-(select code from block_section b where b.objid = cls.blockid ) as blockcode   
+select cls.*, p.code as programcode, p.title as programtitle, 
+c.code as coursecode, c.title as coursetitle, b.code as blockcode, 
+(select concat(p.lastname, ', ', p.firstname) from personnel p where p.objid=cls.teacherid ) as teacher    
 from courseclass cls 
 inner join program p on cls.programid = p.objid 
 inner join course c on cls.courseid = c.objid 
-where cls.schooltermid = $P{schooltermid}
+inner join block_schedule b on b.objid = cls.blockid 
+where cls.schooltermid = $P{schooltermid} 
+order by b.code 
+
 
 
 [list-pending-blocks]
 select b.*, p.code as programcode, p.title as programtitle 
-from block_section b 
+from block_schedule b 
 inner join program p on b.programid = p.objid 
 where b.schooltermid = $P{schooltermid} 
 and not exists (select c.* from courseclass c where c.blockid=b.objid) 
@@ -21,7 +25,8 @@ where s.classid = $P{classid}
 order by s.fromtime, s.days  
 
 [list-block-classes]
-select cls.*, c.code as coursecode, c.title as coursetitle 
+select cls.*, c.code as coursecode, c.title as coursetitle, 
+(select concat(p.lastname,', ',p.firstname) from personnel p where p.objid=cls.teacherid ) as teacher 
 from courseclass cls 
 inner join course c on cls.courseid = c.objid 
 where cls.blockid = $P{blockid}

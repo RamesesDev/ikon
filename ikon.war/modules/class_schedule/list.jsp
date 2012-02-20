@@ -12,7 +12,7 @@
 <script>	
 	$put( "class_list", 
 		new function() {
-			var svc = ProxyService.lookup( "ClassService" );
+			var svc = ProxyService.lookup( "ClassScheduleService" );
 			var self = this;
 			
 			this.schoolterm = <s:invoke service="SchoolTermAdminService" method="read" params="${PARAMS}" json="true" />
@@ -33,29 +33,23 @@
 			}
 		}
 	);
-	
-	function formatSchedule(arr) {
-		if(!arr) return "";
-		var str = "";
-		var a = arr.split(";");
-		for( var i=0;i< a.length;i++ ) {
-			if(i>0) str += "<br>";
-			str += a[i];
-		}	
-		return str;
-	}
 </script>
+
+<div id="schedule-formatter" style="display:none;">
+    #{it.fromtime}-#{it.totime} #{it.days} #{(it.roomno)? '(' + it.roomno + ')': ''}<br> 
+</div>
 
 <input type="button" value="Add Block" r:context="class_list" r:name="addBlock" />
 <br>
 
-<table r:context="class_list" r:model="listModel" r:varName="item" r:varStatus="stat" r:name="selectedItem" border="1" width="80%">
+<table r:context="class_list" r:model="listModel" r:varName="item" r:varStatus="stat" r:name="selectedItem" border="1" width="100%">
 	<thead>
 		<tr>
 			<td>Class Code</td>
 			<td>Block</td>
 			<td>Course</td>
-			<td>Schedule</td>
+			<td>Schedule/Room</td>
+			<td>Teacher</td>
 			<td>Program</td>
 			<td>&nbsp;</td>
 		</tr>
@@ -78,7 +72,8 @@
 				</div>
 			</td>
 			<td>#{item.coursecode}</td>
-			<td>#{item.schedules.join('<br>')}</td>
+			<td>#{ $template('schedule-formatter', item.schedules, true ) }</td>
+			<td>#{ (item.teacher) ? item.teacher : '' }</td>
 			<td>#{item.programcode}</td>
 			<td>
 				<div r:context="class_list" r:visibleWhen="#{item.blockid != null}" style="display:none;">

@@ -31,8 +31,8 @@ class CheckRoomConflictInterceptor {
 		list.each { o->
 			o.schedules.each {
 				if( it.roomid ) {
-					def s = em.sqlContext.createNamedQuery("room_schedule:find-room-conflict").setParameters( [scheduleid: it.objid, roomid:it.roomid ] ).resultList*.roomno.join("\n");
-					if( s ) it.room_conflict = s;
+					def errs = em.sqlContext.createNamedQuery("room_schedule:find-room-conflict").setParameters( [scheduleid: it.objid, roomid:it.roomid ] ).resultList;
+					if( errs ) it.room_conflict = errs;
 				}
 			}
 		}	

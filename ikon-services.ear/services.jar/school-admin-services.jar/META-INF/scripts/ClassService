@@ -8,27 +8,6 @@ class ClassService {
 	@Service("DateService")
 	def dateSvc;
 
-	@ProxyMethod
-	public def getList(def params) {
-		def qry = em.sqlContext.createNamedQuery( "class:list" );
-		if(params) {
-			if(params._start) qry.setFirstResult( params._start );
-			if(params._limit) qry.setMaxResults( params._limit );
-			qry.setParameters( params );
-		}
-		def list = qry.resultList;
-		list.each {
-			it.schedules = em.sqlContext.createNamedQuery("class:class-schedules").setParameters( [classid:it.objid] )
-				.resultList.collect{ x-> [x.fromtime+" "+x.totime+" "+x.days] };
-		}
-		def mainlist = [];	
-		
-		//display pending blocks
-		qry = em.sqlContext.createNamedQuery( "class:list-pending-blocks" ).setParameters( params );
-		mainlist = qry.resultList.collect { [blockid: it.objid, blockcode: it.code, programcode: it.programcode, programtitle: it.programtitle ] }
-		mainlist.addAll( list );
-		return mainlist;
-	}
 	
 	
 	

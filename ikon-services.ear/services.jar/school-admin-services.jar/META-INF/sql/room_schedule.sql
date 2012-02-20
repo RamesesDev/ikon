@@ -15,7 +15,7 @@ where not exists (
 ) 
 
 [list-room-schedule]
-select *, cc.code as classcode 
+select cs.*, cc.code as classcode, cc.colorcode, (select concat(lastname,',',firstname) from personnel where objid=cc.teacherid) as teacher   
 from courseclass_schedule cs 
 inner join courseclass cc on cs.classid=cc.objid 
 inner join course c on cc.courseid = c.objid 
@@ -45,7 +45,7 @@ and not exists (
 delete from room_schedule_conflict where roomid=$P{roomid} and ( sked1=$P{scheduleid} OR sked2=$P{scheduleid} )
 
 [flag-room-conflict]
-insert into room_schedule_conflict 
+insert ignore into room_schedule_conflict 
 select $P{scheduleid}, cs.objid, cs.roomid 
 from courseclass_schedule cs 
 inner join courseclass cc on cs.classid=cc.objid 
@@ -61,10 +61,16 @@ and (
 ) 
  
 [find-room-conflict]
-select r.roomno 
-from room_schedule_conflict rc 
-inner join room r on r.objid = rc.roomid 
-where not(roomid = $P{roomid}) 
-and ( sked1=$P{scheduleid} OR sked2=$P{scheduleid} ) 
+select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
+from courseclass_schedule cs 
+inner join courseclass cc on cc.objid=cs.classid 
+inner join room_schedule_conflict rs on cs.objid=rs.sked1 
+where rs.sked2 = $P{scheduleid} and rs.roomid=$P{roomid} 
+union 
+select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
+from courseclass_schedule cs 
+inner join courseclass cc on cc.objid=cs.classid 
+inner join room_schedule_conflict rs on cs.objid=rs.sked2 
+where rs.sked1 = $P{scheduleid} and rs.roomid=$P{roomid} 
  
  

@@ -1,5 +1,5 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
-<%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
+
 <script>
 	
 	$put( "courselist", 
@@ -65,10 +65,4 @@ Academic Unit: <select r:context="courselist" r:items="orgUnits" r:name="orgUnit
 	</tbody>
 </table>
 			
-Test UI
-<ui:datatable context="courselist">
-	<ui:col caption="Code" name="code"/>
-	<ui:col caption="Title" name="title"/>
-</ui:datatable>		
-		
 		

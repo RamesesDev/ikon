@@ -266,7 +266,7 @@ BindingUtils.handlers.div_weekcalendar = function( elem, controller, idx )
 			calendarModel.push(
 				{
 					id: events[i].id,
-					title: events[i].caption,
+					title: events[i].caption ? events[i].caption : "",
 					start: temp.start,
 					end: temp.end,
 					allDay: false,
@@ -333,6 +333,17 @@ BindingUtils.handlers.div_weekcalendar = function( elem, controller, idx )
 				eventClick : function(event, element) {
 					if(model.onclick)
 						model.onclick( event.item, element.currentTarget );
+				},
+				eventRender: function(event, element) {
+					if(event.item.templateid){
+						console.log(event.item);
+						console.log(event.item.templateid);
+						var title = $template(event.item.templateid, event.item);
+						console.log(title);
+						element.find('.fc-event-title').html( title );
+					} else {
+						element.find('.fc-event-title').html( event.title );
+					}
 				}
 			}
 		);
