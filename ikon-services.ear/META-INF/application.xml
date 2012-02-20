@@ -16,7 +16,7 @@
 	<module>
 		<web>
 			<web-uri>http-invoker-server.war</web-uri>
-			<context-root>ikon</context-root>
+			<context-root>ikon-services</context-root>
 		</web>
 	</module>
 </application>

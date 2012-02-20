@@ -9,7 +9,7 @@
 	</context-param>
 	<context-param>
 		<param-name>app.title</param-name>
-		<param-value>IKON Web</param-value>
+		<param-value>ikon-services Web</param-value>
 	</context-param>
 	<context-param>
 		<param-name>app.description</param-name>
@@ -22,7 +22,7 @@
 	</context-param>
 	<context-param>
 		<param-name>app.context</param-name>
-		<param-value>ikon</param-value>
+		<param-value>ikon-services</param-value>
 	</context-param>
 	<context-param>
 		<param-name>session.host</param-name>
@@ -30,7 +30,7 @@
 	</context-param>
 	<context-param>
 		<param-name>session.context</param-name>
-		<param-value>ikon</param-value>
+		<param-value>ikon-services</param-value>
 	</context-param>
 	<context-param>
 		<param-name>res-url</param-name>
