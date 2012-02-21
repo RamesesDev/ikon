@@ -6,6 +6,7 @@
 <%@ attribute name="model" %>
 <%@ attribute name="hideCols" %>
 <%@ attribute name="name" %>
+<%@ attribute name="width" %>
 
 <%
 	Map m = (Map)jspContext.getAttribute("params");
@@ -14,7 +15,9 @@
 	m.put( "r:name", (name==null) ? "selectedItem" : name );
 %>
 
-<table class="list" r:context="${context}" <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach> cellpadding="0" cellspacing="0" r:varName="item" r:varStatus="status">
+<table class="grid" r:context="${context}" 
+      <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach> 
+	  cellpadding="0" cellspacing="0" r:varName="item" r:varStatus="status" width="${empty width? '100%' : width}">
 	<c:if test="${hideCols != true}">
 		<c:set var="_datatable_processing" scope="request" value="cols"/>
 		<thead>

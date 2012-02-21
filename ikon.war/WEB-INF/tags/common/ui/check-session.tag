@@ -7,6 +7,6 @@
 		if( qs != null )
 		uri = uri + "?" + qs;
 		
-		response.sendRedirect("login.jsp?u=" + java.net.URLEncoder.encode(uri));
+		response.sendRedirect(request.getContextPath() + "/login.jsp?u=" + java.net.URLEncoder.encode(uri));
 	%>
 </c:if>

@@ -2,22 +2,6 @@
 <%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 <%@ taglib tagdir="/WEB-INF/tags/controller" prefix="ctl" %>
 
-<style>
-	.list-column {
-		background-color:gray;
-		padding: 4px;
-	}
-	.list-row {
-		padding:4px;
-		border-bottom: 1px solid lightgrey;
-	}
-	.list tr {
-		background-color: lightyellow;
-	}
-	.list tr.selected {
-		background-color: yellow;
-	}
-</style>
 
 <ui:context name="roomlist">
 	<ctl:crudlist service="RoomAdminService">
@@ -31,11 +15,11 @@
 	</ctl:crudlist>	
 	
 	<ui:button caption="Add" action="add"/>
-	<ui:list model="listModel" width="100%">
-		<ui:col caption="Code" name="code"/>
-		<ui:col caption="Room No" name="roomno"/>
+	<ui:grid model="listModel" width="100%">
+		<ui:col caption="Room No" name="roomno" width="120"/>
+		<ui:col caption="Description" name="description"/>
 		<ui:col><a r:context="${context}" r:name="view">View</a></ui:col>
-	</ui:list> 
+	</ui:grid> 
 </ui:context>
 
 	

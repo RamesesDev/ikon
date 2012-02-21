@@ -1,4 +1,6 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
+<%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
+
 
 
 <script>

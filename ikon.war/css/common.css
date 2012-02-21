@@ -119,6 +119,7 @@ a.button { display: inline-block; }
 /*====== grid ========*/
 table.grid {
 	border: solid 1px #ccc;
+	margin: 5px 0;
 }
 
 table.grid th, table.grid td {

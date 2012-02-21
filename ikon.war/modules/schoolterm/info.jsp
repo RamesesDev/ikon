@@ -1,4 +1,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="t" %>
+<%@ taglib tagdir="/WEB-INF/tags/page" prefix="page" %>
+
+<page:gantt-import/>
 
 <style>
 	.col {
@@ -53,6 +56,34 @@
 					return svc.getEntries( {schooltermid : self.schoolterm.objid} );
 				}
 			}
+			
+			this.events = [
+						{from:"2012-01-01", to:"2012-01-10", caption:"Enrollment for 1st years"},
+						{from:"2012-01-05", to:"2012-01-15", caption:"Enrollment for graduating" },
+					];
+			
+			this.model = {
+				fetchList: function() {
+					return self.events;
+				}	
+			}
+			
+			this.editEvent = function() {
+				this.events[1].to = '2012-01-18';
+				this.events[1].caption = 'Enrollment for graduate students';
+				this.model.load();
+			}
+			
+			this.addEvent = function() {
+				this.events.push( {from:"2012-01-10", to:"2012-01-15", caption:"Start Classes", color:"orange" } );
+				this.model.load();
+			}
+			
+			this.removeEvent = function() {
+				this.events.remove( this.events[1] );
+				this.model.load();
+			}
+			
 		}
 		
 	);
@@ -69,22 +100,9 @@ Term <label r:context="schoolterminfo">#{schoolterm.term}</label>
 Fromdate <label r:context="schoolterminfo">#{schoolterm.fromdate}</label>
 <br>
 To date <label r:context="schoolterminfo">#{schoolterm.todate}</label>
+<input type="button" r:context="schoolterminfo" value="Add Event" r:name="addEvent"/>
+<input type="button" r:context="schoolterminfo" value="Edit Event" r:name="editEvent"/>
+<input type="button" r:context="schoolterminfo" value="Remove Event" r:name="removeEvent"/>
 
-<table r:context="schoolterminfo" r:name="selectedEntry" r:model="entryList" width="40%" r:varStatus="stat"
-	r:varName="item" cellpadding="0" cellspacing="0" border="1">
-	<thead>
-		<tr>
-			<td>Phase</td>
-			<td>From date</td>
-			<td>To date</td>
-		</tr>
-	</thead>	
-	<tbody>
-		<tr>
-			<td>#{item.phase}</td>
-			<td>#{item.fromdate}</td>
-			<td>#{item.fromdate}</td>
-		</tr>
-	</tbody>
-</table>	
 
+<div r:context="schoolterminfo" r:type="gantt" r:model="model" r:width="600" r:showNoOfDays="false"></div>

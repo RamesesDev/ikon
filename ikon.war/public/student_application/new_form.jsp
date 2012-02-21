@@ -220,8 +220,8 @@ response.setDateHeader ("Expires", -1);
 			</div>
 			
 			<div class="section">
-				<span class="section-title">Secondary Address</span>
 				<input type="checkbox" r:context="student_appform" r:name="shownFields.secondaryaddress" />
+				<span class="section-title">Secondary Address</span>
 				<div r:context="student_appform" r:visibleWhen="#{shownFields.secondaryaddress}"
 				     r:depends="shownFields.secondaryaddress">
 					<jsp:include page="new_form/address.jsp">
@@ -234,8 +234,8 @@ response.setDateHeader ("Expires", -1);
 			<div class="hr"></div>
 
 			<div class="section">
-				<span class="section-title">Legal Guardian</span>
 				<input type="checkbox" r:context="student_appform" r:name="shownFields.guardianinfo" />
+				<span class="section-title">Legal Guardian</span>
 				<div r:context="student_appform" r:visibleWhen="#{shownFields.guardianinfo}"
 				     r:depends="shownFields.guardianinfo">
 					<jsp:include page="new_form/personinfo.jsp">
@@ -246,8 +246,8 @@ response.setDateHeader ("Expires", -1);
 			</div>
 			
 			<div class="section">
-				<span class="section-title">Father's Information</span>
 				<input type="checkbox" r:context="student_appform" r:name="shownFields.fathersinfo" />
+				<span class="section-title">Father's Information</span>
 				<div r:context="student_appform" r:visibleWhen="#{shownFields.fathersinfo}"
 				     r:depends="shownFields.fathersinfo">
 					<jsp:include page="new_form/personinfo.jsp">
@@ -258,8 +258,8 @@ response.setDateHeader ("Expires", -1);
 			</div>
 			
 			<div class="section">
-				<span class="section-title">Mother's Information</span>
 				<input type="checkbox" r:context="student_appform" r:name="shownFields.mothersinfo" />
+				<span class="section-title">Mother's Information</span>
 				<div r:context="student_appform" r:visibleWhen="#{shownFields.mothersinfo}"
 				     r:depends="shownFields.mothersinfo">
 					<jsp:include page="new_form/personinfo.jsp">

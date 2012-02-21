@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="ui" %>
+<%@ taglib tagdir="/WEB-INF/tags/page" prefix="page" %>
 
 <%@ attribute name="before_rendering" fragment="true" %>
 <%@ attribute name="head" fragment="true" %>
@@ -19,13 +20,6 @@
 	<c:set var="showFeedback" value="false"/>
 </c:if>
 
-<%
-
-//get the app version
-request.setAttribute("APP_VERSION", application.getInitParameter("app.version"));
-
-%>
-
 <c:if test="${!empty SESSIONID}">
 	<s:invoke service="SessionService" method="getInfo" params="${SESSIONID}" var="SESSION_INFO"/>
 
@@ -38,14 +32,11 @@ request.setAttribute("APP_VERSION", application.getInitParameter("app.version"))
 				<c:if test="${not empty pageTitle}"> - ${pageTitle}</c:if>
 			</title>
 			<meta name="description" content="<%=application.getInitParameter("app.description")%>"/>
-			<link href="${pageContext.servletContext.contextPath}/js/lib/css/jquery-ui/jquery.css?v=${APP_VERSION}" type="text/css" rel="stylesheet" />
-			<link href="${pageContext.servletContext.contextPath}/js/lib/css/rameses-lib.css?v=${APP_VERSION}" type="text/css" rel="stylesheet" />
-			<script src="${pageContext.servletContext.contextPath}/js/lib/jquery-all.js?v=${APP_VERSION}"></script>
-			<script src="${pageContext.servletContext.contextPath}/js/lib/rameses-ext-lib.js?v=${APP_VERSION}"></script>
-			<script src="${pageContext.servletContext.contextPath}/js/lib/rameses-ui.js?v=${APP_VERSION}"></script>
-			<script src="${pageContext.servletContext.contextPath}/js/lib/rameses-proxy.js?v=${APP_VERSION}"></script>
-			<script src="${pageContext.servletContext.contextPath}/js/lib/rameses-session.js?v=${APP_VERSION}"></script>
-			<link href="${pageContext.servletContext.contextPath}/css/secured.css?v=${APP_VERSION}" type="text/css" rel="stylesheet" />
+			
+			<page:app-version/>
+			<page:jquery-import/>
+			<page:rameses-ui-import/>
+			
 			
 			<script>
 				Env.sessionid = $.cookie("sessionid");

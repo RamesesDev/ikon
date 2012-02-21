@@ -1,5 +1,6 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
 <%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
+
 <script>
 	
 	$put( "courselist", 
@@ -48,27 +49,20 @@
 	);
 </script>
 
-Academic Unit: <select r:context="courselist" r:items="orgUnits" r:name="orgUnit" r:itemLabel="code"></select>
-<input type="button" value="Add" r:context="courselist" r:name="add" r:visibleWhen="#{orgUnit!=null}"/>
-<table r:context="courselist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
-	<thead>
-		<td>Code</td>
-		<td>Title</td>
-		<td>Classification</td>
-		<td>&nbsp;</td>
-	</thead>
-	<tbody>
-		<td>#{item.code}</td>
-		<td>#{item.title}</td>
-		<td>#{item.classification}</td>
-		<td><a r:context="courselist" r:name="edit">View</a></td>
-	</tbody>
-</table>
-			
-Test UI
-<ui:datatable context="courselist">
-	<ui:col caption="Code" name="code"/>
-	<ui:col caption="Title" name="title"/>
-</ui:datatable>		
-		
-		
+<ui:context name="courselist">
+	<ui:form>
+		<ui:combo caption="Academic Unit" items="orgUnits" name="orgUnit" itemLabel="code"/>
+	</ui:form>
+	<ui:button caption="Add" action="add" visibleWhen="#{orgUnit!=null}"/>
+	<ui:grid model="listModel">
+		<ui:col caption="Code" name="code"/>
+		<ui:col caption="Title" name="title"/>
+		<ui:col caption="Classification" name="classification"/>
+		<ui:col>
+			<a r:context="courselist" r:name="edit">View</a>
+		</ui:col>
+	</ui:grid>
+</ui:context>
+
+
+
