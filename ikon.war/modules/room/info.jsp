@@ -1,27 +1,17 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
+<%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
+<%@ taglib tagdir="/WEB-INF/tags/controller" prefix="ctl" %>
 
-
-<script>
-	$put( "roominfo", 
-		new function() {
-			
-			this.saveHandler;
-			this.room = {}
-			this.mode = "create";
-			
-			this.save = function() {
-				this.saveHandler(this.room);
-				return "_close";
-			}
-		}
-	);
-</script>
-
-Code <input type="text" r:context="roominfo" r:name="room.code" r:required="true" r:caption="Code"/>
-
-<br>
-Room No <input type="text" r:context="roominfo" r:name="room.roomno" r:required="true" r:caption="Room No" />
-<br>
-
-<input type="button" r:context="roominfo" r:name="save" value="Save"/>
-
+<ui:context name="roominfo" object="room">
+ 
+	<ctl:crudform  service="RoomAdminService"/>
+	
+	<ui:form>
+		<ui:text caption="Code" name="code" required="true" />
+		<ui:text caption="Room No" name="roomno" required="true" />
+		<ui:label>
+			<ui:button caption="Save" action="save" />
+		</ui:label>	
+	</ui:form>
+	
+</ui:context>	

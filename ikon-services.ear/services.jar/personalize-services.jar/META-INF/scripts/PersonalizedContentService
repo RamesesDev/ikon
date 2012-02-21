@@ -1,0 +1,22 @@
+import com.rameses.annotations.*;
+
+class PersonalizedContentService {
+
+	@PersistenceContext("main")
+	def em;
+	
+	@ProxyMethod
+	public def getPageInfo(def link) {
+		if( link.indexOf(".")>0) {
+			link = link.substring(0, link.indexOf("."));
+		}
+		def m = [path: link];
+		return em.sqlContext.createNamedQuery( "content:get-page-info" ).setParameters(m).singleResult;
+	}
+	
+	@ProxyMethod
+	public def getContent(def params) {
+		return em.sqlContext.createNamedQuery( "content:get-content" ).setParameters(params).singleResult?.content;
+	}
+	
+}
