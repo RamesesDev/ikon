@@ -7,6 +7,13 @@ class StudentService {
 	
 	@Service("DateService")
 	def dateSvc;
+	
+	
+	@ProxyMethod
+	public def save( student ) {
+		if(!student.objid) student.objid = "STUD" + new java.rmi.server.UID();
+		return em.create("student", student);
+	}
 
 	@ProxyMethod
 	public def getList(def params) {
