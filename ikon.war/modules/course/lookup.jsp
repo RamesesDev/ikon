@@ -5,11 +5,11 @@
 <t:popup>
 	<jsp:attribute name="head">
 		<style>
-			.course-list tr.selected {
+			.course-lookup tr.selected {
 				background-color: orange;
 				color: white;
 			}
-			</style>
+		</style>
 
 		<script>
 			
@@ -33,6 +33,9 @@
 					}
 					
 					this.select = function() {
+						if( !this.selectedItem )
+							throw new Error('Please select a course.');
+							
 						this.selectHandler( this.selectedItem );
 						return "_close";
 					}
@@ -44,10 +47,6 @@
 				}
 			);
 		</script>
-	</jsp:attribute>
-	
-	<jsp:attribute name="leftactions">
-		<ui:button context="course_lookup" action="add" caption="Add"/> 
 	</jsp:attribute>
 	
 	<jsp:attribute name="rightactions">
@@ -66,7 +65,7 @@
 					<ui:button action="search" caption="Go"/> 
 				</ui:section>
 			</ui:panel>
-			<ui:grid model="listModel" class="course-lookup">
+			<ui:grid model="listModel" styleClass="course-lookup">
 				<ui:col caption="Course Code" name="code" width="100px"/>
 				<ui:col caption="Course Title" name="title"/>
 			</ui:grid>

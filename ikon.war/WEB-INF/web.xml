@@ -9,7 +9,7 @@
 	</context-param>
 	<context-param>
 		<param-name>app.title</param-name>
-		<param-value>ikon-services Web</param-value>
+		<param-value>IKON Web</param-value>
 	</context-param>
 	<context-param>
 		<param-name>app.description</param-name>

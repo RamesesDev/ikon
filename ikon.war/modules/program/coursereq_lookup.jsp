@@ -1,11 +1,13 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
+<%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
+
 
 <style>
-	tr.selected {
+	.course-req-list tr.selected {
 		background-color: orange;
 		color: white;
 	}
-	thead td {
+	.course-req-list thead td {
 		background-color: lightgrey;
 		font-weight: bolder;
 	}
@@ -58,7 +60,7 @@
 Code <input type="text" r:context="program_coursereq_lookup" r:name="query.code" />
 <input type="button" r:context="program_coursereq_lookup" r:name="search" value="Go"/> 
 <br>
-<table r:context="program_coursereq_lookup" r:model="listModel" r:varName="item" r:name="selectedItem" width="100%">
+<table class="course-req-list" r:context="program_coursereq_lookup" r:model="listModel" r:varName="item" r:name="selectedItem" width="100%">
 	<thead>
 		<td width="100">Course Code</td>
 		<td>Course Title</td>

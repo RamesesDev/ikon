@@ -6,7 +6,8 @@
 		<td>
 			<input type="text" size="40"
 				r:context="student_appform" r:name="${param.info}.name"
-				r:required="true" r:caption="${param.caption}: Name">
+				r:required="true" r:caption="${param.caption}: Name"
+				r:textcase="upper">
 		</td>
 	</tr>
 	<tr>
@@ -15,7 +16,8 @@
 		</td>
 		<td>
 			<input type="text" r:context="student_appform" r:name="${param.info}.occupation"
-			       r:required="true" r:caption="${param.caption}: Occupation">
+			       r:required="true" r:caption="${param.caption}: Occupation"
+				   r:textcase="upper">
 		</td>
 	</tr>
 	<tr>
@@ -25,7 +27,8 @@
 		<td>
 			<input type="text" size="50"
 				r:context="student_appform" r:name="${param.info}.address"
-				r:required="true" r:caption="${param.caption}: Address">
+				r:required="true" r:caption="${param.caption}: Address"
+				r:textcase="upper">
 		</td>
 	</tr>
 	<tr>
@@ -34,7 +37,8 @@
 		</td>
 		<td>
 			<input type="text" r:context="student_appform" r:name="${param.info}.phone"
-			       r:required="true" r:caption="${param.caption}: Phone">
+			       r:required="true" r:caption="${param.caption}: Phone"
+				   r:textcase="upper">
 		</td>
 	</tr>
 </table>

@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 <%@ tag import="java.util.*" %>
 <%@ tag dynamic-attributes="params" %>
 <%@ attribute name="context" %>
@@ -7,6 +8,7 @@
 <%@ attribute name="hideCols" %>
 <%@ attribute name="name" %>
 <%@ attribute name="width" %>
+<%@ attribute name="styleClass" %>
 
 <%
 	Map m = (Map)jspContext.getAttribute("params");
@@ -15,7 +17,7 @@
 	m.put( "r:name", (name==null) ? "selectedItem" : name );
 %>
 
-<table class="grid" r:context="${context}" 
+<table class="grid ${styleClass}" r:context="${context}" 
       <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach> 
 	  cellpadding="0" cellspacing="0" r:varName="item" r:varStatus="status" width="${empty width? '100%' : width}">
 	<c:if test="${hideCols != true}">
@@ -29,6 +31,11 @@
 		<tr><jsp:doBody/></tr>
 	</tbody>
 </table>
+<div class="grid-controls" r:context="${context}" r:visibleWhen="#{${model}.rows > 0}">
+	<ui:button action="${model}.moveFirst" caption="First"/>
+	<ui:button action="${model}.movePrev" caption="Previous"/>
+	<ui:button action="${model}.moveNext" caption="Next"/>
+</div>
 
 <%request.removeAttribute("_datatable_processing");%>
 

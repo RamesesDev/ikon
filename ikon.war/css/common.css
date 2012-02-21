@@ -116,6 +116,11 @@ a.button { display: inline-block; }
 }
 
 
+/*====== form ========*/
+table.form {
+	margin: 5px 0;
+}
+
 /*====== grid ========*/
 table.grid {
 	border: solid 1px #ccc;
@@ -144,6 +149,10 @@ table.grid thead td {
 
 table.grid td {
 	border-bottom: solid 1px #ccc;
+}
+
+div.grid-controls {
+	text-align: right;
 }
 
 

@@ -13,11 +13,11 @@
 	</td> 
 	<td>
 		<c:if test="${rtexpression == 'true'}">
-			<label r:context="${context}"
+			<div r:context="${context}" r:type="label"
 			       <c:if test="${!empty depends}"> r:depends="${depends}"</c:if>
 			       <c:if test="${!empty visibleWhen}"> r:visibleWhen="${visibleWhen}"</c:if> >
 				<jsp:doBody/>
-			</label>
+			</div>
 		</c:if>
 		<c:if test="${rtexpression != 'true'}">
 			<jsp:doBody/>

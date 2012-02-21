@@ -15,7 +15,7 @@
 <tr>
 	<td class="form-caption" valign="top">${caption} <c:if test="${required == 'true'}">&nbsp;<font color=red>*</font></c:if></td> 
 	<td>
-		<select r:context="${context}" r:name="${name}" r:items="${items}" r:caption="${caption}"
+		<select r:context="${context}" r:name="${objPrefix}${name}" r:items="${items}" r:caption="${caption}"
 			<c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach> 
 			<c:if test="${! empty depends}"> r:depends="${depends}" </c:if>
 			<c:if test="${! empty required}"> r:required="${required}" </c:if>

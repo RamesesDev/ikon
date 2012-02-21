@@ -1,3 +1,3 @@
 [list]
-select * from room order by code
+select * from room order by roomno
 

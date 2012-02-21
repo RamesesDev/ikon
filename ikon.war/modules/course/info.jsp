@@ -2,36 +2,38 @@
 <%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 
 
+<t:popup>
+	<jsp:attribute name="head">
+		<script>
+			$put( "courseinfo", 
+				new function() {
+					var svc = ProxyService.lookup( "CourseService" );
+					
+					this.saveHandler;
+					this.course = {}
+					
+					this.classifications = ["MAJOR","MINOR","GE"];
+					
+					this.save = function() {
+						svc.update( this.course );
+						if(this.saveHandler) this.saveHandler(this.course);
+						return "_close";
+					}
+				}
+			);
+		</script>
+	</jsp:attribute>
+	
+	<jsp:attribute name="rightactions">
+		<ui:button context="courseinfo" action="save" caption="Save"/>
+	</jsp:attribute>
 
-<script>
-	$put( "courseinfo", 
-		new function() {
-			var svc = ProxyService.lookup( "CourseService" );
-			
-			this.saveHandler;
-			this.course = {}
-			
-			this.classifications = ["MAJOR","MINOR","GE"];
-			
-			this.save = function() {
-				svc.update( this.course );
-				if(this.saveHandler) this.saveHandler(this.course);
-				return "_close";
-			}
-		}
-	);
-</script>
-
-
-Code <input type="text" r:context="courseinfo" r:name="course.code" r:required="true" r:caption="Course Code" />
-<br>
-Title <input type="text" r:context="courseinfo" r:name="course.title" r:required="true" r:caption="Course Title" />
-<br>
-Units <input type="text" r:context="courseinfo" r:name="course.units" r:required="true" r:caption="Course Units" />
-<br>
-Classification <select r:context="courseinfo" r:name="course.classification" r:items="classifications" r:allowNull="true" 
-	r:required="true" r:caption="Course Classification"></select>
-<br>
-
-<input type="button" r:context="courseinfo" r:name="save" value="Save"/>
-
+	<jsp:body>
+		<ui:form context="courseinfo" object="course">
+			<ui:text name="code" caption="Code" required="true"/>
+			<ui:text name="title" caption="Title" required="true"/>
+			<ui:text name="units" caption="Units" required="true"/>
+			<ui:combo name="classification" caption="Classification" items="classifications" required="true" allowNull="true"/>
+		</ui:form>
+	</jsp:body>
+</t:popup>

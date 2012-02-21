@@ -26,8 +26,6 @@
 </style>
 		
 <script>
-	$register( {id:"#programcourse_context_menu", context:"programinfo"} );
-
 	$put( "programinfo", 
 		new function() {
 			var svc = ProxyService.lookup( "ProgramService" );

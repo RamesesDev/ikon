@@ -16,7 +16,7 @@
 	<td class="form-caption" valign="top">${caption} <c:if test="${required == 'true'}">&nbsp;<font color=red>*</font></c:if></td> 
 	<td>
 		<c:forEach items="${optionMap}" var="option">
-			<input type="radio" r:context="${context}" r:name="${name}"
+			<input type="radio" r:context="${context}" r:name="${objPrefix}${name}"
 				<c:if test="${! empty depends}"> r:depends="${depends}" </c:if>
 				<c:if test="${! empty required}"> r:required="${required}" </c:if>
 				<c:if test="${! empty visibleWhen}"> r:visibleWhen="${visibleWhen}" </c:if>

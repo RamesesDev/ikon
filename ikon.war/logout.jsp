@@ -11,5 +11,5 @@
 %>
 
 <t:index redirect_session="true">
-	Thank you for using ${APP_TITLE}!
+	<h2>Thank you for using ${APP_TITLE}!</h2>
 </t:index>

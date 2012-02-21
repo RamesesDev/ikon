@@ -61,18 +61,23 @@
 		
 	<jsp:body>
 		<ui:context name="program_addcourse">
-			<input type="hidden" r:context="program_addcourse" r:name="course.courseid" r:caption="Course" r:required="true" />
-			<ui:button action="lookupCourse" caption="Course" immediate="true" />
-
 			<ui:form object="course">
-				<ui:label caption="Course" rtexpression="true" depends="selectedCourse" required="true">
-					#{selectedCourse.code} #{selectedCourse.title? '-' + selectedCourse.title : ''}
+				<ui:label caption="Course Code" rtexpression="true" depends="selectedCourse" required="true">
+					#{selectedCourse.code}
+				</ui:label>
+				<ui:label rtexpression="true" depends="selectedCourse">
+					#{selectedCourse.title}
+				</ui:label>
+				<ui:label rtexpression="true" depends="selectedCourse">
+					<ui:button action="lookupCourse" immediate="true">
+						#{!course.courseid? 'Select' : 'Change'} Course
+					</ui:button>
 				</ui:label>
 				<ui:combo name="yearlevel" caption="Year Level" required="true" items="yearlevels" allowNull="true"/>
 				<ui:combo name="term" caption="Term / Semester" required="true" itemKey="key" itemLabel="label" items="termList" allowNull="true"/>
-				<ui:text name="units" caption="Units" depends="selectedCourse"/>
-				<ui:text name="lab_hrs" caption="Lab Hrs"/>
-				<ui:text name="lec_hrs" caption="Lec Hrs"/>
+				<ui:text name="units" caption="Units" depends="selectedCourse" size="1" maxlength="1"/>
+				<ui:text name="lab_hrs" caption="Lab Hrs" size="1" maxlength="1"/>
+				<ui:text name="lec_hrs" caption="Lec Hrs" size="1" maxlength="1"/>
 				<ui:text name="remarks" caption="Remarks"/>
 			</ui:form>
 		</ui:context>

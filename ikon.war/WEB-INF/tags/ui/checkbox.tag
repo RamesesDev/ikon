@@ -39,7 +39,7 @@
 						r:name="${name}" 
 					</c:if>
 					<c:if test="${ empty mode}">
-						r:name="${option.name}" 
+						r:name="${objPrefix}${option.name}" 
 					</c:if>
 				/> 
 			</td>

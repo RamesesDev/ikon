@@ -8,11 +8,11 @@
 	</jsp:attribute>
 	
 	<jsp:body>
-		<ui:context name="roominfo" object="room">
+		<ui:context name="roominfo">
 		 
-			<ctl:crudform  service="RoomAdminService"/>
+			<ctl:crudform object="room" service="RoomAdminService"/>
 			
-			<ui:form>
+			<ui:form object="room">
 				<ui:text caption="Room No" name="roomno" required="true" />
 				<ui:text caption="Description" name="description" required="true"  size="50"/>
 			</ui:form>

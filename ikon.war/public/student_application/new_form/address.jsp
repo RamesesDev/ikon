@@ -17,7 +17,8 @@
 		<td>
 			<input type="text" style="width:100%"
 				r:context="student_appform" r:name="${param.address}.address1" 
-				r:required="true" r:caption="${param.caption}: address1">
+				r:required="true" r:caption="${param.caption}: address1"
+				r:textcase="upper">
 		</td>
 	</tr>
 	<tr>
@@ -26,7 +27,7 @@
 		</td>
 		<td>
 			<input type="text"
-				r:context="student_appform" r:name="${param.address}.address2" style="width:100%">
+				r:context="student_appform" r:name="${param.address}.address2" r:textcase="upper" style="width:100%">
 		</td>
 	</tr>
 	<tr>
@@ -34,11 +35,14 @@
 		</td>
 		<td>
 			<input type="text" r:context="student_appform" r:name="${param.address}.city" r:hint="City/Municipality"
-			       r:required="true" r:caption="${param.caption}: city/municipality"> *
+			       r:required="true" r:caption="${param.caption}: city/municipality"
+				   r:textcase="upper"> *
 			<input type="text" r:context="student_appform" r:name="${param.address}.province" r:hint="Province"
-			       r:required="true" r:caption="${param.caption}: province"> *
+			       r:required="true" r:caption="${param.caption}: province"
+				   r:textcase="upper"> *
 			<input type="text" r:context="student_appform" r:name="${param.address}.zipcode" r:hint="Zip Code" size="6"
-			       r:required="true" r:caption="${param.caption}: zipcode"> *
+			       r:required="true" r:caption="${param.caption}: zipcode"
+				   r:textcase="upper"> *
 		</td>
 	</tr>
 </table>
