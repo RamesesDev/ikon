@@ -10,8 +10,9 @@ class TeacherScheduleService {
 	def dateSvc;
 	
 	@ProxyMethod
-	public def getTeacherAvailability(def o) {
-		return em.sqlContext.createNamedQuery("teacher_schedule:list-teacher-availability").setParameters(o).resultList;
+	public def getTeachers(def o) {
+		def str = ( o.display_available == "1" ) ? "list-teacher-availability" : "list-all";
+		return em.sqlContext.createNamedQuery("teacher_schedule:"+str).setParameters(o).resultList;
 	}
 
 	@ProxyMethod
@@ -21,6 +22,7 @@ class TeacherScheduleService {
 
 	@ProxyMethod
 	public def getUnassignedSchedules( o ) {
+		print "show unassigned skeds " + o;
 		return em.sqlContext.createNamedQuery("teacher_schedule:list-available-teacher-schedules").setParameters(o).resultList;
 	}
 	

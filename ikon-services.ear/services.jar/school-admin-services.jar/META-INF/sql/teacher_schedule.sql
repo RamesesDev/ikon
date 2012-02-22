@@ -1,3 +1,10 @@
+[list-all]
+select p.objid, p.lastname,p.firstname,p.staffno,jp.orgunitid 
+from jobposition jp 
+inner join personnel p on jp.assigneeid = p.objid 
+where jp.roleclass = 'FACULTY' 
+and jp.orgunitid = $P{orgunitid} 
+
 [list-teacher-availability]
 select p.objid, p.lastname,p.firstname,p.staffno,jp.orgunitid 
 from jobposition jp 

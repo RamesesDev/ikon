@@ -86,7 +86,7 @@
 			#{it.coursecode}<br>
 			Rm: #{(it.roomno) ? it.roomno: 'unassigned'}<br>
 			#{(it.teacher) ? it.teacher: 'unassigned'}<br>
-			#{(it.room_conflict) ? '<img src="${pageContext.request.contextPath}/img/red_flag.jpg">' : '' }
+			#{(!it.room_conflict) ? '<img src="${pageContext.request.contextPath}/img/red_flag.jpg">' : '' }
 		</div>
 
 		<!-- room conflict template -->
