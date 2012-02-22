@@ -11,10 +11,14 @@
 <%@ attribute name="allowNull"%>
 <%@ attribute name="itemLabel"%>
 <%@ attribute name="itemKey"%>
+<%@ attribute name="emptyText"%>
 
 <tr>
-	<td class="form-caption" valign="top">${caption} <c:if test="${required == 'true'}">&nbsp;<font color=red>*</font></c:if></td> 
-	<td>
+	<td class="form-caption" valign="top"
+	    <c:if test="${!empty visibleWhen}"> r:context="${context}" r:visibleWhen="${visibleWhen}"</c:if> >
+		${caption} <c:if test="${required == 'true'}">&nbsp;<font color=red>*</font></c:if>
+	</td> 
+	<td <c:if test="${!empty visibleWhen}"> r:context="${context}" r:visibleWhen="${visibleWhen}"</c:if> >
 		<select r:context="${context}" r:name="${objPrefix}${name}" r:items="${items}" r:caption="${caption}"
 			<c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach> 
 			<c:if test="${! empty depends}"> r:depends="${depends}" </c:if>
