@@ -5,7 +5,7 @@
 	
 	Thank you for applying. Please remember the trace no. when applying.
 	
-	<h1>${param['objid']}</h1>
+	<h1>${param['appno']}</h1>
 	
 	<br>
 	<i>Place enrollment instructions here</i>

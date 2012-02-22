@@ -1,5 +1,5 @@
 [list-applicants]
-select s.objid, s.lastname, s.firstname, s.yearlevel, p.code as programcode,  p.title as programtitle 
+select s.objid, s.appno, s.lastname, s.firstname, s.yearlevel, p.code as programcode,  p.title as programtitle 
 from student_applicant s 
 left join program p on p.objid = s.programid
 

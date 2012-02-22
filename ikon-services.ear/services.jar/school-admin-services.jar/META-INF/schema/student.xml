@@ -25,6 +25,7 @@
 		<field name="yearlevel" />
 		<field name="studentno" />
 		<field name="appno" />
+		<field name="appid" />
     </element>
 
 	<element name="dependentinfo">
@@ -50,6 +51,7 @@
 	
 	<element name="applicant" tablename="student_applicant" >
 		<field name="objid" primary="true"/>
+		<field name="appno"/>
 		<field name="lastname" />
 		<field name="firstname" />
 		<field name="birthdate" />

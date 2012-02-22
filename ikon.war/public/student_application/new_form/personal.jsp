@@ -58,7 +58,7 @@
 						<span class="caption">Civil Status</span> *
 					</td>
 					<td>
-						<select r:context="student_appform" r:name="student.civilstat" r:items="civilStatusList" 
+						<select r:context="student_appform" r:name="student.civilstatus" r:items="civilStatusList" 
 						        r:allowNull="true" r:required="true" r:caption="Civil Status">
 						</select>
 					</td>
@@ -68,7 +68,7 @@
 						<span class="caption">Place of Birth</span>
 					</td>
 					<td>
-						<input type="text" r:context="student_appform" r:name="student.placeofbirth" r:required="false" 
+						<input type="text" r:context="student_appform" r:name="student.birthplace" r:required="false" 
 						       r:caption="Date of Birth" r:textcase="upper">
 					</td>
 				</tr>
@@ -109,7 +109,7 @@
 		<td valign="top" width="50%">
 			<span class="section-title">Profile Picture</span>
 			<div class="section" r:context="student_appform" r:type="label">
-				<img class="student-photo" src="photo.jsp?id=#{student.objid}"/>
+				<img class="student-photo" src="${pageContext.request.contextPath}/photo/temp/#{student.objid}"/>
 				<input type="file" 
 					  r:context="student_appform" 
 					  r:caption="#{student.temp_photodir? 'Change':'Upload'} Photo"

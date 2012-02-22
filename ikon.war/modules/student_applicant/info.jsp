@@ -8,7 +8,7 @@
 			$register( {id: "#student_applicant_approval", context:"studentapplicantinfo", options:{width:400,height:300} } );
 			$put( "studentapplicantinfo", 
 				new function() {
-					this.info =  <s:invoke service="StudentApplicantService" method="read" params="${pageContext.request}" json="true" />;
+					this.info =  <s:invoke service="StudentApplicantService" method="read" params="${pageContext.request}" json="true" debug="true"/>;
 					var self = this;
 					
 					this.yearLevels = [];
@@ -42,13 +42,23 @@
 					}
 					
 					this.approve = function() {
-					if( confirm( "You are about to accept this student. Continue?") ) {
+						if( confirm( "You are about to accept this student. Continue?") ) {
 							var svc = ProxyService.lookup( "StudentApplicantService" );
 							svc.accept( this.info );
 							alert( "Student successfully accepted" );
 							window.location.hash = "student_applicant:list";
 							return "_close";
 						}
+					}
+					
+					this.displayAddress = function( addr ) {
+						var arr = [];
+						if( addr.address1 ) arr.push( addr.address1 );
+						if( addr.address2 ) arr.push( addr.address2 );
+						if( addr.city ) arr.push( addr.city );
+						if( addr.province ) arr.push( addr.province );
+						if( addr.zipcode ) arr.push( addr.zipcode );
+						return arr.join(', ');
 					}
 				}
 			);
@@ -85,17 +95,54 @@
 	<jsp:body>
 		<ui:context name="studentapplicantinfo">
 			<ui:button action="showApproval"  caption="Approve"/>
-			<ui:form>
-				<ui:label caption="App. No. :" rtexpression="true">
-					#{info.objid}
-				</ui:label>
-				<ui:label caption="Last Name :" rtexpression="true">
-					#{info.lastname}
-				</ui:label>
-				<ui:label caption="First Name :" rtexpression="true">
-					#{info.firstname}
-				</ui:label>
-			</ui:form>
+			<ui:panel cols="2">
+				<ui:section width="300px">
+					<ui:form styleClass="info-form">
+						<ui:label caption="App. No. :" rtexpression="true">
+							#{info.appno}
+						</ui:label>
+						<ui:label caption="Last Name :" rtexpression="true">
+							#{info.lastname}
+						</ui:label>
+						<ui:label caption="First Name :" rtexpression="true">
+							#{info.firstname}
+						</ui:label>
+						<ui:label caption="Middle Name :" rtexpression="true">
+							#{info.middlename}
+						</ui:label>
+						<ui:label caption="Gender :" rtexpression="true">
+							#{info.gender=='M'? 'Male' : info.gender=='F'? 'Female' : ''}
+						</ui:label>
+						<ui:label caption="Citizenship :" rtexpression="true">
+							#{info.citizenship}
+						</ui:label>
+						<ui:label caption="Civil Status :" rtexpression="true">
+							#{info.civilstatus}
+						</ui:label>
+						<ui:label caption="Place of Birth :" rtexpression="true">
+							#{info.birthplace}
+						</ui:label>
+						<ui:label caption="Date of Birth :" rtexpression="true">
+							#{info.birthdate}
+						</ui:label>
+						<ui:label caption="Email Address :" rtexpression="true">
+							#{info.email}
+						</ui:label>
+						<ui:label caption="Religion :" rtexpression="true">
+							#{info.religion}
+						</ui:label>
+						<ui:label caption="Primary Address :" rtexpression="true">
+							#{displayAddress(info.primaryaddress)}
+						</ui:label>
+					</ui:form>
+				</ui:section>
+				<ui:section align="center">
+					<div r:context="studentapplicantinfo" r:type="label">
+						<img class="student-photo" src="${pageContext.request.contextPath}/photo/temp/#{info.objid}"/>
+						<div>Profile Photo</div>
+					</div>
+				</ui:section>
+			</ui:panel>
 		</ui:context>
 	</jsp:body>
 </t:content>

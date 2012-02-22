@@ -26,10 +26,6 @@ response.setDateHeader ("Expires", -1);
 		.form table tr td {
 			padding:3px;
 		}
-		.form .steps a {
-			font-weight: bold;
-			text-decoration: underline;
-		}
 		.form .section-title {
 			font-weight:bold;
 		}
@@ -42,123 +38,96 @@ response.setDateHeader ("Expires", -1);
 
 	<jsp:body>
 		
-	<script>
-		<common:uid prefix="SAAP" var="STUD_APPID"/>
-		<common:loadmodules name="modules"/>
-	
-		$put("student_appform", 
-			new function() {
-				var self = this;
-				
-				this.selectedContact;
-				
-				this.student = {
-					objid: "${STUD_APPID}",
-					contactinfo:[],
-					primaryaddress:{},
-					secondaryaddress:{},
-					fathersinfo:{},
-					mothersinfo:{},
-					guardianinfo:{},
-				};
-				
-				this.otherCitizenship;
-				this.otherCivilstatus;
-				
-				this.genderList = [ 
-					{id:"M", label:"Male"}, 
-					{id:"F", label:"Female"}
-				];
-				this.citizenshipList = ["Filipino", "American","German","Taiwanese"];
-				this.civilStatusList = ["Single","Married","Divorced","Widowed"];
-				
-				this.studentTypeList = ["New Student","Transferee","Cross Enrollee","Returnee"];
-				
-				this.addressTypeList = ["Home","Work"];
-				this.contactTypeList = ["HOMEPHONE", "WORKPHONE", "MOBILE", "HOMEFAX", "WORKFAX"];
-				
-				this.propertyChangeListener = {
-					"otherCitizenship" : function(o) {
-						if(self.student.citizenship === "others")
-							self.student.citizenship = o;
-					}
-				}
-				
-				this.stage = 1;
-				this.step = 1;
-				this.submit = function() {
-					if( this.step < 2 ) {
-						this.step++;
-						this.stage++;
-						return;
+		<script>
+			<common:uid prefix="SAP" var="STUD_APPID"/>
+			<common:loadmodules name="modules"/>
+		
+			$put("student_appform", 
+				new function() {
+					var self = this;
+					
+					this.selectedContact;
+					
+					this.student = {
+						objid: "${STUD_APPID}",
+						contactinfo:[],
+						primaryaddress:{},
+						secondaryaddress:{},
+						fathersinfo:{},
+						mothersinfo:{},
+						guardianinfo:{},
+					};
+					
+					this.otherCitizenship;
+					this.otherCivilstatus;
+					
+					this.genderList = [ 
+						{id:"M", label:"Male"}, 
+						{id:"F", label:"Female"}
+					];
+					this.citizenshipList = ["Filipino", "American","German","Taiwanese"];
+					this.civilStatusList = ["Single","Married","Divorced","Widowed"];
+					
+					this.studentTypeList = ["New Student","Transferee","Cross Enrollee","Returnee"];
+					
+					this.addressTypeList = ["Home","Work"];
+					this.contactTypeList = ["HOMEPHONE", "WORKPHONE", "MOBILE", "HOMEFAX", "WORKFAX"];
+					
+					this.propertyChangeListener = {
+						"otherCitizenship" : function(o) {
+							if(self.student.citizenship === "others")
+								self.student.citizenship = o;
+						}
 					}
 					
-					MsgBox.confirm(
-						'You are about to submit this application.\nPlease check all the entries. Proceed?',
-						function() {
-							var svc = ProxyService.lookup( "StudentApplicantService" );
-							var result = svc.submit(  self.student );
-							window.location.href = "success.jsp?objid=" + result.objid; 
-						}
-					);
+					this.submit = function() {
+						MsgBox.confirm(
+							'You are about to submit this application.\nPlease check all the entries. Proceed?',
+							function() {
+								var svc = ProxyService.lookup( "StudentApplicantService" );
+								var result = svc.submit(  self.student );
+								window.location.href = "success.jsp?appno=" + result.appno; 
+							}
+						);
+					}
+
+					this.addContact = function() {
+						this.student.contactinfo.push({type:"", value:""});
+					}
+					
+					this.deleteContact = function() {
+						this.student.contactinfo.remove(this.selectedContact);
+					}
+					
+					this.lookupProgram = function() {
+						return new PopupOpener("program:lookup",{selectHandler: function(o){
+							self.student.programid = o.objid;
+							self.student.programcode = o.code;
+							self.student.programtitle = o.title;
+							self.student.programyearlevels = o.yearlevels;
+						}});
+					}
+					
+					this.file;
+					this.upload_complete = function() {
+						this.student.temp_photodir = this.file.temp_photodir;
+						this.file = null;
+						this._controller.refresh();
+					}
+					
+					//content toggle visibility flag
+					this.shownFields = {
+						guardianinfo: true
+					};
+					
 				}
-				
-				this.back = function() {
-					this.step--;
-				}
-				
-				this.addContact = function() {
-					this.student.contactinfo.push({type:"", value:""});
-				}
-				
-				this.deleteContact = function() {
-					this.student.contactinfo.remove(this.selectedContact);
-				}
-				
-				this.lookupProgram = function() {
-					return new PopupOpener("program:lookup",{selectHandler: function(o){
-						self.student.programid = o.objid;
-						self.student.programcode = o.code;
-						self.student.programtitle = o.title;
-						self.student.programyearlevels = o.yearlevels;
-					}});
-				}
-				
-				this.file;
-				this.upload_complete = function() {
-					this.student.temp_photodir = this.file.temp_photodir;
-					this.file = null;
-					this._controller.refresh();
-				}
-				
-				//dummy and flags
-				
-				this.dummyFunc = function(){};
-				this.shownFields = {
-					guardianinfo: true
-				};
-				
-			}
-		);
-	</script>
-	
-	<div class="form">
-		<h2>Application for New Students</h2>		
-		<div class="hr"></div>
+			);
+		</script>
 		
-		<div class="section steps">
-			<a r:context="student_appform" r:name="dummyFunc" r:params="{step: 1}" r:immediate="true">
-				Step 1
-			</a>
-			<span r:context="student_appform" r:visibleWhen="#{stage > 1}">
-				/
-				<a r:context="student_appform" r:name="dummyFunc" r:params="{step: 2}" r:immediate="true">
-					Step 2
-				</a>
-			</span>
-		</div>
-		
-		<div r:context="student_appform" r:visibleWhen="#{step == 1}">
+		<div class="form">
+			<h2>Application for New Students</h2>		
+			<div class="hr"></div>
+			
 			<div class="section" r:context="student_appform" r:type="label">
 				<span class="section-title">Program Information</span>
 				<table>
@@ -208,9 +177,9 @@ response.setDateHeader ("Expires", -1);
 			<div class="section">
 				<jsp:include page="new_form/personal.jsp"/>
 			</div>
-		</div>
-		
-		<div r:context="student_appform" r:visibleWhen="#{step == 2}">
+			
+			<div class="hr"></div>
+			
 			<div class="section">
 				<span class="section-title">Primary Address</span>
 				<jsp:include page="new_form/address.jsp">
@@ -223,7 +192,7 @@ response.setDateHeader ("Expires", -1);
 				<input type="checkbox" r:context="student_appform" r:name="shownFields.secondaryaddress" />
 				<span class="section-title">Secondary Address</span>
 				<div r:context="student_appform" r:visibleWhen="#{shownFields.secondaryaddress}"
-				     r:depends="shownFields.secondaryaddress">
+					 r:depends="shownFields.secondaryaddress">
 					<jsp:include page="new_form/address.jsp">
 						<jsp:param name="address" value="student.secondaryaddress"/>
 						<jsp:param name="caption" value="Secondary Address"/>
@@ -237,7 +206,7 @@ response.setDateHeader ("Expires", -1);
 				<input type="checkbox" r:context="student_appform" r:name="shownFields.guardianinfo" />
 				<span class="section-title">Legal Guardian</span>
 				<div r:context="student_appform" r:visibleWhen="#{shownFields.guardianinfo}"
-				     r:depends="shownFields.guardianinfo">
+					 r:depends="shownFields.guardianinfo">
 					<jsp:include page="new_form/personinfo.jsp">
 						<jsp:param name="info" value="student.guardianinfo"/>
 						<jsp:param name="caption" value="Guardian"/>
@@ -249,7 +218,7 @@ response.setDateHeader ("Expires", -1);
 				<input type="checkbox" r:context="student_appform" r:name="shownFields.fathersinfo" />
 				<span class="section-title">Father's Information</span>
 				<div r:context="student_appform" r:visibleWhen="#{shownFields.fathersinfo}"
-				     r:depends="shownFields.fathersinfo">
+					 r:depends="shownFields.fathersinfo">
 					<jsp:include page="new_form/personinfo.jsp">
 						<jsp:param name="info" value="student.fathersinfo"/>
 						<jsp:param name="caption" value="Father"/>
@@ -261,25 +230,21 @@ response.setDateHeader ("Expires", -1);
 				<input type="checkbox" r:context="student_appform" r:name="shownFields.mothersinfo" />
 				<span class="section-title">Mother's Information</span>
 				<div r:context="student_appform" r:visibleWhen="#{shownFields.mothersinfo}"
-				     r:depends="shownFields.mothersinfo">
+					 r:depends="shownFields.mothersinfo">
 					<jsp:include page="new_form/personinfo.jsp">
 						<jsp:param name="info" value="student.mothersinfo"/>
 						<jsp:param name="caption" value="Mother"/>
 					</jsp:include>
 				</div>
 			</div>
+			
+			<div class="section">
+				<button type="button" r:context="student_appform" r:name="submit">Submit</button>
+			</div>
 		</div>
-		
-		<div class="section">
-			<button type="button" r:context="student_appform" r:name="back" r:visibleWhen="#{step>1}" r:immediate="true">Back</button>
-			<button type="button" r:context="student_appform" r:name="submit" r:visibleWhen="#{step==1}">Proceed</button>
-			<button type="button" r:context="student_appform" r:name="submit" r:visibleWhen="#{step==2}">Submit</button>
-		</div>
-	</div>
 	
 	
 	</jsp:body>
-	
-	
-	
+
 </t:public>
+

@@ -121,6 +121,17 @@ table.form {
 	margin: 5px 0;
 }
 
+table.info-form td {
+	font-weight: bold;
+	text-align: left;
+}
+
+table.info-form .form-caption {
+	font-weight: normal;
+	text-align: right;
+}
+
+
 /*====== grid ========*/
 table.grid {
 	border: solid 1px #ccc;

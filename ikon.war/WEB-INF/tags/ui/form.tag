@@ -8,13 +8,14 @@
 
 <%@ attribute name="context" %>
 <%@ attribute name="object" %>
+<%@ attribute name="styleClass" %>
 
 <c:if test="${!empty object}"><c:set var="object" scope="request" value="${object}"/></c:if>
 <c:set var="objPrefix" scope="request"><%=(object!=null)?object+".":""%></c:set>
 	
 <c:if test="<%=request.getAttribute("context")==null%>">
 	<ui:context name="${context}">
-		<table class="form" <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach>>
+		<table class="form ${styleClass}" <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach>>
 			<c:if test="${! empty title}">
 				<tr>
 					<td colspan="2" class="form-title" width="100%">${title}</td> 
@@ -26,7 +27,7 @@
 </c:if>
 
 <c:if test="<%=request.getAttribute("context")!=null%>">
-	<table class="form" <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach>>
+	<table class="form ${styleClass}" <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach>>
 		<c:if test="${! empty title}">
 			<tr>
 				<td colspan="2" class="form-title" width="100%">${title}</td> 

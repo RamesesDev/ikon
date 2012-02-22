@@ -28,7 +28,7 @@
 
 	<jsp:body>
 		<ui:grid context="studentapplicantlist" model="listModel">
-			<ui:col name="objid" caption="App. No."/>
+			<ui:col name="appno" caption="App. No."/>
 			<ui:col name="lastname" caption="Last Name"/>
 			<ui:col name="firstname" caption="First Name"/>
 			<ui:col name="programcode" caption="Program"/>

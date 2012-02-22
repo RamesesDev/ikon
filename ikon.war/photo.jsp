@@ -5,10 +5,28 @@
 
 <%   
 	try {
-		String userid = request.getParameter("id")+"";
+		String pathinfo = request.getPathInfo().substring(1);
+		String path="";
+		String userid="";
+		String imgsize = "thumbnail";
+		String[] patharr = pathinfo.split("/");
 		
-		String resUrl = System.getProperty("ikon.temp.url");
-		String target = resUrl + "/" + userid.hashCode() + "/thumbnail.jpg";
+		if( patharr.length > 1 ) {
+			path = patharr[0];
+			userid = patharr[1];
+		}
+		if( patharr.length > 2 ) {
+			imgsize = patharr[2];
+		}
+		
+		
+		String resUrl = "";
+		if( "temp".equals(path) )
+			resUrl = System.getProperty("ikon.temp.url");
+		else
+			resUrl = System.getProperty("ikon.uploads.url") + "/" + path;
+		
+		String target = resUrl + "/" + userid.hashCode() + "/" +imgsize+ ".jpg";
 		File f = new File(new URL(target).toURI());
 
 		//response.addHeader("Cache-Control", "max-age=86400");

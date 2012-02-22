@@ -1,4 +1,6 @@
 import com.rameses.annotations.*;
+import java.io.*;
+
 
 class StudentApplicantService {
 
@@ -16,9 +18,12 @@ class StudentApplicantService {
 	
 	@ProxyMethod
 	public def submit(def o) {
+		if(!o.objid) o.objid = "SAP" + new java.rmi.server.UID();
+		
 		def df = new java.text.SimpleDateFormat( "yyyy" );
 		def pfx = "S"+df.format(new Date());
-		o.objid = generator.getNextNumber([name:"student_applicant", prefix: pfx ]);
+		o.appno = generator.getNextNumber([name:"student_applicant", prefix: pfx ]);
+		
 		return em.create( "student:applicant", o );
 	}
 	
@@ -27,7 +32,7 @@ class StudentApplicantService {
 		def m = [:];
 		m.putAll( o );
 		m.objid = "STUD" + new java.rmi.server.UID();
-		m.appno = o.objid;
+		m.appid = o.objid;
 		em.create( "student", m );
 		em.delete( "student:applicant", o );
 		
@@ -41,12 +46,14 @@ class StudentApplicantService {
 		u.pwd = "1234";
 		u.email = m.email;
 		userSvc.createLoginAccount( u );
+		
+		transferPhoto( m, o );
 	}
 	
 	@ProxyMethod
 	public def read(def o) {
 		o = em.read( "student:applicant", o );
-		if(o.birthdate) o.birthdate = dateSvc.format( "yyyy-MM-dd", o.birthdate );
+		if(o?.birthdate) o.birthdate = dateSvc.format( "yyyy-MM-dd", o.birthdate );
 		return o;
 	}
 	
@@ -62,6 +69,20 @@ class StudentApplicantService {
 	}
 	
 	
-	
+	private void transferPhoto( student, app ) {
+		String temppath = System.getProperty("ikon.temp.url");
+		String uploadpath = System.getProperty("ikon.uploads.url") + "/profile";
+		
+		File source = new File(new URL(temppath).toURI());
+		source = new File(source, app.objid.hashCode()+"");
+		
+		File target = new File(new URL(uploadpath).toURI());		
+		if( !target.exists() ) target.mkdirs();		
+		target = new File(target, student.objid.hashCode()+"");
+		
+		if(! source.renameTo(target) ) {
+			System.out.println("Failed to move the photo directory");
+		}
+	}
 
 }

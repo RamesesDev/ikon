@@ -25,7 +25,7 @@
 	}
 </style>
 		
-<script>
+<script>	
 	$put( "programinfo", 
 		new function() {
 			var svc = ProxyService.lookup( "ProgramService" );
@@ -87,6 +87,12 @@
 				return new DropdownOpener( "program:coursereq_lookup", {selectHandler:  _addRequisite, reqtype: "1",
 					course: this.selectedCourse} );
 			}
+			
+			this.showReqList = function(reqList) {
+				var arr = [];
+				if( reqList ) reqList.each(function(o){ arr.push(o.coursecode); });
+				return arr.join(', ');
+			} 
 		}
 		
 	);
@@ -120,13 +126,13 @@ No. of year levels : <label r:context="programinfo">#{program.yearlevels}</label
 			<td class="cell" align="center">#{item.units}</td>
 			<td class="cell">#{item.remarks==null? '' : item.remarks}</td>
 			<td class="cell">
-				#{item.prerequisites!=null? item.prerequisites : '' }
+				#{item.prerequisites!=null? showReqList(item.prerequisites) : '' }
 				<a r:context="programinfo" r:name="addPrerequisite" r:immediate="true" r:visibleWhen="#{item.yearlevel+item.term!=2}">
 					[Add]
 				</a>
 			</td>
 			<td class="cell">
-				#{item.corequisites!=null?item.corequisites:''}
+				#{item.corequisites!=null? showReqList(item.corequisites):''}
 				<a r:context="programinfo" r:name="addCorequisite" r:immediate="true" r:visibleWhen="#{item.yearlevel+item.term!=2}">
 					[Add]
 				</a>

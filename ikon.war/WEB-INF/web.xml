@@ -72,6 +72,11 @@
         <jsp-file>/customizer.jsp</jsp-file>
     </servlet>
 	
+	<servlet>
+		<servlet-name>photo-jsp</servlet-name>
+        <jsp-file>/photo.jsp</jsp-file>
+    </servlet>
+	
 
     <servlet-mapping>
         <servlet-name>JSInvoker</servlet-name>
@@ -101,6 +106,11 @@
 	<servlet-mapping>
         <servlet-name>xxx</servlet-name>
         <url-pattern>*.cus</url-pattern>
+    </servlet-mapping>
+	
+	<servlet-mapping>
+        <servlet-name>photo-jsp</servlet-name>
+        <url-pattern>/photo/*</url-pattern>
     </servlet-mapping>
 
 
