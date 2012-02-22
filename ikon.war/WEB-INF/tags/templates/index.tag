@@ -1,6 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="common" %>
+<%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
 
 <%@ tag import="java.util.regex.*" %>
+<%@ tag import="java.util.*" %>
 
 <%@ attribute name="redirect_session" fragment="false" %>
 <%@ attribute name="tab" fragment="false" %>
@@ -29,10 +32,17 @@ request.setAttribute("APP_VERSION", application.getInitParameter("app.version"))
 %>
 
 <c:if test="${!empty SESSIONID and redirect_session=='true'}">
-	<%response.sendRedirect("home.jsp");%>
+	<s:invoke service="SessionService" method="getInfo" params="${SESSIONID}" var="SESSION_INFO"/>
+	<%
+		Map result = (Map) request.getAttribute("SESSION_INFO");
+		String pagename = result.get("usertype") + ".jsp";
+		Object res = application.getResource("/" + pagename);
+		if( res == null ) pagename = "guest.jsp";
+		response.sendRedirect(pagename);
+	%>
 </c:if>
 
-<c:if test="${(empty SESSIONID) || (empty redirect_session) || (redirect_session=='false')}">
+<c:if test="${(empty SESSIONID) || (empty redirect_session) || (redirect_session=='false') || (empty SESSION_INFO)}">
 	<!DOCTYPE html>
 	<html>
 		<head>

@@ -4,6 +4,8 @@
 
 <t:content title="Student Application">
 	<jsp:attribute name="head">
+		<script src="${pageContext.request.contextPath}/js/apps/PersonInfo.js"></script>
+		
 		<script>
 			$register( {id: "#student_applicant_approval", context:"studentapplicantinfo", options:{width:400,height:300} } );
 			$put( "studentapplicantinfo", 
@@ -49,16 +51,6 @@
 							window.location.hash = "student_applicant:list";
 							return "_close";
 						}
-					}
-					
-					this.displayAddress = function( addr ) {
-						var arr = [];
-						if( addr.address1 ) arr.push( addr.address1 );
-						if( addr.address2 ) arr.push( addr.address2 );
-						if( addr.city ) arr.push( addr.city );
-						if( addr.province ) arr.push( addr.province );
-						if( addr.zipcode ) arr.push( addr.zipcode );
-						return arr.join(', ');
 					}
 				}
 			);
@@ -132,7 +124,7 @@
 							#{info.religion}
 						</ui:label>
 						<ui:label caption="Primary Address :" rtexpression="true">
-							#{displayAddress(info.primaryaddress)}
+							#{PersonInfo.formatAddress(info.primaryaddress)}
 						</ui:label>
 					</ui:form>
 				</ui:section>

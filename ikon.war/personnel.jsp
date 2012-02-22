@@ -3,6 +3,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="common" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
+<%@ taglib tagdir="/WEB-INF/tags/page" prefix="page" %>
 
 <s:invoke service="JobPermissionService" method="getUserJobposition" params="${param}" var="JOB" debug="true"/>
 <t:secured-master>
@@ -18,9 +19,6 @@
 				}
 			}
 		);
-			
-		
-		$register({id:"#jobmenu", context:"home"});
 		
 		$put(
 			"home",
@@ -29,38 +27,12 @@
 					if( !location.hash && $ctx('apps').items && $ctx('apps').items.length > 0 ) 
 						location.hash = $ctx('apps').items[0].id;
 				}
-				
-				var jobMenu;						
-				this.showJobs = function() {
-					if( !jobMenu ) {
-						jobMenu = new DropdownOpener( '#jobmenu' );
-						jobMenu.options = {
-							styleClass: 'dropdownmenu',
-							handleClassOnOpen: 'menu_open',
-							position: {my: 'right top', at: 'right bottom'}
-						};
-					}
-					return jobMenu;
-				}
 			}
 		);
 	</jsp:attribute>
 
 	<jsp:attribute name="header_middle">
-		<a r:context="home" r:name="showJobs">
-			${JOB.title} &nbsp;&nbsp;&#9660;
-		</a>
-		<div id="jobmenu" style="display:none">
-			<ul>
-				<c:forEach items="${JOB.others}" var="item">
-					<li>
-						<a href="?jobid=${item.objid}">
-							${item.title}
-						</a>
-					</li>
-				</c:forEach>
-			</ul>
-		</div>
+		<page:select-job title="${JOB.title}" list="${JOB.others}"/>
 	</jsp:attribute>
 	
 	<jsp:body>

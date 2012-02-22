@@ -18,12 +18,17 @@
 		<c:set var="SESSIONID" value="${result.sessionid}" scope="request"/>
 		<%
 			Cookie cookie = new Cookie( "sessionid", (String)request.getAttribute("SESSIONID") ) ;
+			Map result = (Map) request.getAttribute("result");
 			response.addCookie( cookie );
 			
 			if( request.getParameter("u") != null )
 				response.sendRedirect(request.getParameter("u"));
-			else
-				response.sendRedirect("home.jsp");
+			else {
+				String pagename = result.get("usertype") + ".jsp";
+				Object res = application.getResource("/" + pagename);
+				if( res == null ) pagename = "guest.jsp";
+				response.sendRedirect(pagename);
+			}
 		%>
 	</c:if>
 </c:if>

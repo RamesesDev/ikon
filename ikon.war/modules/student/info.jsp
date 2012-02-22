@@ -6,6 +6,8 @@
 
 <t:content title="Student">
 	<jsp:attribute name="head">
+		<script src="${pageContext.request.contextPath}/js/apps/PersonInfo.js"></script>
+
 		<script>
 			$put( "studentinfo", 
 				new function() {
@@ -56,7 +58,7 @@
 							#{info.religion}
 						</ui:label>
 						<ui:label caption="Primary Address :" rtexpression="true">
-							#{displayAddress(info.primaryaddress)}
+							#{PersonInfo.formatAddress(info.primaryaddress)}
 						</ui:label>
 					</ui:form>
 				</ui:section>

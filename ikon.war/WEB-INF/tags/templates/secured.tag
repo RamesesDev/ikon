@@ -42,7 +42,8 @@
 				Env.sessionid = $.cookie("sessionid");
 				var Session = new Notifier( Env.sessionid );
 				Registry.add( {id:"#usermenu", context:"session"} );				
-				ProxyService.contextPath = '${pageContext.request.contextPath}';
+				ProxyService.contextPath = '${pageContext.request.contextPath}';				
+				Notifier.contextPath = '${pageContext.request.contextPath}';
 				
 				$put("session",
 					new function() {

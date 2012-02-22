@@ -17,6 +17,6 @@
 	</jsp:attribute>
 	
 	<jsp:body>
-		This is the page for student.
+		Welcome Guest!
 	</jsp:body>
 </t:secured>
