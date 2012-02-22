@@ -1,37 +1,44 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
+<%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 
-
-<script>
-	$put( "orgunitinfo", 
-		new function() {
-			var svc = ProxyService.lookup("OrgunitService");
-			this.saveHandler;
-			this.orgunit;
-			this.mode = "create";
+<t:popup>
+	<jsp:attribute name="head">
+		<script>
+		
+			$put( "orgunitinfo", 
+				new function() {
+					var svc = ProxyService.lookup("OrgunitService");
+					this.saveHandler;
+					this.orgunit = {};
+					this.mode = "create";
 			
-			this.save = function() {
-				if(this.mode == "create") {
-					svc.create( this.orgunit );
-				}
-				else {
-					svc.update(this.orgunit);
-				}
-				this.saveHandler();
-				return "_close";
-			}
+					this.save = function() {
+						if(this.mode == "create") {
+							svc.create( this.orgunit );
+						}
+						else {
+							svc.update(this.orgunit);
+						}
+						this.saveHandler();
+						return "_close";
+					}
 			
-		}
-	);
-</script>
-
-Type :
-<label r:context="orgunitinfo">#{orgunit.orgtype}</label>
-<br>
-
-Code : <input type="text" r:context="orgunitinfo" r:name="orgunit.code" r:required="true" r:caption="Code" />
-<br>
-Title <input type="text" r:context="orgunitinfo" r:name="orgunit.title" r:required="true" r:caption="Name" />
-<br>
-
-<input type="button" r:context="orgunitinfo" r:name="save" value="Save"/>
-
+				}
+			);
+		</script>
+	</jsp:attribute>
+	
+	<jsp:attribute name="rightactions">
+		<ui:button context="orgunitinfo" action="save" caption="Save"/>
+	</jsp:attribute>
+	
+	<jsp:body>
+		<ui:form context="orgunitinfo" object="orgunit">
+			<ui:label caption="Type : " rtexpression="true">
+				#{orgunit.orgtype}
+			</ui:label>
+			<ui:text caption="Code : " name="code" required="true"/>
+			<ui:text caption="Title : " name="title" required="true"/>
+		</ui:form>
+	</jsp:body>
+</t:popup>

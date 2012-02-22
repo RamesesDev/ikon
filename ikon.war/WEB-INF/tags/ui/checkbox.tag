@@ -24,30 +24,29 @@
 </c:if>
 
 <c:forEach items="${optionMap}" var="option">
-<c:if test="${ empty orientation && orientation != 'horizontal'}"> 
-	<tr>
-</c:if>
-			<td class="form-caption" valign="top">
-				${option.caption}
-				<c:if test="${required == 'true'}">&nbsp;<font color=red>*</font></c:if>
-			</td> 
-			<td>
-				<input type="checkbox" r:context="${context}" 
-					r:checkedValue="${option.checkedValue}" r:uncheckedValue="${option.uncheckedValue}" 
-					<c:if test="${! empty mode && mode == 'set'}">
-						r:mode="${mode}"
-						r:name="${name}" 
-					</c:if>
-					<c:if test="${ empty mode}">
-						r:name="${option.name}" 
-					</c:if>
-				/> 
-			</td>
-<c:if test="${ empty orientation && orientation != 'horizontal'}"> 
-	</tr>
-</c:if>
+	<c:if test="${ empty orientation && orientation != 'horizontal'}"> 
+		<tr>
+	</c:if>
+	<td class="form-caption" valign="top">
+		${option.caption}
+		<c:if test="${required == 'true'}">&nbsp;<font color=red>*</font></c:if>
+	</td> 
+	<td>
+		<input type="checkbox" r:context="${context}" 
+			r:checkedValue="${option.checkedValue}" r:uncheckedValue="${option.uncheckedValue}" 
+			<c:if test="${! empty mode && mode == 'set'}">
+				r:mode="${mode}"
+				r:name="${name}" 
+			</c:if>
+			<c:if test="${ empty mode}">
+				r:name="${option.name}" 
+			</c:if>
+		/> 
+	</td>
+	<c:if test="${ empty orientation && orientation != 'horizontal'}"> 
+		</tr>
+	</c:if>
 </c:forEach>
-
 
 <c:if test="${! empty orientation && orientation == 'horizontal'}"> 
 				</tr>
