@@ -1,0 +1,28 @@
+import com.rameses.annotations.*;
+import java.text.*;
+
+
+class DocnoGenerator {
+
+	@PersistenceContext("main")
+	def em;
+
+	@ProxyMethod
+	public def getNextNumber( def o ) {
+		def g = em.read( "docno_generator", o );
+		if( g == null ) {
+			g = [:];
+			g.name = o.name;
+			g.prefix = o.prefix;
+			g.lastnum = 1;
+			em.create( "docno_generator", g ); 
+		}
+		else {
+			g.lastnum = g.lastnum + 1;
+			em.update( "docno_generator", g );
+		}
+		def df = new DecimalFormat( "00000000" );
+		return g.prefix + df.format( g.lastnum );
+	}	
+
+}

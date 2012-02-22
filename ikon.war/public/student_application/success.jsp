@@ -7,5 +7,7 @@
 	
 	<h1>${param['objid']}</h1>
 	
+	<br>
+	<i>Place enrollment instructions here</i>
 	
 </t:public>

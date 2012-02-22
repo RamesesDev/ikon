@@ -1,54 +1,48 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
+<%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 
-<script>
-	
-	$put( "schooltermlist", 
-		new function() {
-			var svc = ProxyService.lookup( "SchoolTermAdminService" );
-			
-			var self = this;
-			
-			this.selectedItem;
-			this.listModel = {
-				rows: 10,
-				fetchList: function(o) {
-					return svc.getList( o );	
+<t:content title="School Term Calendar">
+
+	<jsp:attribute name="script">
+		$put( "schooltermlist", 
+			new function() {
+				var svc = ProxyService.lookup( "SchoolTermAdminService" );
+				
+				var self = this;
+				
+				this.selectedItem;
+				this.listModel = {
+					rows: 10,
+					fetchList: function(o) {
+						return svc.getList( o );	
+					}
+				}
+				
+				this.add = function() {
+					var f = function(o) {
+						svc.create(o);
+						self.listModel.refresh(true);	
+					}
+					return new PopupOpener( "schoolterm:edit", {saveHandler:f} );
 				}
 			}
-			
-			this.add = function() {
-				var f = function(o) {
-					svc.create(o);
-					self.listModel.refresh(true);	
-				}
-				return new PopupOpener( "schoolterm:edit", {saveHandler:f} );
-			}
-		}
-	);
-</script>
-
-
-<input type="button" value="Add" r:context="schooltermlist" r:name="add" />
-<table r:context="schooltermlist" r:model="listModel" r:varName="item" r:name="selectedItem" border="1" width="80%">
-	<thead>
-		<td>Year</td>
-		<td>Semester</td>
-		<td>From date</td>
-		<td>To date</td>
-		<td>Status</td>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-	</thead>
+		);
+	</jsp:attribute>
 	
-	<tbody>
-		<td>#{item.year}</td>
-		<td>#{item.term}</td>
-		<td>#{item.fromdate}</td>
-		<td>#{item.todate}</td>
-		<td>#{item.status}</td>
-		<td><a href="#schoolterm:info?objid=#{item.objid}">View</a></td>
-		<td><a href="${pageContext.request.contextPath}/scheduling.jsp?schooltermid=#{item.objid}">Scheduling</a></td>
-	</tbody>
-</table>
-			
-		
+	<jsp:body>
+		<ui:context name="schooltermlist">
+			<ui:button caption="Add" action="add"/>
+			<ui:grid model="listModel">	
+				<ui:col caption="Year" name="year"/>
+				<ui:col caption="Sem" name="term"/>
+				<ui:col caption="From Date" name="fromdate"/>
+				<ui:col caption="To Date" name="todate"/>
+				<ui:col caption="Status" name="status"/>
+				<ui:col><a href="#schoolterm:info?objid=#{item.objid}">View</a></ui:col>
+				<ui:col><a href="${pageContext.request.contextPath}/scheduling.jsp?schooltermid=#{item.objid}">Scheduling</a></ui:col>
+			</ui:grid>
+		</ui:context>
+	</jsp:body>
+
+</t:content>
+

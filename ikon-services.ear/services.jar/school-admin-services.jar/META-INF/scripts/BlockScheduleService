@@ -1,6 +1,6 @@
 import com.rameses.annotations.*;
 
-class ClassScheduleService {
+class BlockScheduleService {
 
 	@PersistenceContext("main")
 	def em;

@@ -1,0 +1,8 @@
+<schema>
+	<element tablename="docno_generator" >
+		<field name="name" primary="true"/>
+		<field name="prefix" primary="true"/>
+		<field name="lastnum"/>
+	</element>
+	
+</schema>

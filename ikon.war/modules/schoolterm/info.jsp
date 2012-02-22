@@ -50,12 +50,11 @@
 	<jsp:body>
 		
 		<ui:context name="schoolterminfo">
+			<ui:button caption="Add Entry" action="addEntry"/><br>
 			<ui:form object="schoolterm">
 				<ui:label caption="Year / Term" rtexpression="true">#{schoolterm.year} / #{schoolterm.term}</ui:label>	
 				<ui:label caption="Period" rtexpression="true">#{schoolterm.fromdate} to #{schoolterm.todate}</ui:label>	
 			</ui:form>
-			<ui:button caption="Edit" action="edit"/>
-			<ui:button caption="Add Entry" action="addEntry"/>
 		</ui:context>
 		
 		

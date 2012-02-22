@@ -90,7 +90,7 @@
 					</td>
 					<td>
 						<input type="text" size="30"
-							r:context="student_appform" r:name="studdent.religion" r:required="false" 
+							r:context="student_appform" r:name="student.religion" r:required="false" 
 							r:caption="Religion" r:textcase="upper">
 					</td>
 				</tr>

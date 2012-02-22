@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ tag import="java.util.*" %>
-
+<%@ tag dynamic-attributes="params" %>
 
 <%
 Stack st = (Stack)request.getAttribute( "_panel_flag" );
@@ -30,5 +30,5 @@ jspContext.setAttribute( "last", new Boolean(_last ));
 %>
 
 <c:if test="${first}"><tr></c:if>
-<td valign="top"><jsp:doBody/></td>
+<td valign="top" <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach>><jsp:doBody/></td>
 <c:if test="${last}"></tr></c:if>	

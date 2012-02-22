@@ -5,7 +5,7 @@
 	$put( "class_schedule_edit_block_class", 
 	
 		new function() {
-			var svc = ProxyService.lookup("ClassScheduleService"); 
+			var svc = ProxyService.lookup("BlockScheduleService"); 
 			
 			this.class;
 			this.selectedSchedule;

@@ -8,9 +8,17 @@ class StudentApplicantService {
 	@Service("DateService")
 	def dateSvc;
 
+	@Service("UserAccountService")
+	def userSvc;
+	
+	@Service( "DocnoGeneratorService" )
+	def generator;
+	
 	@ProxyMethod
 	public def submit(def o) {
-		if(!o.objid) o.objid = "SAPP" + new java.rmi.server.UID();
+		def df = new java.text.SimpleDateFormat( "yyyy" );
+		def pfx = "S"+df.format(new Date());
+		o.objid = generator.getNextNumber([name:"student_applicant", prefix: pfx ]);
 		return em.create( "student:applicant", o );
 	}
 	
@@ -22,6 +30,17 @@ class StudentApplicantService {
 		m.appno = o.objid;
 		em.create( "student", m );
 		em.delete( "student:applicant", o );
+		
+		//also create a login automatically
+		def u = [:];
+		u.objid = m.objid;
+		u.usertype = "student";
+		u.firstname = m.firstname;
+		u.lastname = m.lastname;
+		u.uid = m.studentno;
+		u.pwd = "1234";
+		u.email = m.email;
+		userSvc.createLoginAccount( u );
 	}
 	
 	@ProxyMethod
