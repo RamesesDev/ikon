@@ -336,10 +336,7 @@ BindingUtils.handlers.div_weekcalendar = function( elem, controller, idx )
 				},
 				eventRender: function(event, element) {
 					if(event.item.templateid){
-						console.log(event.item);
-						console.log(event.item.templateid);
 						var title = $template(event.item.templateid, event.item);
-						console.log(title);
 						element.find('.fc-event-title').html( title );
 					} else {
 						element.find('.fc-event-title').html( event.title );
@@ -347,6 +344,8 @@ BindingUtils.handlers.div_weekcalendar = function( elem, controller, idx )
 				}
 			}
 		);
+		
+		calendar.render();
 	}
 	
 	model.load = function() {
