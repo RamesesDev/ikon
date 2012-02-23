@@ -22,7 +22,6 @@ class TeacherScheduleService {
 
 	@ProxyMethod
 	public def getUnassignedSchedules( o ) {
-		print "show unassigned skeds " + o;
 		return em.sqlContext.createNamedQuery("teacher_schedule:list-available-teacher-schedules").setParameters(o).resultList;
 	}
 	

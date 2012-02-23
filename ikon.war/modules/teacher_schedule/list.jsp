@@ -40,7 +40,7 @@
 							o.totime = self.schedule.totime;
 						}
 						o.schooltermid = self.schooltermid;
-						o.orgunitid = (self.orgunit.objid)? self.orgunit.objid : null;
+						o.orgunitid = (self.orgunit)? self.orgunit.objid : null;
 						return svc.getTeachers(o);	
 					}
 				}	

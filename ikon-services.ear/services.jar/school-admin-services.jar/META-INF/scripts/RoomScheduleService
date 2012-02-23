@@ -10,7 +10,8 @@ class RoomScheduleService {
 	
 	@ProxyMethod
 	public def getRoomAvailability(def o) {
-		return em.sqlContext.createNamedQuery("room_schedule:list-room-availability").setParameters(o).resultList;
+		def str = ( o.display_available == "1" ) ? "list-room-availability" : "list-all";
+		return em.sqlContext.createNamedQuery("room_schedule:"+str).setParameters(o).resultList;
 	}
 
 	@ProxyMethod

@@ -1,3 +1,6 @@
+[list-all]
+select r.* from room r order by r.roomno 
+
 [list-room-availability]
 select r.* from room r 
 where not exists (
@@ -13,6 +16,7 @@ where not exists (
 	 or (cs.fromtime>=$P{fromtime} and cs.totime<=$P{totime} ) 
    ) 
 ) 
+order by r.roomno
 
 [list-room-schedule]
 select cs.*, cc.code as classcode, cc.colorcode, (select concat(lastname,',',firstname) from personnel where objid=cc.teacherid) as teacher   
