@@ -37,8 +37,12 @@ class EnrollmentService
 	}
 	
 	@ProxyMethod
-	public def getEnrolled() {
-	
+	public def getPendingEnrollment() {
+		def list = em.sqlContext.createNamedQuery( "enrollment:get-pending-classes").setParameter('studentid', env.objid).resultList;
+		list.each {
+			it.schedules = em.sqlContext.createNamedQuery("class:class-schedules").setParameters( [classid:it.objid] ).resultList;
+		}
+		return list;
 	}
 
 }

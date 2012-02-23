@@ -20,10 +20,57 @@
 				new function() 
 				{
 					var self = this;
-					var svc = ProxyService.lookup("BlockScheduleService");
 					var util = new SkedUtil();
 
+					this.classlist = <s:invoke service="EnrollmentService" method="getPendingEnrollment" json="true"/>
 					
+					this.model = {
+						minTime: 6,
+						maxTime: 22,
+						fetchList: function() {
+							var arr = [];
+							self.classlist.each(
+								function(clz) {
+									for( var i=0;i<clz.schedules.length;i++ ) {
+										var c = clz.schedules[i];	
+										var func = function(d) {
+											var z = {coursecode: clz.coursecode, roomno: c.roomno, room_conflict: c.room_conflict, teacher: clz.teacher }
+											arr.push( {day: d, from: c.fromtime, to: c.totime, caption: $template('schedule_panel',z), 
+												item:{class:clz,sked:c}, color: clz.colorcode });		
+										}
+										util.fetchDays( c.days_of_week, func );
+									}
+								}
+							);
+							return arr;
+						}
+					}
+
+					this.listView = false;
+					this.toggleView = function() {
+						this.listView = !this.listView;
+					}
+					
+					this.getClassList = function() {
+						return this.classlist.each(buildListInfo);
+					}
+					
+					function buildListInfo(cl){
+						var arr = [];
+						cl.schedules.each(function(sk){
+							console.log( sk );
+							arr.push(
+								"<b>"+ sk.days + "</b> / " + 
+								formatToTime(sk.fromtime) + "-" + formatToTime(sk.totime) +
+								" / " + (sk.roomno? sk.roomno : '<i>unassigned</i>')
+							);
+						});
+						cl.schedule = arr.join(' , ');
+					}
+					
+					function formatToTime( num ) {
+						return (num+"").replace(/(\d+)(\d{2})$/, "$1:$2");
+					}
 					
 				}
 			);
@@ -39,6 +86,24 @@
 	</jsp:attribute>
 
 	<jsp:body>
-		
+		<ui:context name="pending">
+			<div class="clearfix" r:context="${context}" r:type="label">
+				<span class="right">
+					<ui:button action="toggleView">
+						#{listView? 'Calendar' : 'List'} View
+					</ui:button>
+				</span>
+			</div>
+			<div r:context="${context}" r:visibleWhen="#{!listView}">
+				<div r:type="weekcalendar" r:context="${context}" r:model="model" class="sections"></div>
+			</div>
+			<div r:context="${context}" r:visibleWhen="#{listView}">
+				<ui:grid items="getClassList()">
+					<ui:col caption="Course Code" name="coursecode"/>
+					<ui:col caption="Title" name="coursetitle"/>
+					<ui:col caption="Schedule" name="schedule" width="200px"/>
+				</ui:grid>
+			</div>
+		</ui:context>
 	</jsp:body>
 </t:content>
