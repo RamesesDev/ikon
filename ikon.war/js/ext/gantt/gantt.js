@@ -11,14 +11,15 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 	var showNoOfDays = R.attr(elem, "showNoOfDays");
 	var ganttViewModel = [];
 	var term = [];
+	var eventFontSize = R.attr(elem, "eventFontSize");
 	
-	var fromexp = R.attr(elem, "from");
+	var fromexp = controller.get(R.attr(elem, "from"));
 	if(fromexp)
-		model.from = fromexp.evaluate(controller.code);
+		model.from = fromexp;
 		
-	var toexp = R.attr(elem, "to");
+	var toexp = controller.get(R.attr(elem, "to"));
 	if(toexp)
-		model.to = toexp.evaluate(controller.code);
+		model.to = toexp;
 	
 	build();	
 	function build() {
@@ -70,6 +71,10 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 				}
 			}
 		);
+		
+		//changes the event/series FONT SIZE
+		if(eventFontSize)
+			e.find('div.ganttview-vtheader-series-name').css( "font-size", eventFontSize );
 		
 		//removes the EVENT HEADER
 		var vtheader = e.find('div.ganttview-vtheader-item-name').remove();

@@ -1,7 +1,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
-<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="sv" %>
+<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="cui" %>
 <%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 
 <t:popup>
@@ -13,7 +13,7 @@
 				new function() {
 					var svc = ProxyService.lookup( "RoleService" );
 					this.rolename = "${param['role']}";
-					this.included = <sv:tojson value="${INFO.included}"/>;
+					this.included = <cui:tojson value="${INFO.included}"/>;
 					this.savePermissions = function() {
 						svc.updatePermissions( {name:this.rolename, included: this.included} );
 						return "_close";	

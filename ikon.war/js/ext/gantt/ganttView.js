@@ -156,7 +156,32 @@ behavior: {
 			
 				var seriesDiv = jQuery("<div>", { "class": "ganttview-vtheader-series" });
 				for (var j = 0; j < data[i].series.length; j++) {
-					seriesDiv.append(jQuery("<div>", { "class": "ganttview-vtheader-series-name" }).append(data[i].series[j].name));
+					/*seriesDiv.append(jQuery("<div>", 
+						{ 
+							"class": "ganttview-vtheader-series-name",
+							"title" : data[i].series[j].name
+						}
+					).append(data[i].series[j].name));
+					*/
+					var seriesItemDiv = jQuery("<div>", 
+						{ 
+							"class": "ganttview-vtheader-series-name",
+						}
+					);
+					var seriesItemDesc = jQuery("<div>", 
+						{ 
+							"title" : data[i].series[j].name,
+							"css": 
+								{
+									"margin-top" : "3px",
+									"overflow" : "hidden",
+									"height" : "100%"
+								}
+						}
+					).append(data[i].series[j].name);
+					
+					seriesItemDesc.appendTo(seriesItemDiv);
+					seriesItemDiv.appendTo(seriesDiv);
 				}
 				itemDiv.append(seriesDiv);
 				headerDiv.append(itemDiv);
