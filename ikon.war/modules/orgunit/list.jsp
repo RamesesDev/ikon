@@ -56,8 +56,8 @@
 				<ui:combo name="orgType" items="orgTypes" itemKey="name" itemLabel="name"/>
 			</ui:form>
 			<ui:button action="add" caption="Add"/>
-			<ui:grid model="listModel" width="80%" name="selectedItem">
-				<ui:col caption="Code" name="code" width="25%"/>
+			<ui:grid model="listModel" name="selectedItem">
+				<ui:col caption="Code" name="code" width="20%"/>
 				<ui:col caption="Title" name="title" width="60%"/>
 				<ui:col >
 					<a r:context="orgunitlist" r:name="edit">View</a>

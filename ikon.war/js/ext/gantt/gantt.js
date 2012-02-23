@@ -11,14 +11,15 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 	var showNoOfDays = R.attr(elem, "showNoOfDays");
 	var ganttViewModel = [];
 	var term = [];
+	var eventFontSize = R.attr(elem, "eventFontSize");
 	
-	var fromexp = R.attr(elem, "from");
+	var fromexp = controller.get(R.attr(elem, "from"));
 	if(fromexp)
-		model.from = fromexp.evaluate(controller.code);
+		model.from = fromexp;
 		
-	var toexp = R.attr(elem, "to");
+	var toexp = controller.get(R.attr(elem, "to"));
 	if(toexp)
-		model.to = toexp.evaluate(controller.code);
+		model.to = toexp;
 	
 	build();	
 	function build() {
@@ -36,7 +37,8 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 						name: events[i].caption,
 						start: buildDate(events[i].from),
 						end: buildDate(events[i].to),
-						color: events[i].color
+						color: events[i].color,
+						item: events[i]
 					}
 				);
 			}
@@ -57,19 +59,23 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 					resizable: model.resizable == null ? false : model.resizable,
 					onClick: function(data, elem) {
 						if(model.onclick)
-							model.onclick(data, elem);
+							model.onclick(rebuildData(data), elem);
 					},
 					onDrag: function(data, elem) {
 						if(model.ondrag)
-							model.ondrag(data, elem);
+							model.ondrag(rebuildData(data), elem);
 					},
 					onResize: function(data, elem){
 						if(model.onresize)
-							model.onresize(data, elem);
+							model.onresize(rebuildData(data), elem);
 					}
 				}
 			}
 		);
+		
+		//changes the event/series FONT SIZE
+		if(eventFontSize)
+			e.find('div.ganttview-vtheader-series-name').css( "font-size", eventFontSize );
 		
 		//removes the EVENT HEADER
 		var vtheader = e.find('div.ganttview-vtheader-item-name').remove();
@@ -99,6 +105,16 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 		var month = _month.substring(0, _month.indexOf("-"));
 		var day = _month.substring(_month.lastIndexOf("-")+1, _month.length);
 		return new Date(year, month-1, day);
+	}
+	
+	function rebuildData(event) {
+		var _item = event.item;
+		var _start = event.start;
+		var _end = event.end;
+		_item.from = _start.getFullYear() + "-" + (_start.getMonth()+1) + "-" + _start.getDate();
+		_item.to = _end.getFullYear() + "-" + (_end.getMonth()+1) + "-" + _end.getDate();
+		
+		return _item;
 	}
 }
 

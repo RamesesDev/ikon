@@ -75,6 +75,7 @@ div.ganttview-vtheader-series-name {
 	line-height: 16px;
 	padding-left: 5px;
 	padding-right: 10px;
+	overflow:hidden;
 }
 
 

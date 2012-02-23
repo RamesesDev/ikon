@@ -9,6 +9,11 @@ class PersonnelService {
 	def dateSvc;
 	
 	@ProxyMethod
+	public def getPositions(def objid) {
+		return em.sqlContext.createNamedQuery( "personnel:getPersonnelPositions" ).setParameter( "objid", objid ).resultList;
+	}
+	
+	@ProxyMethod
 	public def getList(def params) {
 		def qry = em.sqlContext.createNamedQuery( "personnel:list" );
 		def sb = new StringBuffer();
