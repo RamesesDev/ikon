@@ -345,7 +345,7 @@ BindingUtils.handlers.div_weekcalendar = function( elem, controller, idx )
 			}
 		);
 		
-		calendar.render();
+		calendar.fullCalendar('render');
 	}
 	
 	model.load = function() {
