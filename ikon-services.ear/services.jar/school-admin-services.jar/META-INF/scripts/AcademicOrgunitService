@@ -1,6 +1,6 @@
 import com.rameses.annotations.*;
 
-class CourseAdminService {
+class AcademicOrgunitService {
 
 	@PersistenceContext("main")
 	def em;
@@ -12,7 +12,5 @@ class CourseAdminService {
 	public def getList(def params) {
 		return orgSvc.getUserOrgunits( [orgtype : "ACADEMIC_UNIT"] );
 	}
-	
-	
 	
 }

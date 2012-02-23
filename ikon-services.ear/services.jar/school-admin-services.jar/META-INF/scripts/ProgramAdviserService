@@ -1,0 +1,38 @@
+import com.rameses.annotations.*;
+
+class ProgramAdviserService {
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+	
+	@Service("ProgramService")
+	def progSvc;
+	
+	
+	@ProxyMethod
+	public def getList( params ) {
+		def qry = em.sqlContext.createNamedQuery( "program_adviser:list" );
+		if(params) {
+			if(params._start) qry.setFirstResult( params._start );
+			if(params._limit) qry.setMaxResults( params._limit );
+			qry.setParameters( params );
+		}
+		return qry.resultList;
+	}
+
+	
+	
+	@ProxyMethod
+	public def create(def o) {
+		em.create( "program_adviser", o );
+	}
+
+	@ProxyMethod
+	public def remove(def o) {
+		em.delete( "program_adviser", o );
+	}
+	
+}

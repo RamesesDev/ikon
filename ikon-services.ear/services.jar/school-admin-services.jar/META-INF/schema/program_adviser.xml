@@ -1,0 +1,10 @@
+<schema>
+
+	<element tablename="program_adviser" >
+		<field name="schooltermid" primary="true"/>
+		<field name="adviserid" primary="true"/>
+		<field name="programid" primary="true"/>
+		<field name="yearlevel" primary="true"/>
+    </element>
+
+</schema>

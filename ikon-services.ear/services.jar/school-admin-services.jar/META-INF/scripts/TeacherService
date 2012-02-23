@@ -1,0 +1,15 @@
+import com.rameses.annotations.*;
+
+class TeacherService {
+
+	@PersistenceContext("main")
+	def em;
+	
+	@ProxyMethod
+	public def getList(def o) {
+		def str = (o.programid) ? "list-by-program" : "list-all";
+		return em.sqlContext.createNamedQuery("teacher:"+str).setParameters(o).resultList;
+	}
+	
+	
+}
