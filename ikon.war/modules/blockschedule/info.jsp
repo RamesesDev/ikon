@@ -1,5 +1,5 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
-<%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
+<%@ taglib tagdir="/WEB-INF/tags/server" prefix="s" %>
 <%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 <%@ taglib tagdir="/WEB-INF/tags/common" prefix="com" %>
 
@@ -12,12 +12,14 @@
 		Block Schedule - ${INFO.code}
 	</jsp:attribute>
 	
-	<jsp:attribute name="script">
+	<jsp:attribute name="head">
+	  <script type="text/javascript">
+	  
 		$register( {id:"#context_menu", context: "blockinfo" });	
 		$put( "blockinfo", 
 			new function() {
 				var svc = ProxyService.lookup("BlockScheduleService");
-				this.blockinfo = <com:toJSON value="${INFO}"/>;	
+				this.blockinfo = <com:tojson value="${INFO}"/>;	
 				this.classlist;
 				var self = this;
 					
@@ -77,7 +79,8 @@
 					alert('view room for ' + this.selectedSchedule.roomid + " " + this.selectedSchedule.roomno );
 				}
 			}	
-		);	
+		);
+	  </script>
 	</jsp:attribute>
 
 	<jsp:attribute name="sections">

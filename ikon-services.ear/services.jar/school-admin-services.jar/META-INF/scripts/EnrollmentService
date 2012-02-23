@@ -1,0 +1,44 @@
+import com.rameses.annotations.*;
+
+class EnrollmentService 
+{
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+	
+	@Env
+	def env;
+
+	
+	@ProxyMethod
+	public void enroll( form ) {
+		form.classes.each{
+			try {
+				it.studentid = env.objid;
+				it.schooltermid = form.schooltermid;
+				em.create("class:enrollee", it);
+			}
+			catch(e) {
+				e.printStackTrace();
+				throw e;
+			}
+		};
+	}
+	
+	@ProxyMethod
+	public def checkEnrollment() {
+		def state = em.sqlContext.createNamedQuery('enrollment:check-enrolled-state').setParameter('studentid', env.objid).singleResult;
+		state.pending = state.pending? true : false;
+		state.active = state.active? true : false;
+		return state;
+	}
+	
+	@ProxyMethod
+	public def getEnrolled() {
+	
+	}
+
+}

@@ -1,6 +1,6 @@
 <schema>
 
-	<element name="class" tablename="courseclass" >
+	<element name="class" tablename="class" >
 		<field name="objid" primary="true"/>
 		<field name="code" />
 		<field name="blockid" />
@@ -14,7 +14,7 @@
 		<field name="colorcode" />
     </element>
 
-	<element name="schedule" tablename="courseclass_schedule" >
+	<element name="schedule" tablename="class_schedule" >
 		<field name="objid" primary="true"/>
 		<field name="classid" />
 		<field name="days_of_week" />
@@ -33,6 +33,20 @@
 		<field name="description" />
 		<field name="yearlevel" />
 		<field name="term" />
+    </element>
+	
+	<element name="enrollee" tablename="class_enrollee" >
+		<field name="classid" primary="true"/>
+		<field name="schooltermid" primary="true"/>
+		<field name="studentid" primary="true"/>
+    </element>
+	
+	<element name="student" tablename="class_student" >
+		<field name="classid" primary="true"/>
+		<field name="schooltermid" primary="true"/>
+		<field name="studentid" primary="true"/>
+		<field name="finalgrade"/>
+		<field name="partialgrade"/>
     </element>
 
 </schema>

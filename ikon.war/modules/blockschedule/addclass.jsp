@@ -67,6 +67,10 @@
 				}
 				
 				this.save = function() {
+					if(this.class.schedules.length == 0) {
+						MsgBox.error("Please specify the schedule(s).");
+						return;
+					}
 					svc.saveClass( this.class );
 					this.saveHandler();
 					return "_close";

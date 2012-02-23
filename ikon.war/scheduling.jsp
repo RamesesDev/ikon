@@ -47,8 +47,8 @@
 	</jsp:attribute>
 	
 	<jsp:body>
-		<a href="home.jsp">Home</a>
-		<br>
+		<a href="index.jsp">Home</a>
+		<div class="hr"></div>
 		<table r:context="apps" r:items="items">
 			<tr>
 				<td><a href="##{id}">#{caption}</a></td>

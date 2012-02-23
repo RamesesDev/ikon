@@ -18,5 +18,12 @@ class SchoolEventService
 		
 		return list.groupBy{ it.phaseid };
 	}
+	
+	@ProxyMethod
+	public def getPhaseEvents( phaseid ) {
+		return em.sqlContext.createNamedQuery('school_events:get-phase-events')
+		         .setParameter('phaseid', phaseid)
+				 .resultList;
+	}
 
 }

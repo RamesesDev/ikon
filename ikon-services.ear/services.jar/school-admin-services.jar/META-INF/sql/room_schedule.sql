@@ -4,8 +4,8 @@ select r.* from room r order by r.roomno
 [list-room-availability]
 select r.* from room r 
 where not exists (
-	select * from courseclass_schedule cs 
-	inner join courseclass cc on cs.classid=cc.objid 
+	select * from class_schedule cs 
+	inner join class cc on cs.classid=cc.objid 
 	where cc.schooltermid=$P{schooltermid}  
 	and cs.roomid = r.objid 
     and (cs.days_of_week & $P{days_of_week} ) > 0   
@@ -20,21 +20,21 @@ order by r.roomno
 
 [list-room-schedule]
 select cs.*, cc.code as classcode, cc.colorcode, (select concat(lastname,',',firstname) from personnel where objid=cc.teacherid) as teacher   
-from courseclass_schedule cs 
-inner join courseclass cc on cs.classid=cc.objid 
+from class_schedule cs 
+inner join class cc on cs.classid=cc.objid 
 inner join course c on cc.courseid = c.objid 
 where cc.schooltermid=$P{schooltermid}  
 and cs.roomid = $P{roomid} 
 
 [list-available-room-schedules]
 select cs.*, cc.code as classcode   
-from courseclass_schedule cs 
-inner join courseclass cc on cc.objid=cs.classid 
+from class_schedule cs 
+inner join class cc on cc.objid=cs.classid 
 inner join course c on cc.courseid=c.objid 
 where cc.schooltermid = $P{schooltermid} 
 and cs.roomid is null 
 and not exists ( 
-   select * from courseclass_schedule xs 
+   select * from class_schedule xs 
    where xs.roomid = $P{roomid} 
 	and ((cs.days_of_week & xs.days_of_week ) > 0)  
 	and (
@@ -51,8 +51,8 @@ delete from room_schedule_conflict where roomid=$P{roomid} and ( sked1=$P{schedu
 [flag-room-conflict]
 insert ignore into room_schedule_conflict 
 select $P{scheduleid}, cs.objid, cs.roomid 
-from courseclass_schedule cs 
-inner join courseclass cc on cs.classid=cc.objid 
+from class_schedule cs 
+inner join class cc on cs.classid=cc.objid 
 where cc.schooltermid=$P{schooltermid}  
 and not( cs.objid = $P{scheduleid} ) 
 and cs.roomid = $P{roomid}  
@@ -66,14 +66,14 @@ and (
  
 [find-room-conflict]
 select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
-from courseclass_schedule cs 
-inner join courseclass cc on cc.objid=cs.classid 
+from class_schedule cs 
+inner join class cc on cc.objid=cs.classid 
 inner join room_schedule_conflict rs on cs.objid=rs.sked1 
 where rs.sked2 = $P{scheduleid} and rs.roomid=$P{roomid} 
 union 
 select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
-from courseclass_schedule cs 
-inner join courseclass cc on cc.objid=cs.classid 
+from class_schedule cs 
+inner join class cc on cc.objid=cs.classid 
 inner join room_schedule_conflict rs on cs.objid=rs.sked2 
 where rs.sked1 = $P{scheduleid} and rs.roomid=$P{roomid} 
  

@@ -117,5 +117,16 @@ class BlockScheduleService {
 		}
 	}
 	
+	@ProxyMethod
+	public def getBlockSchedules( param ) {
+		def qry = em.sqlContext.createNamedQuery("class:list-block-schedules");
+		if( param ) {
+			if(param._start) qry.setFirstResult(param._start);
+			if(param._limit) qry.setMaxResults(param._limit);
+			qry.setParameters(param);
+		}
+		return qry.resultList;
+	}
+	
 	
 }

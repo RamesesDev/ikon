@@ -52,6 +52,7 @@
 		<ui:context name="blockschedule_create">
 			<ui:form object="block">
 				<ui:text caption="Block Code" name="code" required="true"/>
+				<ui:text caption="Description" name="description" required="true" size="60"/>
 				<ui:label caption="Program" rtexpression="true">#{program.code} - #{program.title}</ui:label>
 				<ui:label>
 					<ui:button caption="Select Program" action="lookupProgram" immediate="true" />

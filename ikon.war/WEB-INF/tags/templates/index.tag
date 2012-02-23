@@ -35,10 +35,13 @@ request.setAttribute("APP_VERSION", application.getInitParameter("app.version"))
 	<s:invoke service="SessionService" method="getInfo" params="${SESSIONID}" var="SESSION_INFO"/>
 	<%
 		Map result = (Map) request.getAttribute("SESSION_INFO");
-		String pagename = result.get("usertype") + ".jsp";
-		Object res = application.getResource("/" + pagename);
-		if( res == null ) pagename = "guest.jsp";
-		response.sendRedirect(pagename);
+		if( result != null )
+		{
+			String pagename = result.get("usertype") + ".jsp";
+			Object res = application.getResource("/" + pagename);
+			if( res == null ) pagename = "guest.jsp";
+			response.sendRedirect(pagename);
+		}
 	%>
 </c:if>
 
