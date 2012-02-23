@@ -4,7 +4,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 
 
-<t:content title="Student">
+<t:content title="Student - Information">
 	<jsp:attribute name="head">
 		<script src="${pageContext.request.contextPath}/js/apps/PersonInfo.js"></script>
 

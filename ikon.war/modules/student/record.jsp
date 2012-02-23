@@ -2,14 +2,21 @@
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
 <%@ taglib tagdir="/WEB-INF/tags/app" prefix="app" %>
 
-<script>
-	$put( "studentrecord", 
-		new function() {
-			this.info =  <s:invoke service="StudentService" method="read" params="<%=request%>" json="true" />;
-		}
-	);
-</script>
 
-<app:studentinfo objid="${param['objid']}"/>
+<t:content title="Student - Record">
+	<jsp:attribute name="head">
+		<script>
+			$put( "studentrecord", 
+				new function() {
+					this.info =  <s:invoke service="StudentService" method="read" params="${pageContext.request}" json="true" />;
+				}
+			);
+		</script>
+	</jsp:attribute>
 
-Student Record
+	<jsp:body>
+		<app:studentinfo objid="${param['objid']}"/>
+
+		Student Record
+	</jsp:body>
+</t:content>

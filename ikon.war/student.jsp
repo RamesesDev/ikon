@@ -3,6 +3,7 @@
 <%@ taglib tagdir="/WEB-INF/tags/templates" prefix="t" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="common" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
+<%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 
 
 <s:invoke service="JobPermissionService" method="getUserJobposition" params="${param}" var="JOB" debug="true"/>
@@ -36,6 +37,22 @@
 	</jsp:attribute>
 	
 	<jsp:body>
+		<ui:panel cols="2">
+			<ui:section>
+				<img src="${pageContext.request.contextPath}/photo/profile/${SESSION_INFO.objid}"/>
+			</ui:section>
+			<ui:section>
+				<span class="capitalized">
+					<h4>
+						${fn:toLowerCase(SESSION_INFO.lastname)}, ${fn:toLowerCase(SESSION_INFO.firstname)}
+					</h4>
+				</span>
+				<i>student</i>
+			</ui:section>
+		</ui:panel>
+		
+		<div class="hr"></div>
+		
 		<table r:context="apps" r:items="items">
 			<tr>
 				<td><a href="##{id}">#{caption}</a></td>

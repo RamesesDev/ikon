@@ -1,0 +1,22 @@
+import com.rameses.annotations.*;
+
+class SchoolEventService 
+{
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+
+	@ProxyMethod
+	public def getCurrentEvents() {
+		def curdate = dateSvc.serverDate;
+		def list = em.sqlContext.createNamedQuery('school_events:get-current-list')
+					 .setParameter("date", curdate)
+					 .resultList;
+		
+		return list.groupBy{ it.phaseid };
+	}
+
+}

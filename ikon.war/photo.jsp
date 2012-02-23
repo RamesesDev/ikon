@@ -21,16 +21,18 @@
 		
 		
 		String resUrl = "";
-		if( "temp".equals(path) )
+		if( "temp".equals(path) ) {
 			resUrl = System.getProperty("ikon.temp.url");
-		else
+		}
+		else {
 			resUrl = System.getProperty("ikon.uploads.url") + "/" + path;
+			response.addHeader("Cache-Control", "max-age=86400");
+			response.addHeader("Cache-Control", "public");
+		}
 		
 		String target = resUrl + "/" + userid.hashCode() + "/" +imgsize+ ".jpg";
 		File f = new File(new URL(target).toURI());
 
-		//response.addHeader("Cache-Control", "max-age=86400");
-		//response.addHeader("Cache-Control", "public");
 		response.setContentType("image/jpg");
 		
 		Writer w = response.getWriter();
