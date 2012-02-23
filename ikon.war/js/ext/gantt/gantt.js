@@ -59,15 +59,15 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 					resizable: model.resizable == null ? false : model.resizable,
 					onClick: function(data, elem) {
 						if(model.onclick)
-							model.onclick(rebuildData(data).item, elem);
+							model.onclick(rebuildData(data), elem);
 					},
 					onDrag: function(data, elem) {
 						if(model.ondrag)
-							model.ondrag(rebuildData(data).item, elem);
+							model.ondrag(rebuildData(data), elem);
 					},
 					onResize: function(data, elem){
 						if(model.onresize)
-							model.onresize(rebuildData(data).item, elem);
+							model.onresize(rebuildData(data), elem);
 					}
 				}
 			}
@@ -113,8 +113,8 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 		var _end = event.end;
 		_item.from = _start.getFullYear() + "-" + (_start.getMonth()+1) + "-" + _start.getDate();
 		_item.to = _end.getFullYear() + "-" + (_end.getMonth()+1) + "-" + _end.getDate();
-		event.item = _item;
-		return event;
+		
+		return _item;
 	}
 }
 
