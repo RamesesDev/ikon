@@ -12,6 +12,7 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 	var ganttViewModel = [];
 	var term = [];
 	var eventFontSize = R.attr(elem, "eventFontSize");
+	var eventHdrWidth = R.attr(elem, "eventHdrWidth");
 	
 	var fromexp = controller.get(R.attr(elem, "from"));
 	if(fromexp)
@@ -74,8 +75,15 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 		);
 		
 		//changes the event/series FONT SIZE
-		if(eventFontSize)
-			e.find('div.ganttview-vtheader-series-name').css( "font-size", eventFontSize );
+		//changes the WIDTH of the container of the event/series Header
+		if(eventFontSize) {
+			e.find('div.ganttview-vtheader').css( 
+				{
+					"font-size": eventFontSize,
+					"width": eventHdrWidth
+				}
+			);
+		}
 		
 		//removes the EVENT HEADER
 		var vtheader = e.find('div.ganttview-vtheader-item-name').remove();
