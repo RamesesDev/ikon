@@ -26,7 +26,9 @@
 			<c:if test="${! empty visibleWhen}"> r:visibleWhen="${visibleWhen}" </c:if>
 			<c:if test="${! empty itemKey}"> r:itemKey="${itemKey}" </c:if>
 			<c:if test="${! empty itemLabel}"> r:itemLabel="${itemLabel}" </c:if>
-			<c:if test="${! empty allowNull}"> r:allowNull="${allowNull}"</c:if> >
+			<c:if test="${! empty allowNull}"> r:allowNull="${allowNull}"</c:if> 
+			<c:if test="${! empty emptyText}"> r:emptyText="${emptyText}"</c:if> 
+			>
 			<jsp:doBody/>
 		</select>
 	</td>

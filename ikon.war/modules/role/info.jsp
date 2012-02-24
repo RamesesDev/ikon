@@ -39,24 +39,19 @@
 	</jsp:attribute>
 
 	<jsp:attribute name="rightactions">
-		<ui:button context="roleinfo" action="save" caption="Save" visibleWhen="#{mode=='create'}"/>
+		<ui:button context="roleinfo" action="save" caption="Save" />
 		<ui:button context="roleinfo" action="viewPermissions" caption="Permissions" visibleWhen="#{mode!='create'}"/>
 	</jsp:attribute>
 	
 	<jsp:body>
-		<ui:form context="roleinfo">
+		<ui:form context="roleinfo" object="role">
 			<ui:combo name="roleclass" items="roleClasses" itemKey="name" itemLabel="description" caption="Role Class : " visibleWhen="#{mode=='create'}"/>
 			<ui:label visibleWhen="#{mode!='create'}" caption="Role Class : " rtexpression="true">
 				#{role.roleclass}
 			</ui:label>
-			<ui:text name="name" required="true" caption="Name" visibleWhen="#{mode=='create'}"/>
-			<ui:label visibleWhen="#{mode!='create'}" caption="Name : " rtexpression="true">
-				#{role.name}
-			</ui:label>
-			<ui:text name="description" required="true" caption="Description" visibleWhen="#{mode=='create'}"/>
-			<ui:label visibleWhen="#{mode!='create'}" caption="Description : " rtexpression="true">
-				#{role.description}
-			</ui:label>
+			<ui:text name="name" required="true" caption="Name : " />
+			<ui:text name="description" required="true" caption="Description : " width="200px"/>
+			
 		</ui:form>
 	</jsp:body>
 </t:popup>

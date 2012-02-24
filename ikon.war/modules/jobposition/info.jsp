@@ -56,8 +56,8 @@
 	<jsp:body>
 		<ui:form context="jobpositioninfo" object="jobposition">
 			<ui:text name="code" caption="Code : "/>
-			<ui:text name="title" caption="Title : "/>		
-			<ui:radio name="jobstatus" caption="Job Status : " options="{R:'Regular', D:'Delegated'}"/>	
+			<ui:text name="title" caption="Title : " width="200px"/>		
+			<ui:radio name="jobstatus" caption="Job Status : " options="{R:'Regular', D:'Delegated'}"/>
 			<ui:combo name="roleclass" caption="Role Class : " items="getRoleClasses()" allowNull="true" itemKey="name" itemLabel="name"/>
 			<ui:combo name="role" caption="Role : " items="getRoles()" allowNull="true" itemKey="name" itemLabel="name"/>
 		</ui:form>

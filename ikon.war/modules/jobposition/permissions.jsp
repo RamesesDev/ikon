@@ -6,7 +6,7 @@
 
 <t:popup>
 	<jsp:attribute name="head">
-		<s:invoke service="JobpositionService" method="getPermissions" params="<%=request%>" var="INFO"/>
+		<s:invoke service="JobpositionService" method="getPermissions" params="${pageContext.request}" var="INFO"/>
 		<script>
 
 			$put("jobposition_permission",

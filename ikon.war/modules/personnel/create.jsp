@@ -57,17 +57,17 @@
 				<ui:text name="zipcode" caption="Zip Code : "/>
 			</ui:form>
 			<h2>Contact Info</h2>
-			<ui:panel items="info.contactinfo" name="selectedContact">
-				<ui:col>
+			<ui:grid items="info.contactinfo" name="selectedContact">
+				<ui:col width="25%">
 					<select r:context="personnel_create" r:items="contactTypes" r:name="info.contactinfo[#{stat.index}].type"></select>
 				</ui:col>
-				<ui:col>
-					<input type="text" r:context="personnel_create" r:name="info.contactinfo[#{stat.index}].value"/>
+				<ui:col width="50%">
+					<input type="text" r:context="personnel_create" r:name="info.contactinfo[#{stat.index}].value" />
 				</ui:col>
-				<ui:col>
+				<ui:col width="25%">
 					<a r:context="personnel_create" r:name="removeContact" title="Remove" r:immediate="true">Remove</a>
 				</ui:col>
-			</ui:panel>
+			</ui:grid>
 			<ui:button action="addContact" caption="Add" immediate="true"/>
 		</ui:context>
 	</jsp:body>

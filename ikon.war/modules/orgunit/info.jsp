@@ -37,8 +37,8 @@
 			<ui:label caption="Type : " rtexpression="true">
 				#{orgunit.orgtype}
 			</ui:label>
-			<ui:text caption="Code : " name="code" required="true"/>
-			<ui:text caption="Title : " name="title" required="true"/>
+			<ui:text caption="Code : " name="code" required="true" />
+			<ui:text caption="Title : " name="title" required="true" width="200px"/>
 		</ui:form>
 	</jsp:body>
 </t:popup>

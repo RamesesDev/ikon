@@ -7,11 +7,12 @@
 <%@ attribute name="required" %>
 
 <tr>
-	<td class="form-caption" valign="top">
+	<td class="form-caption" valign="top"
+		<c:if test="${!empty visibleWhen}"> r:context="${context}" r:visibleWhen="${visibleWhen}"</c:if> >
 		${! empty caption ? caption : ''}
 		<c:if test="${required == 'true'}">&nbsp;<font color=red>*</font></c:if>
 	</td> 
-	<td>
+	<td <c:if test="${!empty visibleWhen}"> r:context="${context}" r:visibleWhen="${visibleWhen}"</c:if>>
 		<c:if test="${rtexpression == 'true'}">
 			<div r:context="${context}" r:type="label"
 			       <c:if test="${!empty depends}"> r:depends="${depends}"</c:if>
