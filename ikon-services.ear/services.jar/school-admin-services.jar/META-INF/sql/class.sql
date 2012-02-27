@@ -28,7 +28,7 @@
   left join block_class bc on bc.classid=cls.objid   
   left join block_schedule b on b.objid = bc.blockid 
   where cls.schooltermid = $P{schooltermid} ) z 
-  order by z.idx 
+  order by z.code 
 
 	
 	

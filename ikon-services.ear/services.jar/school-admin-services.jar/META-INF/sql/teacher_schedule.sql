@@ -74,17 +74,21 @@ and (
  or (cs.fromtime>=$P{fromtime} and cs.totime<=$P{totime} ) 
 ) 
  
-[find-teacher-conflict]
-select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
-from class_schedule cs 
-inner join class cc on cc.objid=cs.classid 
-inner join teacher_schedule_conflict rs on cs.objid=rs.sked1 
-where rs.sked2 = $P{scheduleid} and rs.teacherid=$P{teacherid} 
-union 
-select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
-from class_schedule cs 
-inner join class cc on cc.objid=cs.classid 
-inner join teacher_schedule_conflict rs on cs.objid=rs.sked2 
-where rs.sked1 = $P{scheduleid} and rs.teacherid=$P{teacherid} 
+[check-teacher-conflict] 
+select count(*) as flag from teacher_schedule_conflict tc where tc.teacherid=$P{teacherid} 
+and (tc.sked1 = $P{scheduleid} or tc.sked2 = $P{scheduleid})
  
- 
+[teacher-conflict-list] 
+select o.* from 
+(select p.lastname, p.firstname, p.objid as teacherid,  
+ c1.code as classcode1, cs1.days as days1, cs1.fromtime as fromtime1, cs1.totime as totime1, bc1.blockid as blockid1, 
+ c2.code as classcode2, cs2.days as days2, cs2.fromtime as fromtime2, cs2.totime as totime2, bc2.blockid as blockid2  
+from teacher_schedule_conflict tc  
+inner join personnel p on p.objid=tc.teacherid  
+inner join class_schedule cs1 on tc.sked1=cs1.objid 
+inner join class c1 on cs1.classid=c1.objid 
+left join block_class bc1 on bc1.classid=c1.objid 
+inner join class_schedule cs2 on tc.sked2=cs2.objid 
+inner join class c2 on cs2.classid=c2.objid 
+left join block_class bc2 on bc2.classid=c2.objid 
+) o ${filter} 

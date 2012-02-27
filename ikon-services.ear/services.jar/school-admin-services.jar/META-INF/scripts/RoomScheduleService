@@ -38,4 +38,16 @@ class RoomScheduleService {
 		em.update( "class:schedule", x );
 	}
 
+	@ProxyMethod
+	public def getScheduleConflicts( o ) {
+		def qry = em.sqlContext.createNamedQuery( "room_schedule:room-conflict-list");
+		if( o.objid ) {
+			qry.setVars( [filter: ''' where o.roomid=$P{objid} '''] );				
+		}
+		else {
+			qry.setVars( [filter: ''] );				
+		}
+		return qry.setParameters( o ).resultList;
+	}
+	
 }

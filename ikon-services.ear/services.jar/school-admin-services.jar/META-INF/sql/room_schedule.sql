@@ -64,17 +64,25 @@ and (
  or (cs.fromtime>=$P{fromtime} and cs.totime<=$P{totime} ) 
 ) 
  
-[find-room-conflict]
-select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
-from class_schedule cs 
-inner join class cc on cc.objid=cs.classid 
-inner join room_schedule_conflict rs on cs.objid=rs.sked1 
-where rs.sked2 = $P{scheduleid} and rs.roomid=$P{roomid} 
-union 
-select cc.code as classcode, cs.days, cs.fromtime, cs.totime 
-from class_schedule cs 
-inner join class cc on cc.objid=cs.classid 
-inner join room_schedule_conflict rs on cs.objid=rs.sked2 
-where rs.sked1 = $P{scheduleid} and rs.roomid=$P{roomid} 
+[check-room-conflict] 
+select count(*) as flag from room_schedule_conflict rc where rc.roomid=$P{roomid} 
+and (rc.sked1 = $P{scheduleid} or rc.sked2 = $P{scheduleid})
+
+
+[room-conflict-list] 
+select o.* from 
+(select r.roomno, r.objid as roomid,  
+ c1.code as classcode1, cs1.days as days1, cs1.fromtime as fromtime1, cs1.totime as totime1, bc1.blockid as blockid1, 
+ c2.code as classcode2, cs2.days as days2, cs2.fromtime as fromtime2, cs2.totime as totime2, bc2.blockid as blockid2  
+from room_schedule_conflict tc  
+inner join room r on r.objid=tc.roomid  
+inner join class_schedule cs1 on tc.sked1=cs1.objid 
+inner join class c1 on cs1.classid=c1.objid 
+left join block_class bc1 on bc1.classid=c1.objid 
+inner join class_schedule cs2 on tc.sked2=cs2.objid 
+inner join class c2 on cs2.classid=c2.objid 
+left join block_class bc2 on bc2.classid=c2.objid 
+) o ${filter} 
+ 
  
  

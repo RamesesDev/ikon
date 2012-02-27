@@ -47,7 +47,8 @@
 								for( var i=0;i<clz.schedules.length;i++ ) {
 									var c = clz.schedules[i];	
 									var func = function(d) {
-										var z = {coursecode: clz.coursecode, roomno: c.roomno, room_conflict: c.room_conflict, teacher: clz.teacher }
+										var z = {coursecode: clz.coursecode, roomno: c.roomno, roomid: c.roomid, 
+											room_conflict: c.room_conflict, teacher: clz.teacher, teacherid: clz.teacherid };
 										arr.push( {day: d, from: c.fromtime, to: c.totime, caption: $template('schedule_panel',z), 
 											item:{class:clz,sked:c}, color: clz.colorcode });		
 									}
@@ -93,7 +94,17 @@
 			#{it.coursecode}<br>
 			Rm: #{(it.roomno) ? it.roomno: 'unassigned'}<br>
 			#{(it.teacher) ? it.teacher: 'unassigned'}<br>
-			#{(it.room_conflict) ? '<img src="${pageContext.request.contextPath}/img/red_flag.png">' : '' }
+			
+			<div r:context="blockinfo" r:visibleWhen="#{it.room_conflict == true}">
+				<a href="#schedule_conflict:room?objid=#{it.roomid}">
+					<img src="${pageContext.request.contextPath}/img/red_flag.png"/>Room 
+				</a>
+			</div>
+			<div r:context="blockinfo" r:visibleWhen="#{it.teacher_conflict == true}">
+				<a href="#schedule_conflict:teacher?objid=#{it.teacherid}">
+					<img src="${pageContext.request.contextPath}/img/red_flag.png"/>Teacher 
+				</a>
+			</div>
 		</div>
 
 		<!-- room conflict template -->

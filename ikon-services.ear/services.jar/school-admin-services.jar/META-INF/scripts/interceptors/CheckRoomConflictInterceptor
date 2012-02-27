@@ -5,7 +5,7 @@ class CheckRoomConflictInterceptor {
 	@PersistenceContext("main")
 	def em;
 
-	@After(pattern="ClassScheduleService.changeSchedule.*")
+	@After(pattern="BlockScheduleService.changeSchedule.*")
 	public void checkRoomConflict( evt ) {
 		def o = evt.args[0];
 		def m = [:];
@@ -25,14 +25,14 @@ class CheckRoomConflictInterceptor {
 	}
 	
 	//attach room conflict flags
-	@After(pattern="ClassScheduleService.getBlockClasses.*")
+	@After(pattern="BlockScheduleService.getBlockClasses.*")
 	public void findRoomConflict( evt ) {
 		def list = evt.result;
 		list.each { o->
 			o.schedules.each {
 				if( it.roomid ) {
-					def errs = em.sqlContext.createNamedQuery("room_schedule:find-room-conflict").setParameters( [scheduleid: it.objid, roomid:it.roomid ] ).resultList;
-					if( errs ) it.room_conflict = errs;
+					def x = em.sqlContext.createNamedQuery("room_schedule:check-room-conflict").setParameters( [scheduleid: it.objid, roomid:it.roomid ] ).singleResult;
+					if( x.flag > 0 ) it.room_conflict = true;
 				}
 			}
 		}	

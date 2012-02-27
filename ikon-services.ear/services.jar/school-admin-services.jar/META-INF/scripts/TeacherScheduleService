@@ -39,5 +39,16 @@ class TeacherScheduleService {
 		em.update( "class", x );
 	}
 	
+	@ProxyMethod
+	public def getScheduleConflicts( o ) {
+		def qry = em.sqlContext.createNamedQuery( "teacher_schedule:teacher-conflict-list");
+		if( o.objid ) {
+			qry.setVars( [filter: ''' where o.teacherid=$P{objid} '''] );				
+		}
+		else {
+			qry.setVars( [filter: ''] );				
+		}
+		return qry.setParameters( o ).resultList;
+	}
 	
 }

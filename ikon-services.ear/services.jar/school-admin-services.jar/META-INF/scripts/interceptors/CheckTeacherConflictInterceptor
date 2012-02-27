@@ -5,8 +5,8 @@ class CheckTeacherConflictInterceptor {
 	@PersistenceContext("main")
 	def em;
 	
-	@After(pattern="ClassScheduleService.changeSchedule.*")
-	public void checkRoomConflict( evt ) {
+	@After(pattern="BlockScheduleService.changeSchedule.*")
+	public void checkTeacherConflict( evt ) {
 		def o = evt.args[0];
 		def m = [:];
 		m.schooltermid = o.schooltermid;
@@ -22,6 +22,20 @@ class CheckTeacherConflictInterceptor {
 				em.sqlContext.createNamedExecutor("teacher_schedule:flag-teacher-conflict").setParameters(m).execute();
 			}		
 		}
+	}
+	
+	//attach room conflict flags
+	@After(pattern="BlockScheduleService1.getBlockClasses.*")
+	public void findTeacherConflict( evt ) {
+		def list = evt.result;
+		list.each { o->
+			if( o.teacherid ) {
+				o.schedules.each {
+					def x = em.sqlContext.createNamedQuery("teacher_schedule:check-teacher-conflict").setParameters( [scheduleid: it.objid, teacherid:o.teacherid ] ).singleResult;
+					if( x.flag > 0 ) it.teacher_conflict = true;
+				}	
+			}
+		}	
 	}
 	
 }
