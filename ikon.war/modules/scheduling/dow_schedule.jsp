@@ -19,9 +19,16 @@
 
 			this.save = function() {
 				this.schedule.days_of_week = this.DOW.daysToNumber();
+				
 				this.schedule.days = this.DOW.daysToString();
 				this.schedule.fromtime = this.fromtime.toNumber();
 				this.schedule.totime = this.totime.toNumber();
+				
+				if( this.schedule.days_of_week == 0 ) throw new Error("Please specify at least one day of the week"); 
+				if( this.schedule.fromtime == 0 ) throw new Error("From time must be specified"); 
+				if( this.schedule.totime == 0 ) throw new Error("To time must be specified");
+				if( this.schedule.totime < this.schedule.fromtime ) throw new Error("To time must be greater than from time");
+				
 				if(this.saveHandler) this.saveHandler( this.schedule );
 				return "_close";
 			}

@@ -5,24 +5,23 @@
 <%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 
 
-<t:content title="Pending Enrollment Form">	
-	<jsp:attribute name="head">
-		<s:invoke service="StudentService" method="read" params="${SESSION_INFO}" var="STUDENT" debug="true"/>
-		
+<t:content title="Enrollment Form - For Approval">	
+	<jsp:attribute name="head">		
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/js/ext/calendar/fullcalendar.css" type="text/css"/>
 		<script src="${pageContext.servletContext.contextPath}/js/ext/calendar/fullcalendar.js"></script>
 		<script src="${pageContext.servletContext.contextPath}/js/ext/calendar/calendar.js"></script>
 		<script src="${pageContext.servletContext.contextPath}/js/apps/SkedUtil.js"></script>
 		
 		<script>
+			$register({id:'#add-remarks', context:'for_approval_info', title: 'Post Remarks'});
 			$put(
-				"pending", 
+				"for_approval_info", 
 				new function() 
 				{
 					var self = this;
 					var util = new SkedUtil();
 
-					this.classlist = <s:invoke service="EnrollmentService" method="getPendingEnrollment" json="true"/>
+					this.classlist = <s:invoke service="EnrollmentService" method="getEnrolledClasses" params="${pageContext.request}" json="true"/>;;
 					
 					this.model = {
 						minTime: 6,
@@ -46,19 +45,20 @@
 						}
 					}
 
-					this.listView = false;
+					this.listView = true;
 					this.toggleView = function() {
 						this.listView = !this.listView;
 					}
 					
-					this.getClassList = function() {
-						return this.classlist.each(buildListInfo);
+					this.listModel = {
+						fetchList: function() {
+							return self.classlist.each(buildListInfo);
+						}
 					}
 					
 					function buildListInfo(cl){
 						var arr = [];
 						cl.schedules.each(function(sk){
-							console.log( sk );
 							arr.push(
 								"<b>"+ sk.days + "</b> / " + 
 								formatToTime(sk.fromtime) + "-" + formatToTime(sk.totime) +
@@ -72,9 +72,51 @@
 						return (num+"").replace(/(\d+)(\d{2})$/, "$1:$2");
 					}
 					
+					var _svc;
+					function getSvc() {
+						return _svc? _svc : (_svc = ProxyService.lookup("EnrollmentService"));
+					}
+					
+					this.approve = function() {
+						MsgBox.confirm(
+							'Are you sure you want to <b>approve</b> this enrollment form?',
+							function() {
+								getSvc().approve( '${param.studentid}' );
+								location.href = 'home.jsp?jobid=${param.jobid}';
+							}
+						);
+					}
+					
+					this.disapprove = function() {
+						MsgBox.confirm(
+							'Are you sure you want to <b>disapprove</b> this enrollment form?',
+							function() {
+								getSvc().disapprove( '${param.studentid}' );
+								location.href = 'home.jsp?jobid=${param.jobid}';
+							}
+						);
+					}
+					
+					this.remarks;
+					
+					this.addRemarks = function() {
+						this.remarks = this.selectedItem.remarks;
+						return new PopupOpener('#add-remarks');
+					}
+					
+					this.postRemarks = function() {
+						getSvc().postRemarks( {classid: this.selectedItem.objid, remarks: this.remarks} );
+						this.classlist = getSvc().getEnrolledClasses({studentid: '${param.studentid}'});
+						this.listModel.load();
+						return '_close';
+					}
 				}
 			);
 		</script>
+		
+		<style>
+			
+		</style>
 	</jsp:attribute>
 	
 	<jsp:attribute name="sections">
@@ -83,25 +125,47 @@
 			Rm: #{(it.roomno) ? it.roomno: 'unassigned'}<br>
 			#{(it.teacher) ? it.teacher: 'unassigned'}
 		</div>
+		
+		<div id="add-remarks" style="display:none">
+			<t:popup>
+				<jsp:attribute name="rightactions">
+					<ui:button context="for_approval_info" action="postRemarks" caption="Post"/>
+				</jsp:attribute>
+				<jsp:body>
+					<h4>Remarks</h4>
+					<textarea r:context="for_approval_info" r:name="remarks" rows="8" style="width:100%"></textarea>
+				</jsp:body>
+			</t:popup>
+		</div>
 	</jsp:attribute>
 
 	<jsp:body>
-		<ui:context name="pending">
+		<ui:context name="for_approval_info">
 			<div class="clearfix" r:context="${context}" r:type="label">
+				<span class="left">
+					<ui:button action="approve" caption="Approve"/>
+					<ui:button action="disapprove" caption="Disapprove"/>
+				</span>
 				<span class="right">
 					<ui:button action="toggleView">
 						#{listView? 'Calendar' : 'List'} View
 					</ui:button>
 				</span>
 			</div>
-			<div r:context="${context}" r:visibleWhen="#{!listView}">
+			<div r:context="${context}" r:visibleWhen="#{!listView}" style="display:none">
 				<div r:type="weekcalendar" r:context="${context}" r:model="model" class="sections"></div>
 			</div>
 			<div r:context="${context}" r:visibleWhen="#{listView}">
-				<ui:grid items="getClassList()">
-					<ui:col caption="Course Code" name="coursecode"/>
+				<ui:grid model="listModel">
+					<ui:col caption="Course Code" name="coursecode" width="80px"/>
 					<ui:col caption="Title" name="coursetitle"/>
-					<ui:col caption="Schedule" name="schedule" width="200px"/>
+					<ui:col caption="Schedule" name="schedule"/>
+					<ui:col caption="Remarks" name="remarks" width="200px" />
+					<ui:col valign="top">
+						<a r:context="${context}" r:name="addRemarks" title="#{item.remarks? 'Edit' : 'Add'} Remarks">
+							#{item.remarks? 'Edit' : 'Add'}
+						</a>
+					</ui:col>
 				</ui:grid>
 			</div>
 		</ui:context>

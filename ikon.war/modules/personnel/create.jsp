@@ -41,33 +41,33 @@
 		<ui:context name="personnel_create">
 			<ui:form object="info">
 				<ui:text name="staffno" required="true" caption="Staff No : "/>
-				<ui:text name="lastname" required="true" caption="Last Name : "/>
-				<ui:text name="firstname" required="true" caption="First Name : "/>
-				<ui:text name="middlename" caption="Middle Name: "/>
+				<ui:text name="lastname" required="true" caption="Last Name : " size="40"/>
+				<ui:text name="firstname" required="true" caption="First Name : " size="40"/>
+				<ui:text name="middlename" caption="Middle Name: " size="40"/>
 				<ui:text name="birthdate" caption="Birthdate"/>
 				<ui:radio name="gender" required="true" caption="Gender : " options="{M:'Male', F:'Female'}" orientation="vertical"/>
-				<ui:text name="email" required="true" caption="Email : " width="200px"/>
+				<ui:text name="email" required="true" caption="Email : " textcase="none" size="40"/>
 			</ui:form>
 			<h2>Primary Address</h2>
 			<ui:form object="info.primaryaddress">
-				<ui:text name="address1" required="true" caption="Address : " width="200px"/>
-				<ui:text name="address2" caption="" width="200px"/>
-				<ui:text name="city" caption="City/Town : "/>
-				<ui:text name="province" caption="Province : "/>
-				<ui:text name="zipcode" caption="Zip Code : "/>
+				<ui:text name="address1" required="true" caption="Address : " size="40"/>
+				<ui:text name="address2" caption="" size="40"/>
+				<ui:text name="city" required="true" caption="City/Town : " size="40"/>
+				<ui:text name="province" required="true" caption="Province : " size="40"/>
+				<ui:text name="zipcode" required="true" caption="Zip Code : "/>
 			</ui:form>
 			<h2>Contact Info</h2>
-			<ui:panel items="info.contactinfo" name="selectedContact">
-				<ui:col>
+			<ui:grid items="info.contactinfo" name="selectedContact" varStatus="stat">
+				<ui:col caption="Type" width="100px">
 					<select r:context="personnel_create" r:items="contactTypes" r:name="info.contactinfo[#{stat.index}].type"></select>
 				</ui:col>
 				<ui:col>
-					<input type="text" r:context="personnel_create" r:name="info.contactinfo[#{stat.index}].value"/>
+					<input type="text" r:context="personnel_create" r:name="info.contactinfo[#{stat.index}].value" style="width:100%"/>
 				</ui:col>
 				<ui:col>
 					<a r:context="personnel_create" r:name="removeContact" title="Remove" r:immediate="true">Remove</a>
 				</ui:col>
-			</ui:panel>
+			</ui:grid>
 			<ui:button action="addContact" caption="Add" immediate="true"/>
 		</ui:context>
 	</jsp:body>

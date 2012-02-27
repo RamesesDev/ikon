@@ -8,6 +8,9 @@
 
 <s:invoke service="SchoolEventService" method="getCurrentEvents" var="events"/>
 <app:load-notification-handlers type="student:notification" events="${events}" var="handlers"/>
+${events}<br/>
+
+
 
 <t:content title="News Feed">
 	<jsp:attribute name="head">

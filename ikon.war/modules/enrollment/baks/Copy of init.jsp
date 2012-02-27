@@ -55,10 +55,17 @@
 
 	<jsp:body>
 		<ui:context name="enrollment">
-			<ui:form>
-				<ui:combo items="schoolterms" name="schooltermid" itemKey="id" itemLabel="caption" allowNull="true" caption="Select Schoolterm: "/>
-			</ui:form>
-			
+			<ui:panel cols="2" width="100%">
+				<ui:section>
+					<ui:form>
+						<ui:combo items="schoolterms" name="schooltermid" itemKey="id" itemLabel="caption" allowNull="true" caption="Select Schoolterm: "/>
+					</ui:form>
+				</ui:section>	
+				<ui:section align="right">
+					<a href="#enrollment:customize?objid=${STUDENT.objid}">Customize Schedule</a> 						
+				</ui:section>
+			</ui:panel>	
+
 			<ui:grid model="listModel">
 				<ui:col name="code" caption="Section" width="100px"/>
 				<ui:col name="description" caption="Description"/>

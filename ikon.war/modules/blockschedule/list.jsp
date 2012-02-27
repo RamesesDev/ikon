@@ -24,7 +24,7 @@
 				
 				this.selectedItem;
 				this.listModel = {
-					rows: 10,
+					rows: 15,
 					fetchList: function(o) {
 						o.schooltermid = "${param['schooltermid']}";
 						return svc.getList( o );	
@@ -50,14 +50,16 @@
 		<ui:context name="blockschedule_list">
 			<ui:button caption="Add New" action="addBlock"/>
 			<ui:grid model="listModel" width="100%">
-				<ui:col caption="Block" name="blockcode"/>
 				<ui:col caption="Class Code" name="code"/>
 				<ui:col caption="Course">#{item.coursecode ? item.coursecode : ''}</ui:col>
+				<ui:col caption="Block" name="blockcode"/>
 				<ui:col caption="Schedule/Room">#{ $template('schedule-formatter', item.schedules, true ) }</ui:col>
 				<ui:col caption="Teacher">#{ (item.teacher) ? item.teacher : '' }</ui:col>
 				<ui:col caption="Program">#{ item.programcode? item.programcode : '' }</ui:col>
 				<ui:col>
-					<a href="#blockschedule:blockinfo?objid=#{item.blockid}">View Block</a>
+					<div r:context="${context}" r:visibleWhen="#{!!item.blockid}">
+						<a href="#blockschedule:blockinfo?objid=#{item.blockid}">View Block</a>
+					</div>
 				</ui:col>
 			</ui:grid>
 		</ui:context>

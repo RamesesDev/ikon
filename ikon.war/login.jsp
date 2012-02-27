@@ -13,7 +13,7 @@
 	%>
 
 
-	<s:invoke service="LoginService" method="login" params="${data}" var="result" debug="true"/>
+	<s:invoke service="LoginService" method="login" params="${data}" var="result"/>
 	<c:if test="${empty error}">
 		<c:set var="SESSIONID" value="${result.sessionid}" scope="request"/>
 		<%
@@ -24,10 +24,7 @@
 			if( request.getParameter("u") != null )
 				response.sendRedirect(request.getParameter("u"));
 			else {
-				String pagename = result.get("usertype") + ".jsp";
-				Object res = application.getResource("/" + pagename);
-				if( res == null ) pagename = "guest.jsp";
-				response.sendRedirect(pagename);
+				response.sendRedirect("home.jsp");
 			}
 		%>
 	</c:if>

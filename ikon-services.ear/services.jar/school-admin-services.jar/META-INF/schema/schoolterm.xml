@@ -10,10 +10,12 @@
 	
 	<element name="entry" tablename="schoolterm_entry" >
 		<field name="objid" primary="true"/>
+		<field name="title"/>
 		<field name="schooltermid" />
 		<field name="fromdate"/>
 		<field name="todate"/>
 		<field name="phaseid"/>
+		<complex name="info" merge="true" serializer="default"/>
 	</element>
 	
 	<element name="phase" tablename="schoolterm_phase" >

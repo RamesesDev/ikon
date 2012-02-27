@@ -8,11 +8,11 @@
 <t:content title="Enrollment - Schedule">	
 	<jsp:attribute name="head">
 		<s:invoke service="StudentService" method="read" params="${SESSION_INFO}" var="STUDENT" debug="true"/>
-		
 		<link rel="stylesheet" href="${pageContext.servletContext.contextPath}/js/ext/calendar/fullcalendar.css" type="text/css"/>
 		<script src="${pageContext.servletContext.contextPath}/js/ext/calendar/fullcalendar.js"></script>
 		<script src="${pageContext.servletContext.contextPath}/js/ext/calendar/calendar.js"></script>
 		<script src="${pageContext.servletContext.contextPath}/js/apps/SkedUtil.js"></script>
+		
 		
 		<script>
 			$put(

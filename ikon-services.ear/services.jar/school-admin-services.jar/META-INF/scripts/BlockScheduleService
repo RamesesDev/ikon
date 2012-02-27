@@ -18,15 +18,11 @@ class BlockScheduleService {
 		}
 		def list = qry.resultList;
 		list.each {
-			it.schedules = em.sqlContext.createNamedQuery("class:class-schedules").setParameters( [classid:it.objid] ).resultList;
+			if( it.objid ) {
+				it.schedules = em.sqlContext.createNamedQuery("class:class-schedules").setParameters( [classid:it.objid] ).resultList;
+			}
 		}
-		def mainlist = [];	
-		
-		//display pending blocks
-		qry = em.sqlContext.createNamedQuery( "class:list-pending-blocks" ).setParameters( params );
-		mainlist = qry.resultList.collect { [blockid: it.objid, blockcode: it.code, programcode: it.programcode, programtitle: it.programtitle ] }
-		mainlist.addAll( list );
-		return mainlist;
+		return list;
 	}
 	
 	@ProxyMethod
@@ -80,6 +76,10 @@ class BlockScheduleService {
 		checkClassConflicts( o );
 		if(!o.objid) o.objid = "CLS"+new java.rmi.server.UID();
 		o = em.save( "class", o );
+		
+		//save also the block class
+		em.save( "class:block_class", [classid: o.objid, blockid: o.blockid ] );
+		
 		if(o.removedSchedules) {
 			o.removedSchedules.each {
 				em.delete("class:schedule", it);
@@ -92,6 +92,18 @@ class BlockScheduleService {
 			em.save( "class:schedule", it );
 		}
 		return o;
+	}
+	
+	@ProxyMethod
+	public def removeClass(def o) {
+		try {
+			em.delete( "class:block_class", [classid: o.objid, blockid:o.blockid ] );
+			em.sqlContext.createNamedExecutor( "class:remove-class-schedules").setParameters([classid: o.objid]).execute();
+			em.delete( "class", o );
+		}
+		catch(e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

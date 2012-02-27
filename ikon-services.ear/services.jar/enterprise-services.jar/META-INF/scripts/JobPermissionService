@@ -80,5 +80,12 @@ class JobPermissionService
 		
 		return info;
 	}
+	
+	@ProxyMethod
+	public def getPermissions( param )
+	{
+		def jobpos = getUserJobposition( param );
+		return jobpos?.permissions;
+	}
 
 }

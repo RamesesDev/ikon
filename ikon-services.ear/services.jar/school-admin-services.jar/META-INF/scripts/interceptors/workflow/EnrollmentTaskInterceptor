@@ -1,0 +1,60 @@
+import com.rameses.annotations.*;
+
+class EnrollmentTaskInterceptor 
+{
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+	
+	@Service("StudentService")
+	def studentService;
+	
+	@Env
+	def env;
+	
+	
+	@After(pattern="WorkflowService.fetchCustomTasks.*")
+	public void loadTasks( evt ) {
+		if( env.usertype != 'student' ) return;
+		
+		def student = studentService.read( [objid: env.userid] );
+		def tasks = [];
+		
+		//get the enrollment status of the student
+		def stat = em.read("enrollment:enrollment_status", [studentid: env.userid]);
+		println stat;
+
+		def curdate = dateSvc.serverDate;
+		def list = em.sqlContext.createNamedQuery('school_events:get-current-list').setParameter("date", curdate).resultList;
+		
+		list.each 
+		{
+			if(it.info) 
+			{
+				it.info = em.serializer.read( it.info );
+				if( student && (!it.info.programid || it.info.programid == student.programid) ) 
+				{
+					if( 
+						!it.info.yearlevel || it.info.yearlevel.toString() == "0" || 
+						it.info.yearlevel.toString() == student.yearlevel.toString() 
+					){
+						def info = [schooltermid: it.schooltermid, year: it.year, term: it.term];
+						
+						if( !stat )
+							tasks.add([objid:'enrollment', info: info, handler: "student_enrollment", msgtype: "enrollment" ]);
+						else if( stat.state == 'DISAPPROVED' )
+							tasks.add([objid:'enrollment', info: info, handler: "student_enrollment_disapproved", msgtype: "enrollment" ]);
+						else if( stat.state == 'APPROVED' )
+							tasks.add([objid:'enrollment', info: info, handler: "student_enrollment_approved", msgtype: "enrollment" ]);
+					}
+				}
+			}
+		}
+		
+		evt.args[0].addAll( tasks.unique() );
+	}
+	
+}

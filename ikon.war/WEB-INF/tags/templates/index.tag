@@ -37,10 +37,7 @@ request.setAttribute("APP_VERSION", application.getInitParameter("app.version"))
 		Map result = (Map) request.getAttribute("SESSION_INFO");
 		if( result != null )
 		{
-			String pagename = result.get("usertype") + ".jsp";
-			Object res = application.getResource("/" + pagename);
-			if( res == null ) pagename = "guest.jsp";
-			response.sendRedirect(pagename);
+			response.sendRedirect("home.jsp");
 		}
 	%>
 </c:if>

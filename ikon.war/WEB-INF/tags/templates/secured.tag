@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib tagdir="/WEB-INF/tags/common/server" prefix="s" %>
-<%@ taglib tagdir="/WEB-INF/tags/common/ui" prefix="ui" %>
+<%@ taglib tagdir="/WEB-INF/tags/common" prefix="ui" %>
 <%@ taglib tagdir="/WEB-INF/tags/page" prefix="page" %>
 
 <%@ attribute name="before_rendering" fragment="true" %>
@@ -15,13 +15,13 @@
 <%@ attribute name="showFeedback"%>
 
 <ui:check-session/>
+<ui:load-session-info/>
 
 <c:if test="${empty showFeedback}">
 	<c:set var="showFeedback" value="false"/>
 </c:if>
 
 <c:if test="${!empty SESSIONID}">
-	<s:invoke service="SessionService" method="getInfo" params="${SESSIONID}" var="SESSION_INFO"/>
 
 <jsp:invoke fragment="before_rendering"/>
 	<!DOCTYPE html>
@@ -147,10 +147,14 @@
 							<a href="home.jsp">Home</a>
 							<span class="vr"></span>
 							<a href="#" id="useraccountmenu" r:context="session" r:name="showProfileMenu">
-								Hi ${SESSION_INFO.username}&nbsp;&nbsp;&#9660;
+								Hi 
+								<span class="capitalized">
+									${fn:toLowerCase(SESSION_INFO.firstname)}
+								</span>
+								&nbsp;&nbsp;&#9660;
 							</a>
 							<!-- useraccount menu panel -->
-							<div id="usermenu" style="display:none">
+							<div id="usermenu" style="display:none; width:100px;">
 								<ul>
 									<li>
 										<a href="profile.jsp" onclick="return false;">Edit Profile</a>

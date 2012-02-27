@@ -1,0 +1,44 @@
+import com.rameses.annotations.*;
+
+class ScheduleLoadingTaskInterceptor 
+{
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+	
+	@Service("StudentService")
+	def studentService;
+	
+	@Env
+	def env;
+	
+	
+	@After(pattern="WorkflowService.fetchCustomTasks.*")
+	public void loadTasks( evt ) {
+		if( env.usertype != 'personnel' ) return;
+		
+		def curdate = dateSvc.serverDate;
+
+		def tasks = [];
+		def list = em.sqlContext.createNamedQuery('school_events:get-current-list').setParameter("date", curdate).resultList;
+		list.each 
+		{
+			if(it.info) 
+			{
+				it.info = em.serializer.read( it.info );
+				if( it.phaseid == 'LOAD_SCHEDULING' )
+				{
+					def t = [objid:'schedule_loading', info:[schooltermid: it.schooltermid], handler: "schedule_loading", msgtype: "schedule_loading" ];
+					t.permission = "schoolterm:schoolterm.viewList";
+					tasks.add(t);
+				}
+			}
+		}
+		
+		evt.args[0].addAll( tasks.unique() );
+	}
+	
+}

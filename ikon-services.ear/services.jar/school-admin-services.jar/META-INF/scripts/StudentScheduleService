@@ -1,0 +1,26 @@
+import com.rameses.annotations.*;
+
+class StudentScheduleService {
+
+	
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+	
+	@ProxyMethod
+	public def getAvailableCourses(def o) {
+		print o;
+		return em.sqlContext.createNamedQuery("student_schedule:list-available-courses").setParameters(o).resultList;
+	}
+
+	@ProxyMethod
+	public def getAvailableSchedules(def o) {
+		print o;
+		return [];
+		//return em.sqlContext.createNamedQuery("student_schedule:list-available-courses").setParameters(o).resultList;
+	}
+
+	
+}

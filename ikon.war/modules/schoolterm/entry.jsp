@@ -39,7 +39,18 @@
 			</ui:form>	
 
 			<div r:context="${context}" r:visibleWhen="#{entry.phaseid == 'ENROLLMENT'}" r:depends="entry.phaseid">
-				<h2>Enrollment Settings</h2> 		
+				<h2>Enrollment Settings</h2>
+				<ui:form object="entry">
+					<ui:text name="programid" caption="Program"/>
+					<ui:combo name="yearlevel" caption="Year Level">
+						<option value="0">Any</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</ui:combo>
+				</ui:form>
 			</div>
 			
 		</ui:context>

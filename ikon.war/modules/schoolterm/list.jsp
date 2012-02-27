@@ -38,8 +38,7 @@
 				<ui:col caption="From Date" name="fromdate"/>
 				<ui:col caption="To Date" name="todate"/>
 				<ui:col caption="Status" name="status"/>
-				<ui:col><a href="#schoolterm:info?objid=#{item.objid}">View</a></ui:col>
-				<ui:col><a href="${pageContext.request.contextPath}/scheduling.jsp?schooltermid=#{item.objid}">Scheduling</a></ui:col>
+				<ui:col align="center"><a href="#schoolterm:info?objid=#{item.objid}">View</a></ui:col>
 			</ui:grid>
 		</ui:context>
 	</jsp:body>

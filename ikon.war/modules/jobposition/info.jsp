@@ -31,7 +31,7 @@
 			
 					this.save = function() {
 						if(this.mode == "create") {
-							svc.create( this.jobposition );
+							this.jobposition = svc.create( this.jobposition );
 							this.mode = "edit";
 						}
 						else {
@@ -56,10 +56,10 @@
 	<jsp:body>
 		<ui:form context="jobpositioninfo" object="jobposition">
 			<ui:text name="code" caption="Code : "/>
-			<ui:text name="title" caption="Title : "/>		
+			<ui:text name="title" caption="Title : " size="50"/>		
 			<ui:radio name="jobstatus" caption="Job Status : " options="{R:'Regular', D:'Delegated'}"/>	
 			<ui:combo name="roleclass" caption="Role Class : " items="getRoleClasses()" allowNull="true" itemKey="name" itemLabel="name"/>
-			<ui:combo name="role" caption="Role : " items="getRoles()" allowNull="true" itemKey="name" itemLabel="name"/>
+			<ui:combo name="role" caption="Role : " items="getRoles()" allowNull="true" itemKey="name" itemLabel="name" depends="jobposition.roleclass"/>
 		</ui:form>
 	</jsp:body>
 </t:popup>

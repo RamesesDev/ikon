@@ -22,8 +22,13 @@ class ProgramAdviserService {
 		}
 		return qry.resultList;
 	}
-
 	
+	@ProxyMethod
+	public def getAdviser( param ) {
+		return em.sqlContext.createNamedQuery("program_adviser:get-adviser")
+		         .setParameters(param)
+				 .resultList;
+	}
 	
 	@ProxyMethod
 	public def create(def o) {

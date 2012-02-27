@@ -3,7 +3,6 @@
 	<element name="class" tablename="class" >
 		<field name="objid" primary="true"/>
 		<field name="code" />
-		<field name="blockid" />
 		<field name="programid" />
 		<field name="courseid" />
 		<field name="schooltermid" />
@@ -14,6 +13,11 @@
 		<field name="colorcode" />
     </element>
 
+	<element name="block_class" tablename="block_class">
+		<field name="blockid" primary="true" />
+		<field name="classid" primary="true"/>
+	</element>
+	
 	<element name="schedule" tablename="class_schedule" >
 		<field name="objid" primary="true"/>
 		<field name="classid" />
@@ -37,13 +41,13 @@
 	
 	<element name="enrollee" tablename="class_enrollee" >
 		<field name="classid" primary="true"/>
-		<field name="schooltermid" primary="true"/>
 		<field name="studentid" primary="true"/>
+		<field name="state"/>
+		<field name="remarks"/>
     </element>
 	
 	<element name="student" tablename="class_student" >
 		<field name="classid" primary="true"/>
-		<field name="schooltermid" primary="true"/>
 		<field name="studentid" primary="true"/>
 		<field name="finalgrade"/>
 		<field name="partialgrade"/>

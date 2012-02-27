@@ -341,11 +341,13 @@ BindingUtils.handlers.div_weekcalendar = function( elem, controller, idx )
 					} else {
 						element.find('.fc-event-title').html( event.title );
 					}
+					
+					BindingUtils.bind( null, element );
 				}
 			}
 		);
 		
-		calendar.render();
+		$(elem).fullCalendar('render');
 	}
 	
 	model.load = function() {

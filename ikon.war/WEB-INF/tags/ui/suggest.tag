@@ -13,9 +13,7 @@
 <%@ attribute name="suggestExpression" %>
 <%@ attribute name="suggest" %>
 
-<input type="text" r:context="personnellookup" r:suggestName="selectedItem" r:name="myname" 
-	r:suggestExpression="#{lastname}, #{firstname}" r:suggest="lookupName"/> 
-	
+
 <c:if test="${visibleWhen || visibleWhen == null}">
 	<tr>
 		<td class="form-caption" valign="top">${caption} <c:if test="${required == 'true'}">&nbsp;<font color=red>*</font></c:if></td> 

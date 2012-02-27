@@ -1,0 +1,8 @@
+<schema>
+
+	<element name="enrollment_status" tablename="enrollment_status" >
+		<field name="studentid" primary="true"/>
+		<field name="state" />
+    </element>
+
+</schema>

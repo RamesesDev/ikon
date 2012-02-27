@@ -5,7 +5,9 @@
 
 <t:content title="Program Adviser">
 
-	<jsp:attribute name="script">
+	<jsp:attribute name="head">
+	 <script>
+		$register({id:'#program-adviser-info', context:'program_adviser_list', title:'Select Year Level'});
 		$put( "program_adviser_list",
 			new function() {
 			
@@ -17,6 +19,8 @@
 				this.programList;
 				this.program;
 				this.schooltermid ="${param['schooltermid']}" ;
+				
+				this.adviser;
 				
 				this.onload = function() {
 					this.programList = progSvc.getList({});
@@ -42,21 +46,58 @@
 					if( !this.program ) {
 						throw new Error( 'Program must be provided' )
 					}
-					var t = function(o) {
-						svc.create({schooltermid:self.schooltermid, adviserid: o.objid, programid: self.program.objid, yearlevel: 1 });
-						self.listModel.refresh(true);
+
+					var teacherHandler = function(o) {
+						self.adviser = {schooltermid:self.schooltermid, adviserid: o.objid, programid: self.program.objid, yearlevel: 0};
+						self._controller.navigate(new PopupOpener('#program-adviser-info'));
 					}
-					return new PopupOpener( "teacher:lookup", {selectHandler: t, programid: this.program.objid } );
+					return new PopupOpener( "teacher:lookup", {selectHandler: teacherHandler, programid: this.program.objid });
+				}
+				
+				this.saveAdviser = function() {
+					svc.create(this.adviser);
+					self.listModel.refresh(true);
+					return '_close';
 				}
 				
 				this.removeEntry = function() {
-					if( confirm("You are about to remove this entry. Continue?") ) {
-						svc.remove(this.selectedItem);
-						self.listModel.refresh(true);
+					MsgBox.confirm(
+						"You are about to remove this entry. Continue?",
+						function() {
+							svc.remove(self.selectedItem);
+							self.listModel.refresh(true);
+						}
+					);
+				}
+				
+				this.getYearLevels = function() {
+					var list = [{lbl:'All', val: 0}];
+					for(var i=1; i<=this.program.yearlevels; ++i) {
+						list.push({lbl: i+'', val: i});
 					}
+					return list;
 				}
 			}
-		);	
+		);
+	 </script>
+	</jsp:attribute>
+	
+	<jsp:attribute name="sections">
+		<div id="program-adviser-info" style="display:none">
+			<t:popup>
+				<jsp:attribute name="rightactions">
+					<ui:button context="program_adviser_list" action="saveAdviser" caption="Save"/>
+				</jsp:attribute>
+				
+				<jsp:body>
+					<ui:context name="program_adviser_list">
+						<ui:form>
+							<ui:combo items="getYearLevels()" name="adviser.yearlevel" caption="Year Level" itemKey="val" itemLabel="lbl"/>
+						</ui:form>
+					</ui:context>
+				</jsp:body>
+			</t:popup>
+		</div>
 	</jsp:attribute>
 
 	<jsp:body>
@@ -69,7 +110,9 @@
 				<ui:col caption="Last Name" name="lastname" width="120"/>
 				<ui:col caption="First Name" name="firstname" width="120"/>
 				<ui:col caption="Program">#{item.programcode} - #{item.programtitle}</ui:col>
-				<ui:col caption="Year" name="yearlevel" width="20"/>
+				<ui:col caption="Year" width="20" align="center">
+					#{item.yearlevel? item.yearlevel : 'All'}
+				</ui:col>
 				<ui:col><a r:context="${context}" r:name="removeEntry">Remove</a></ui:col>
 			</ui:grid> 
 		</ui:context>

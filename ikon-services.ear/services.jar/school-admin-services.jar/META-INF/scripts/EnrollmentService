@@ -9,8 +9,23 @@ class EnrollmentService
 	@Service("DateService")
 	def dateSvc;
 	
+	@Service("BlockScheduleService")
+	def blockSvc;
+	
+	@Service("WorkflowService")
+	def workflowSvc;
+	
+	@Service("ProgramAdviserService")
+	def adviserSvc;
+	
 	@Env
 	def env;
+
+
+	@ProxyMethod
+	public def checkEnrollmentStatus(param) {
+		return em.sqlContext.createNamedQuery('enrollment:enrollment-status').setParameters(param).singleResult;
+	}
 
 	
 	@ProxyMethod
@@ -29,20 +44,102 @@ class EnrollmentService
 	}
 	
 	@ProxyMethod
-	public def checkEnrollment() {
-		def state = em.sqlContext.createNamedQuery('enrollment:check-enrolled-state').setParameter('studentid', env.objid).singleResult;
-		state.pending = state.pending? true : false;
-		state.active = state.active? true : false;
-		return state;
+	public void submitForApproval( student, schooltermid ) {
+		def stat = [studentid: env.userid, state: 'FOR_APPROVAL'];
+		em.save("enrollment:enrollment_status", stat);
+		
+		def p = [schooltermid: schooltermid, programid: student.programid, yearlevel: student.yearlevel];
+		def advisers = adviserSvc.getAdviser(p);
+		
+		def task = [
+			objid      : student.objid + "_enrollment",
+			requesterid: student.objid,
+			recipients : advisers.collect{ [actorid: it.adviserid] },
+			handler    : 'enrollment_for_approval',
+			msgtype    : 'enrollment_for_approval',
+			info       : [ 
+				objid       : student.objid,
+				studentno   : student.studentno,
+				lastname    : student.lastname,
+				firstname   : student.firstname,
+				middlename  : student.middlename,
+				yearlevel   : student.yearlevel,
+				schooltermid: schooltermid,
+			]
+		];
+		
+		workflowSvc.addTask(task);
 	}
 	
 	@ProxyMethod
-	public def getPendingEnrollment() {
-		def list = em.sqlContext.createNamedQuery( "enrollment:get-pending-classes").setParameter('studentid', env.objid).resultList;
+	public void approve( studentid ) {
+		def stat = [studentid: studentid, state: 'APPROVED'];
+		em.save("enrollment:enrollment_status", stat);
+		em.sqlContext.createNamedExecutor('enrollment:approve-pending').setParameter('studentid', studentid).execute();
+		em.sqlContext.createNamedExecutor('enrollment:remove-pending').setParameter('studentid', studentid).execute();
+		workflowSvc.removeTask([objid: studentid + "_enrollment"]);
+	}
+	
+	@ProxyMethod
+	public void disapprove( studentid ) {
+		def stat = [studentid: studentid, state: 'DISAPPROVED'];
+		em.save("enrollment:enrollment_status", stat);
+		workflowSvc.removeTask([objid: studentid + "_enrollment"]);
+	}
+	
+	@ProxyMethod
+	public void postRemarks( param ) {
+		em.sqlContext.createNamedExecutor('enrollment:post-remarks').setParameters(param).execute();
+	}
+	
+	@ProxyMethod
+	public def getEnrolledClasses( param ) {
+		def studentid = param?.studentid ? param.studentid : env.objid;
+		def list = em.sqlContext.createNamedQuery( "enrollment:get-pending-classes").setParameter('studentid', studentid).resultList;
 		list.each {
 			it.schedules = em.sqlContext.createNamedQuery("class:class-schedules").setParameters( [classid:it.objid] ).resultList;
 		}
 		return list;
 	}
+	
+	@ProxyMethod
+	public def getAvailableBlocks( param ) {
+		return em.sqlContext.createNamedQuery("enrollment:available-blocks").setParameters(param).resultList;
+	}
 
+	
+	@ProxyMethod
+	public def getBlockSchedules( param ) {
+		print param;
+		return blockSvc.getBlockClasses( param );
+	}
+	
+	
+	@ProxyMethod
+	public def getAvailableCourses( param ) {
+		def filtermode = param.filtermode;
+		if( !filtermode ) filtermode = "regular";
+		return em.sqlContext.createNamedQuery("enrollment:available-courses-"+filtermode).setParameters(param).resultList;
+	}
+	
+	@ProxyMethod
+	public def getAvailableCourseSchedules( param ) {
+		return em.sqlContext.createNamedQuery("enrollment:available-course-schedules").setParameters(param).resultList;
+	}
+	
+	@ProxyMethod
+	public def addClassSchedule( param ) {
+		em.create("class:enrollee", param );
+	}	
+	
+	@ProxyMethod
+	public def removeClassSchedule( param ) {
+		em.delete("class:enrollee", param );
+	}	
+
+	@ProxyMethod
+	public def addBlockSchedule( param ) {
+		em.sqlContext.createNamedExecutor("enrollment:add-block-classes").setParameters( param ).execute();
+	}	
+	
 }

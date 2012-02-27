@@ -7,6 +7,8 @@
 <%@ attribute name="model" %>
 <%@ attribute name="hideCols" %>
 <%@ attribute name="name" %>
+<%@ attribute name="varStatus" %>
+<%@ attribute name="varName" %>
 <%@ attribute name="width" %>
 <%@ attribute name="styleClass" %>
 
@@ -19,7 +21,10 @@
 
 <table class="grid ${styleClass}" r:context="${context}" 
       <c:forEach items="${params}" var="p"> ${p.key}="${p.value}" </c:forEach> 
-	  cellpadding="0" cellspacing="0" r:varName="item" r:varStatus="status" width="${empty width? '100%' : width}">
+	  cellpadding="0" cellspacing="0" 
+	  r:varName="${empty varName? 'item' : varName}" 
+	  r:varStatus="${empty varStatus? 'status' : varStatus}" 
+	  width="${empty width? '100%' : width}">
 	<c:if test="${hideCols != true}">
 		<c:set var="_datatable_processing" scope="request" value="cols"/>
 		<thead>

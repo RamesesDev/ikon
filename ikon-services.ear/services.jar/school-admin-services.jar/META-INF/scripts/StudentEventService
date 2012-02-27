@@ -1,0 +1,60 @@
+import com.rameses.annotations.*;
+
+/**
+* displays applicable events for the student
+**/
+class StudentEventService {
+
+	@PersistenceContext("main")
+	def em;
+	
+	@Service("DateService")
+	def dateSvc;
+
+	@Env
+	def env;
+	
+	@Service("StudentService")
+	def studentService;
+	
+	@Service("TemplateService")
+	def templateService;
+	
+	@ProxyMethod
+	public def getEvents() {
+		def student = studentService.read( [objid: env.userid] );
+		
+		//get the enrollment status of the student
+		
+		def curdate = dateSvc.serverDate;
+		def tasks = [];
+		def list = em.sqlContext.createNamedQuery('school_events:get-current-list').setParameter("date", curdate).resultList;
+		list.each {
+			def handler = "student_" + it.phaseid.toLowerCase();
+
+			if(it.info) {
+				it.info = em.serializer.read( it.info );
+				if( !it.info.programid || it.info.programid == student.programid ) {
+					if( !it.info.yearlevel || it.info.yearlevel.toString() == "0" || 
+						it.info.yearlevel.toString() == student.yearlevel.toString() ) {
+						
+						def m = [handler:handler, phaseid: it.phaseid, studentid: student.objid, programid: student.programid, 
+									yearlevel: student.yearlevel, schooltermid: it.schooltermid ];
+						tasks.push( m );
+					}
+				}
+			}
+			else {
+				def m = [phaseid: it.phaseid, studentid: student.objid, programid: student.programid, 
+									yearlevel: student.yearlevel, schooltermid: it.schooltermid ];
+				tasks.add( m );
+			}	
+		}
+		
+		return [
+			tasks : tasks.unique()
+		]
+	}
+	
+
+}

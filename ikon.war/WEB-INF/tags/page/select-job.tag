@@ -26,16 +26,21 @@
 </script>
 
 <a r:context="job_menu" r:name="showJobs">
-	${title} &nbsp;&nbsp;&#9660;
+	${title}
+	<c:if test="${!empty list}">
+		&nbsp;&nbsp;&#9660;
+	</c:if>
 </a>
 <div id="jobmenu" style="display:none">
-	<ul>
+	<table cellpadding="0" cellspacing="0">
 		<c:forEach items="${list}" var="item">
-			<li>
+			<tr>
+			  <td>
 				<a href="?jobid=${item.objid}">
 					${item.title}
 				</a>
-			</li>
+			  </td>
+			</tr>
 		</c:forEach>
-	</ul>
+	</table>
 </div>

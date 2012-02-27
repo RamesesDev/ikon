@@ -19,7 +19,8 @@
 		$put( "blockinfo", 
 			new function() {
 				var svc = ProxyService.lookup("BlockScheduleService");
-				this.blockinfo = <com:tojson value="${INFO}"/>;	
+				this.blockinfo = <com:tojson value="${INFO}"/>;
+				
 				this.classlist;
 				var self = this;
 					
@@ -71,8 +72,11 @@
 					return new PopupOpener("blockschedule:editclass", { class:this.selectedClass, saveHandler:reloadModel } );
 				}
 				
-				this.removeClass = function() {
-					alert( "remove " + $.toJSON(this.selectedClass) );
+				this.removeSchedule = function() {
+					//self._controller.navigate("_close");
+					if( confirm("Are you sure you want to remove this schedule?") ) {
+						svc.removeClass( {objid: this.selectedClass.objid, blockid: this.blockinfo.objid}, function(z) {self.model.load();} ); 
+					}
 				}
 
 				this.viewRoom = function() {
@@ -89,7 +93,7 @@
 			#{it.coursecode}<br>
 			Rm: #{(it.roomno) ? it.roomno: 'unassigned'}<br>
 			#{(it.teacher) ? it.teacher: 'unassigned'}<br>
-			#{(!it.room_conflict) ? '<img src="${pageContext.request.contextPath}/img/red_flag.jpg">' : '' }
+			#{(it.room_conflict) ? '<img src="${pageContext.request.contextPath}/img/red_flag.png">' : '' }
 		</div>
 
 		<!-- room conflict template -->
@@ -104,6 +108,8 @@
 				<br>
 			</label>
 			<a r:context="blockinfo" r:name="changeSchedule">Change Schedule</a>
+			<br>
+			<a r:context="blockinfo" r:name="removeSchedule">Remove Schedule</a>
 			<br>
 			<div r:context="blockinfo" r:type="label" r:visibleWhen="#{selectedSchedule.room_conflict!=null}">
 				<font color=red>Room Conflicts</font> <a r:context="blockinfo" r:name="viewRoom">View Room</a>

@@ -77,7 +77,7 @@
 				<ui:combo items="orgUnits" name="orgUnit" itemLabel="title" caption="Org Unit : "/>
 			</ui:form>
 			<ui:button action="add" caption="Add"/>
-			<ui:grid model="listModel" name="selectedItem" width="80%">
+			<ui:grid model="listModel" name="selectedItem">
 				<ui:col name="code" caption="Code"/>
 				<ui:col name="title" caption="Title"/>
 				<ui:col caption="Assignee">

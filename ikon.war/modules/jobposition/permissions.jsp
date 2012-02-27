@@ -6,7 +6,7 @@
 
 <t:popup>
 	<jsp:attribute name="head">
-		<s:invoke service="JobpositionService" method="getPermissions" params="<%=request%>" var="INFO"/>
+		<s:invoke service="JobpositionService" method="getPermissions" params="${pageContext.request}" var="INFO"/>
 		<script>
 
 			$put("jobposition_permission",
@@ -37,6 +37,9 @@
 	</jsp:attribute>
 	
 	<jsp:body>
+		<c:if test="${empty INFO.modules}">
+			<i>No permission defined for this Job Position.</i>
+		</c:if>
 		<c:forEach items="${INFO.modules}" var="m" varStatus="stat">
 			<c:if test="${stat.index > 0}">
 				<br/>
