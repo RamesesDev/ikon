@@ -51,7 +51,7 @@
 	<jsp:body>
 		<ui:context name="programlist">
 			<ui:form>
-				<ui:combo caption="Academic Unit:" items="orgUnits" itemLabel="code" name="orgUnit"/>
+				<ui:combo caption="Academic Unit:" items="orgUnits" itemLabel="title" name="orgUnit"/>
 			</ui:form>
 			<ui:button caption="Add" action="add" visibleWhen="#{orgUnit!=null}"/>
 			<ui:grid model="listModel" width="100%">

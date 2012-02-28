@@ -36,7 +36,6 @@
 					onclick: function(o, e) {
 						self.selectedClass = o.item.class;
 						self.selectedSchedule = o.item.sked;
-						window.console.log( $.toJSON(o.item.sked) );
 						self._controller.navigate(new DropdownOpener( "#context_menu"), e );
 					},
 					fetchList: function() {
@@ -47,8 +46,11 @@
 								for( var i=0;i<clz.schedules.length;i++ ) {
 									var c = clz.schedules[i];	
 									var func = function(d) {
-										var z = {coursecode: clz.coursecode, roomno: c.roomno, roomid: c.roomid, 
-											room_conflict: c.room_conflict, teacher: clz.teacher, teacherid: clz.teacherid };
+										var z = {
+											coursecode: clz.coursecode, roomno: c.roomno, roomid: c.roomid, 
+											room_conflict: c.room_conflict, teacher_conflict: c.teacher_conflict, 
+											teacher: clz.teacher, teacherid: clz.teacherid 
+										};
 										arr.push( {day: d, from: c.fromtime, to: c.totime, caption: $template('schedule_panel',z), 
 											item:{class:clz,sked:c}, color: clz.colorcode });		
 									}
@@ -70,7 +72,7 @@
 				
 				this.changeSchedule = function() {
 					self._controller.navigate("_close");
-					return new PopupOpener("blockschedule:editclass", { class:this.selectedClass, saveHandler:reloadModel } );
+					return new PopupOpener("blockschedule:editclass", { clazz:this.selectedClass, saveHandler:reloadModel } );
 				}
 				
 				this.removeSchedule = function() {

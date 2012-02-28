@@ -10,14 +10,27 @@
 				this.phaseList;
 				this.schooltermid;
 				this.saveHandler;
+				this.mode = 'create';
+				
+				var progSvc = ProxyService.lookup( "ProgramService" );
+				this.programList;
 				
 				this.onload = function() {
-					this.entry = { schooltermid: this.schooltermid };	
-					this.phaseList = svc.getPhaseList();
+					if( !this.entry ) {
+						this.entry = { schooltermid: this.schooltermid };
+					}
+					
+					this.phaseList = svc.getPhaseList();					
+					this.programList = progSvc.getList({});
+						
 				}	
 				
 				this.save = function() {
-					svc.addEntry( this.entry );
+					if( this.mode == 'create' )
+						svc.addEntry( this.entry );
+					else
+						svc.updateEntry( this.entry );
+					
 					if(this.saveHandler) this.saveHandler();
 					return "_close";
 				}
@@ -41,7 +54,7 @@
 			<div r:context="${context}" r:visibleWhen="#{entry.phaseid == 'ENROLLMENT'}" r:depends="entry.phaseid">
 				<h2>Enrollment Settings</h2>
 				<ui:form object="entry">
-					<ui:text name="programid" caption="Program"/>
+					<ui:combo caption="Select a Program" items="programList" itemLabel="title" itemKey="objid" name="programid" allowNull="true" emptyText="Any"/>
 					<ui:combo name="yearlevel" caption="Year Level">
 						<option value="0">Any</option>
 						<option value="1">1</option>

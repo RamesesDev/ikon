@@ -58,6 +58,7 @@ and not exists (
 [remove-teacher-conflict] 
 delete from teacher_schedule_conflict where teacherid=$P{teacherid} and ( sked1=$P{scheduleid} OR sked2=$P{scheduleid} )
 
+
 [flag-teacher-conflict]
 insert ignore into teacher_schedule_conflict 
 select $P{scheduleid}, cs.objid, cc.teacherid  

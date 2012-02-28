@@ -3,52 +3,59 @@
 <%@ taglib tagdir="/WEB-INF/tags/page" prefix="page" %>
 <%@ taglib tagdir="/WEB-INF/tags/ui" prefix="ui" %>
 
-<page:gantt-import/>
+
 <s:invoke service="SchoolTermAdminService" method="read" params="<%=request%>" json="true" var="INFO"/>
 
 <t:content title="School Term Calendar">
 
-	<jsp:attribute name="script">
-		$put( "schoolterminfo", 
-			new function() {
-				var svc = ProxyService.lookup( "SchoolTermAdminService" );
-				this.objid;
-				this.schoolterm  = ${INFO};
-				this.selectedEntry;
-				
-				var self = this;
-				
-				this.edit = function() {
-				
-				}
-				
-				var reloadModel = function() {
-					self.model.load();
-				}
-				
-				this.addEntry = function() {
-					return new PopupOpener("schoolterm:entry", { schooltermid: this.schoolterm.objid, mode: "create", saveHandler: reloadModel });
-				}
-				
-				this.model = {
-					fetchList: function() {
-						var list = svc.getEntries( {schooltermid : self.schoolterm.objid} );
-						var arr = [];
-						for( var i=0; i<list.length; i++ ) {
-							var x = list[i];
-							arr.push( {from:x.fromdate, to:x.todate, caption:x.title } );
+	<jsp:attribute name="head">
+		<page:gantt-import/>
+		<script>
+			$put( "schoolterminfo", 
+				new function() {
+					var svc = ProxyService.lookup( "SchoolTermAdminService" );
+					this.objid;
+					this.schoolterm  = ${INFO};
+					this.selectedEntry;
+					
+					var self = this;
+					
+					this.edit = function() {
+					
+					}
+					
+					var reloadModel = function() {
+						Hash.reload();
+					}
+					
+					this.addEntry = function() {
+						return new PopupOpener("schoolterm:entry", { schooltermid: this.schoolterm.objid, mode: "create", saveHandler: reloadModel });
+					}
+					
+					this.model = {
+						onclick: function(item, elem) {
+							var p = { schooltermid: self.schoolterm.objid, mode: "edit", saveHandler: reloadModel, entry: item.item};
+							var o = new PopupOpener("schoolterm:entry", p);
+							self._controller.navigate(o);
+						},
+						fetchList: function() {
+							var list = svc.getEntries( {schooltermid : self.schoolterm.objid} );
+							var arr = [];
+							for( var i=0; i<list.length; i++ ) {
+								var x = list[i];
+								arr.push( {from:x.fromdate, to:x.todate, caption:x.title, item: x} );
+							}
+							return arr;
 						}
-						return arr;
-					}	
+					}
+					
 				}
 				
-			}
-			
-		);
+			);
+		</script>
 	</jsp:attribute>
 		
 	<jsp:body>
-		
 		<ui:context name="schoolterminfo">
 			<ui:button caption="Add Entry" action="addEntry"/><br>
 			<ui:form object="schoolterm">

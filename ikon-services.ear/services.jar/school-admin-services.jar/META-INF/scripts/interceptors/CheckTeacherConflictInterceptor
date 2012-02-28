@@ -25,7 +25,7 @@ class CheckTeacherConflictInterceptor {
 	}
 	
 	//attach room conflict flags
-	@After(pattern="BlockScheduleService1.getBlockClasses.*")
+	@After(pattern="BlockScheduleService.getBlockClasses.*")
 	public void findTeacherConflict( evt ) {
 		def list = evt.result;
 		list.each { o->

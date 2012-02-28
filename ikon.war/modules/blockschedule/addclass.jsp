@@ -75,6 +75,16 @@
 					this.saveHandler();
 					return "_close";
 				}
+				
+				this._course;
+				this.propertyChangeListener = {
+					'_course' : function(c) {
+						if( c ) {
+							self.class.courseid = c.courseid;
+							self.class.code = (c.coursecode + '-' + self.block.code).trim();
+						}
+					}
+				};
 			}	
 		);
 	</jsp:attribute>
@@ -88,13 +98,13 @@
 			<ui:panel cols="2" width="100%">	
 				<ui:section width="180px">
 					Select a course<br>
-					<select r:context="${context}" r:items="getCourseList()" r:depends="scheduletype" r:name="class.courseid" 
-						r:itemKey="courseid" r:itemLabel="coursecode" r:required="true" r:caption="Course" size="15"
+					<select r:context="${context}" r:items="getCourseList()" r:depends="scheduletype" r:name="_course" 
+						    r:itemLabel="coursecode" r:required="true" r:caption="Course" size="15"
 						style="width:100%"/>
 				</ui:section>
 				<ui:section style="padding-left:20px">
 					<ui:form object="class">
-						<ui:text caption="Class Code" name="code" 	required="true"/>
+						<ui:text caption="Class Code" name="code" required="true" depends="_course"/>
 						<ui:label caption="Color Code">
 							<span r:type="colorpicker" r:context="blockschedule_addclass" r:name="class.colorcode"></span>			
 						</ui:label>

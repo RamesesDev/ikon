@@ -38,7 +38,7 @@
 				#{orgunit.orgtype}
 			</ui:label>
 			<ui:text caption="Code : " name="code" required="true"/>
-			<ui:text caption="Title : " name="title" required="true"/>
+			<ui:text caption="Title : " name="title" required="true" size="50"/>
 		</ui:form>
 	</jsp:body>
 </t:popup>

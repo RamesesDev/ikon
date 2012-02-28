@@ -12,6 +12,7 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 	var ganttViewModel = [];
 	var term = [];
 	var eventFontSize = R.attr(elem, "eventFontSize");
+	var eventHdrWidth = R.attr(elem, "eventHdrWidth");
 	
 	var fromexp = controller.get(R.attr(elem, "from"));
 	if(fromexp)
@@ -54,9 +55,9 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 				cellWidth: cellWidth,
 				cellHeight: cellHeight,
 				behavior: {
-					clickable: model.clickable == null ? false : model.clickable,
-					draggable: model.draggable == null ? false : model.draggable,
-					resizable: model.resizable == null ? false : model.resizable,
+					clickable: model.onclick? true : false,
+					draggable: model.ondrag? true : false,
+					resizable: model.onresize? true : false,
 					onClick: function(data, elem) {
 						if(model.onclick)
 							model.onclick(rebuildData(data), elem);
@@ -74,8 +75,15 @@ BindingUtils.handlers.div_gantt = function( elem, controller, idx )
 		);
 		
 		//changes the event/series FONT SIZE
-		if(eventFontSize)
-			e.find('div.ganttview-vtheader-series-name').css( "font-size", eventFontSize );
+		//changes the WIDTH of the container of the event/series Header
+		if(eventFontSize) {
+			e.find('div.ganttview-vtheader').css( 
+				{
+					"font-size": eventFontSize,
+					"width": eventHdrWidth
+				}
+			);
+		}
 		
 		//removes the EVENT HEADER
 		var vtheader = e.find('div.ganttview-vtheader-item-name').remove();
